@@ -55,7 +55,15 @@ function CSDetail({ topicId }: { topicId: string }) {
         <h1 className="font-serif text-3xl text-ink">{t.name}</h1>
         {Comp && <Chip accent="compsci">interactive</Chip>}
       </div>
-      <p className="text-ink-soft mb-6">{t.summary}</p>
+      <p className="text-ink-soft mb-3">{t.summary}</p>
+
+      {/* Prominent read-aloud for the whole page, right under the title. */}
+      <div className="mb-6">
+        <SpeakButton
+          text={`${t.name}. ${t.summary} ${t.detail.join(" ")}`}
+          className="!text-sm !px-3.5 !py-2"
+        />
+      </div>
 
       {Comp && (
         <div className="mb-8">
@@ -65,11 +73,8 @@ function CSDetail({ topicId }: { topicId: string }) {
 
       {/* Key points */}
       <div className="mb-8">
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <div className="text-xs font-medium text-ink-faint uppercase tracking-wide">
-            The essentials
-          </div>
-          <SpeakButton text={`${t.summary} ${t.detail.join(" ")}`} />
+        <div className="text-xs font-medium text-ink-faint uppercase tracking-wide mb-3">
+          The essentials
         </div>
         <ul className="space-y-3">
           {t.detail.map((d, i) => (

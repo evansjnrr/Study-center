@@ -65,7 +65,17 @@ function VizDetail({ topicId }: { topicId: string }) {
         <h1 className="font-serif text-3xl sm:text-4xl text-ink">{topic?.name}</h1>
         {Comp && <Chip accent="physics">interactive</Chip>}
       </div>
-      <p className="text-ink-soft mb-6">{v?.summary}</p>
+      <p className="text-ink-soft mb-3">{v?.summary}</p>
+
+      {/* Prominent read-aloud for the whole page, right under the title. */}
+      {v && (
+        <div className="mb-6">
+          <SpeakButton
+            text={`${topic?.name}. ${v.summary} ${v.detail.join(" ")}`}
+            className="!text-sm !px-3.5 !py-2"
+          />
+        </div>
+      )}
 
       {Comp && (
         <div className="mb-8">
@@ -118,11 +128,8 @@ export function ConceptDetail({ entry }: { entry: VizEntry }) {
       {/* In-depth explanation */}
       {entry.detail.length > 0 && (
         <div>
-          <div className="flex items-center justify-between gap-3 mb-3">
-            <div className="text-xs font-medium text-ink-faint uppercase tracking-wide">
-              In depth
-            </div>
-            <SpeakButton text={`${entry.summary} ${entry.detail.join(" ")}`} />
+          <div className="text-xs font-medium text-ink-faint uppercase tracking-wide mb-3">
+            In depth
           </div>
           <ul className="space-y-3">
             {entry.detail.map((d, i) => (

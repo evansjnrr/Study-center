@@ -26,7 +26,14 @@ export function EconGraphs({ diagramId }: { diagramId?: string }) {
           <h1 className="font-serif text-3xl text-ink">{d.name}</h1>
           <Chip accent="econ">{d.category === "Macroeconomics" ? "Macro" : "Micro"}</Chip>
         </div>
-        <p className="text-ink-soft mb-6">{d.note}</p>
+        <p className="text-ink-soft mb-3">{d.note}</p>
+        {/* Prominent read-aloud for the whole page, right under the title. */}
+        <div className="mb-6">
+          <SpeakButton
+            text={`${d.name}. ${d.note} Real world example. ${d.realWorld} How the diagram works. ${d.explanation.join(" ")}`}
+            className="!text-sm !px-3.5 !py-2"
+          />
+        </div>
         <DiagramEditor id={d.id} />
         <DiagramDetail d={d} />
         <div className="mt-6">
@@ -69,11 +76,8 @@ function DiagramDetail({ d }: { d: DiagramTemplate }) {
 
       {/* In-depth explanation */}
       <div>
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <div className="text-xs font-medium text-ink-faint uppercase tracking-wide">
-            How the diagram works
-          </div>
-          <SpeakButton text={`${d.realWorld} ${d.explanation.join(" ")}`} />
+        <div className="text-xs font-medium text-ink-faint uppercase tracking-wide mb-3">
+          How the diagram works
         </div>
         <ul className="space-y-3">
           {d.explanation.map((e, i) => (
