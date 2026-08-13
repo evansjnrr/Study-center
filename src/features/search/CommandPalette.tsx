@@ -125,7 +125,7 @@ export function CommandPalette() {
   });
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] px-4" role="dialog" aria-modal>
+    <div className="fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] px-4" role="dialog" aria-modal aria-label="Search concepts, diagrams and topics">
       <div className="absolute inset-0 bg-ink/30 backdrop-blur-sm animate-fade-in" onClick={() => setOpen(false)} />
       <div className="relative w-full max-w-xl bg-surface border border-line rounded-2xl shadow-soft-lg overflow-hidden animate-fade-up" onKeyDown={onListKey}>
         <div className="flex items-center gap-3 px-4 border-b border-line/60">

@@ -47,6 +47,34 @@ npm run build      # production build
 npm run typecheck  # tsc, no emit
 ```
 
+## Install as an app (PWA)
+
+It's an installable, offline-capable Progressive Web App. Build + serve locally:
+
+```bash
+npm run build
+npm run preview        # serves http://localhost:4173
+```
+
+Open that URL in Chrome/Edge and click the install icon in the address bar. Once
+loaded, it works fully offline (service worker precaches the shell, self-hosted
+fonts, and KaTeX). On iOS: Safari → Share → Add to Home Screen.
+
+## Deploy (GitHub → Vercel, auto-deploy on push)
+
+This repo is wired for Vercel (`vercel.json`) and Netlify (`netlify.toml`). The
+one-time setup: create a GitHub repo, push, then import it at vercel.com. After
+that, deploying is automatic — every push rebuilds and redeploys:
+
+```bash
+git add -A
+git commit -m "what changed"
+git push               # Vercel auto-builds + deploys in ~30s
+```
+
+Only the static app is hosted; all study data stays in each device's IndexedDB
+(use Settings → Export/Import to move it between devices).
+
 ## Structure
 
 - `src/features/visualize/*` — physics concept pages. `registry.tsx` holds every

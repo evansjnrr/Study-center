@@ -63,6 +63,8 @@ export function TimerWidget() {
           running ? "text-ink bg-surface-2" : "text-ink-faint hover:text-ink hover:bg-surface-2",
         )}
         title="Focus timer"
+        aria-label={running ? `Focus timer, ${mm}:${ss} remaining` : "Focus timer"}
+        aria-expanded={open}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" className="-ml-0.5">
           <circle cx="12" cy="12" r={R} fill="none" stroke="rgb(var(--line))" strokeWidth="2.5" />

@@ -6,6 +6,7 @@ import { allDiagrams } from "@/lib/db";
 import { Card, Chip, IconBack } from "@/components/ui";
 import { RichText } from "@/components/Katex";
 import { ExplainBack } from "@/features/notes/ExplainBack";
+import { SpeakButton } from "@/components/SpeakButton";
 
 export function EconGraphs({ diagramId }: { diagramId?: string }) {
   const { navigate, back } = useApp();
@@ -68,8 +69,11 @@ function DiagramDetail({ d }: { d: DiagramTemplate }) {
 
       {/* In-depth explanation */}
       <div>
-        <div className="text-xs font-medium text-ink-faint uppercase tracking-wide mb-3">
-          How the diagram works
+        <div className="flex items-center justify-between gap-3 mb-3">
+          <div className="text-xs font-medium text-ink-faint uppercase tracking-wide">
+            How the diagram works
+          </div>
+          <SpeakButton text={`${d.realWorld} ${d.explanation.join(" ")}`} />
         </div>
         <ul className="space-y-3">
           {d.explanation.map((e, i) => (

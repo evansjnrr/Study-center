@@ -5,6 +5,7 @@ import { Button, Card, Chip, IconBack } from "@/components/ui";
 import { RichText, renderInline } from "@/components/Katex";
 import { ExplainBack } from "@/features/notes/ExplainBack";
 import { WorkedExamples, hasWorked } from "./worked";
+import { SpeakButton } from "@/components/SpeakButton";
 
 // Hub: grid of physics topics; interactive ones open a live visualizer,
 // all of them open a fully detailed concept page.
@@ -117,8 +118,11 @@ export function ConceptDetail({ entry }: { entry: VizEntry }) {
       {/* In-depth explanation */}
       {entry.detail.length > 0 && (
         <div>
-          <div className="text-xs font-medium text-ink-faint uppercase tracking-wide mb-3">
-            In depth
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <div className="text-xs font-medium text-ink-faint uppercase tracking-wide">
+              In depth
+            </div>
+            <SpeakButton text={`${entry.summary} ${entry.detail.join(" ")}`} />
           </div>
           <ul className="space-y-3">
             {entry.detail.map((d, i) => (

@@ -35,8 +35,14 @@ export default function App() {
 
   return (
     <div className="min-h-full flex flex-col">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:px-4 focus:py-2 focus:rounded-xl focus:bg-ink focus:text-paper focus:shadow-soft-lg"
+      >
+        Skip to content
+      </a>
       <TopBar />
-      <main className="flex-1 min-h-0">
+      <main id="main" tabIndex={-1} className="flex-1 min-h-0 outline-none">
         <div key={routeKey} className="animate-fade-up">
           <React.Suspense fallback={<div className="h-64 grid place-items-center text-ink-faint text-sm">loading…</div>}>
             <Screen />

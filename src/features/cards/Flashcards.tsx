@@ -5,6 +5,7 @@ import { review, intervalPreview, dueCards, interleave, newCard, type Grade } fr
 import type { CardSubject, Flashcard } from "@/lib/types";
 import { Button, Card, Chip, IconBack, ProgressBar, cx } from "@/components/ui";
 import { RichText } from "@/components/Katex";
+import { SpeakButton } from "@/components/SpeakButton";
 import { Stats } from "./Stats";
 
 const SUBJECTS: { code: CardSubject; name: string; accent: "physics" | "econ" | "compsci" }[] = [
@@ -210,6 +211,12 @@ function ReviewSession({
         )}
         {!flipped && <div className="text-ink-faint text-sm mt-8">tap, or press space, to flip</div>}
       </button>
+
+      {flipped && (
+        <div className="flex justify-center -mt-2 mb-3">
+          <SpeakButton text={`${current.front}. ${current.back}`} />
+        </div>
+      )}
 
       {flipped ? (
         <div className="grid grid-cols-4 gap-2 animate-fade-up">
