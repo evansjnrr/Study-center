@@ -60,7 +60,21 @@ Open that URL in Chrome/Edge and click the install icon in the address bar. Once
 loaded, it works fully offline (service worker precaches the shell, self-hosted
 fonts, and KaTeX). On iOS: Safari → Share → Add to Home Screen.
 
+## Read aloud — getting a human-sounding voice
+
+The app picks the most natural voice your browser offers. Windows' built-in
+voices (David/Mark/Zira) are robotic, so for a genuinely human voice open the app
+in **Microsoft Edge**, which ships free neural voices (e.g. *Microsoft Aria
+Online (Natural)*, *Sonia (Natural)*). Settings → Read aloud will auto-select one
+and the "only basic voices" warning disappears. Phones (iOS/Android) also ship
+good neural voices.
+
 ## Deploy (GitHub → Vercel, auto-deploy on push)
+
+> **Note:** on Vercel's Hobby plan with a **private** repo, a commit carrying a
+> `Co-Authored-By:` trailer is rejected ("commit author did not have contributing
+> access"), because the co-author counts as a collaborator. Keep commits
+> single-author, or make the repo public.
 
 This repo is wired for Vercel (`vercel.json`) and Netlify (`netlify.toml`). The
 one-time setup: create a GitHub repo, push, then import it at vercel.com. After

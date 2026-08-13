@@ -13,7 +13,9 @@
       "Bash(echo \"name: $\\(git config user.name\\)\")",
       "Bash(echo \"email: $\\(git config user.email\\)\")",
       "WebFetch(domain:study-center-tau.vercel.app)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ]
   }
 }
