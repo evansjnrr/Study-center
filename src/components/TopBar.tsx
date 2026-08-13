@@ -13,7 +13,7 @@ export function TopBar() {
 
   return (
     <header className="sticky top-3 z-30 px-3 sm:px-4">
-      <div className="max-w-4xl mx-auto h-12 flex items-center justify-between gap-2 rounded-full border border-line/70 bg-surface/60 backdrop-blur-xl pl-4 pr-2 shadow-[0_10px_36px_rgb(var(--shadow)/0.35)]">
+      <div className="max-w-4xl mx-auto min-h-12 py-1 flex items-center justify-between gap-2 rounded-full border border-line/70 bg-surface/60 backdrop-blur-xl pl-4 pr-2 shadow-[0_10px_36px_rgb(var(--shadow)/0.35)]">
         <button
           onClick={() => navigate({ name: "home" })}
           className="flex items-center gap-2.5 text-ink hover:opacity-80 transition-opacity"

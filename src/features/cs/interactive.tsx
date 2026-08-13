@@ -15,7 +15,7 @@ export function NumberBaseConverter() {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-1.5 justify-center">
+      <div className="flex gap-1.5 justify-center no-grow">
         {bits.map((b, i) => (
           <button
             key={i}

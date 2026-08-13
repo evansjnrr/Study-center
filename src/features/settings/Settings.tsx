@@ -3,6 +3,15 @@ import { useApp } from "@/lib/store";
 import { Card, IconBack, cx } from "@/components/ui";
 import { exportAll, importAll, clearData, countCards, putCards } from "@/lib/db";
 import { seedCards } from "@/data/flashcards";
+import {
+  speechAvailable,
+  loadVoices,
+  englishVoices,
+  bestVoice,
+  speak,
+  stopSpeech,
+  onlyRoboticVoices,
+} from "@/lib/speech";
 
 export function SettingsScreen() {
   const { settings, saveSettings, back } = useApp();
@@ -68,13 +77,24 @@ export function SettingsScreen() {
             </button>
           ))}
         </div>
-        <Toggle
-          label="Reduce motion"
-          desc="Turn off animations and transitions."
-          on={settings.reduceMotion}
-          onChange={(v) => saveSettings({ reduceMotion: v })}
-        />
+        <div className="space-y-4">
+          <Toggle
+            label="Reduce motion"
+            desc="Turn off animations and transitions."
+            on={settings.reduceMotion}
+            onChange={(v) => saveSettings({ reduceMotion: v })}
+          />
+          <Toggle
+            label="Bigger tap targets"
+            desc="Roomier buttons and controls — easier on a phone or tablet."
+            on={settings.bigTapTargets}
+            onChange={(v) => saveSettings({ bigTapTargets: v })}
+          />
+        </div>
       </Card>
+
+      {/* Read aloud */}
+      <ReadAloudCard />
 
       {/* Worked examples & study */}
       <Card className="p-5 mb-4">
@@ -127,6 +147,104 @@ export function SettingsScreen() {
         </p>
       </Card>
     </div>
+  );
+}
+
+function ReadAloudCard() {
+  const { settings, saveSettings } = useApp();
+  const [voices, setVoices] = React.useState<SpeechSynthesisVoice[]>([]);
+  const [testing, setTesting] = React.useState(false);
+  const available = React.useMemo(speechAvailable, []);
+
+  React.useEffect(() => {
+    if (!available) return;
+    loadVoices().then(() => setVoices(englishVoices()));
+    return () => stopSpeech();
+  }, [available]);
+
+  if (!available) return null;
+
+  const auto = bestVoice();
+  const ranked = [...voices].sort((a, b) => {
+    // put the auto-pick first, then alphabetical
+    if (a.voiceURI === auto?.voiceURI) return -1;
+    if (b.voiceURI === auto?.voiceURI) return 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  function test() {
+    stopSpeech();
+    setTesting(true);
+    speak(
+      "Acceleration is the rate of change of velocity. Only the resultant force accelerates a body.",
+      { voiceURI: settings.voiceURI, rate: settings.speechRate, onend: () => setTesting(false) },
+    );
+  }
+
+  return (
+    <Card className="p-5 mb-4">
+      <h2 className="text-ink font-medium mb-1">Read aloud</h2>
+      <p className="text-ink-faint text-sm mb-4">
+        Used by the "Read aloud" buttons on concept pages and flashcards. Voices marked
+        <span className="text-ink-soft"> Natural</span>,
+        <span className="text-ink-soft"> Neural</span> or
+        <span className="text-ink-soft"> Google</span> sound the most human.
+      </p>
+
+      <label className="block mb-4">
+        <span className="text-xs text-ink-faint">Voice</span>
+        <select
+          value={settings.voiceURI ?? ""}
+          onChange={(e) => saveSettings({ voiceURI: e.target.value || undefined })}
+          className="mt-1 w-full rounded-xl bg-surface-2 border border-line/60 px-3 py-2 text-sm text-ink outline-none focus:border-physics/50"
+        >
+          <option value="">
+            Best available{auto ? ` — ${auto.name}` : ""}
+          </option>
+          {ranked.map((v) => (
+            <option key={v.voiceURI} value={v.voiceURI}>
+              {v.name} ({v.lang})
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label className="block mb-4">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-xs text-ink-faint">Speed</span>
+          <span className="text-xs text-ink font-mono">{settings.speechRate.toFixed(2)}×</span>
+        </div>
+        <input
+          type="range"
+          min={0.6}
+          max={1.6}
+          step={0.05}
+          value={settings.speechRate}
+          onChange={(e) => saveSettings({ speechRate: Number(e.target.value) })}
+          className="w-full accent-[rgb(var(--physics))] cursor-pointer"
+        />
+      </label>
+
+      <div className="flex items-center gap-2">
+        <ActionBtn onClick={testing ? () => { stopSpeech(); setTesting(false); } : test}>
+          {testing ? "■ Stop" : "▶ Test voice"}
+        </ActionBtn>
+        {voices.length === 0 && (
+          <span className="text-ink-faint text-xs">Loading voices…</span>
+        )}
+      </div>
+
+      {voices.length > 0 && onlyRoboticVoices() && (
+        <div className="mt-4 rounded-xl border border-mark-warn/30 bg-[rgb(var(--mark-warn)/0.10)] px-4 py-3 text-sm text-ink-soft leading-relaxed">
+          <span className="text-mark-warn font-medium">Only basic voices found. </span>
+          This browser only has the older robotic Windows voices, so I've softened the
+          delivery to compensate. For a properly human voice, open this app in{" "}
+          <span className="text-ink">Microsoft Edge</span> (which adds free "Natural"
+          neural voices), or install more in{" "}
+          <span className="text-ink">Windows Settings → Time &amp; language → Speech</span>.
+        </div>
+      )}
+    </Card>
   );
 }
 

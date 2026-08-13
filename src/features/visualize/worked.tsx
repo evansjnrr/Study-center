@@ -702,7 +702,7 @@ export function WorkedExamples({ topicId }: { topicId: string }) {
       </div>
       <p className="text-ink-soft text-sm leading-relaxed mb-4">{topic.concept}</p>
 
-      <div className="flex gap-1.5 mb-4 flex-wrap">
+      <div className="flex gap-1.5 mb-4 flex-wrap no-grow">
         {topic.levels.map((lv, i) => (
           <button
             key={i}

@@ -56,4 +56,9 @@ export interface Settings {
   revealStepwise: boolean; // reveal solutions one step at a time
   showDiagrams: boolean; // show the mini dynamic diagram
   randomizeOnOpen: boolean; // fresh numbers each time a topic opens
+  // Read-aloud (text-to-speech) preferences
+  voiceURI?: string; // chosen voice; empty = best available
+  speechRate: number; // 0.6 – 1.6
+  // Touch comfort — larger tap targets for phone/tablet use
+  bigTapTargets: boolean;
 }

@@ -35,6 +35,8 @@ const DEFAULT_SETTINGS: Settings = {
   revealStepwise: true,
   showDiagrams: true,
   randomizeOnOpen: true,
+  speechRate: 1,
+  bigTapTargets: false,
 };
 
 export const useApp = create<AppState>((set, get) => ({
@@ -68,7 +70,9 @@ export const useApp = create<AppState>((set, get) => ({
     const next = { ...get().settings, ...patch };
     await putSettings(next);
     set({ settings: next });
-    if ("theme" in patch || "reduceMotion" in patch) get().applyTheme();
+    if ("theme" in patch || "reduceMotion" in patch || "bigTapTargets" in patch) {
+      get().applyTheme();
+    }
   },
 
   applyTheme: () => {
@@ -78,6 +82,7 @@ export const useApp = create<AppState>((set, get) => ({
     const dark = theme === "dark" || (theme === "system" && prefersDark);
     document.documentElement.classList.toggle("dark", dark);
     document.documentElement.classList.toggle("reduce-motion", !!get().settings.reduceMotion);
+    document.documentElement.classList.toggle("big-tap", !!get().settings.bigTapTargets);
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", dark ? "#070709" : "#f7f8fa");
   },

@@ -185,3 +185,55 @@ body::before {
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
 }
+
+/* ------------------------------------------------------------------ */
+/* Touch targets. On coarse pointers (phones/tablets) every control    */
+/* gets at least the 44px recommended minimum; "big-tap" makes it 52px */
+/* everywhere for comfort.                                             */
+/* ------------------------------------------------------------------ */
+@media (pointer: coarse) {
+  button,
+  a[href],
+  [role="switch"],
+  [role="button"],
+  select,
+  summary,
+  input[type="range"] {
+    min-height: 44px;
+  }
+  button,
+  a[href],
+  [role="button"] {
+    min-width: 44px;
+  }
+  /* Small inline controls stay visually compact but get a tappable halo. */
+  .tap-pad {
+    position: relative;
+  }
+  .tap-pad::after {
+    content: "";
+    position: absolute;
+    inset: -8px;
+  }
+}
+
+.big-tap button,
+.big-tap a[href],
+.big-tap [role="switch"],
+.big-tap [role="button"],
+.big-tap select,
+.big-tap input[type="range"] {
+  min-height: 52px;
+  min-width: 52px;
+}
+.big-tap button,
+.big-tap select {
+  padding-inline: 1rem;
+}
+/* Don't stretch things that must stay laid out (grids of bits, svg controls). */
+.big-tap .no-grow,
+.big-tap .no-grow button {
+  min-height: 0;
+  min-width: 0;
+  padding-inline: revert;
+}
