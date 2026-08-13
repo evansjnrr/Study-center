@@ -102,17 +102,36 @@ function DiagramDetail({ d }: { d: DiagramTemplate }) {
         </div>
       )}
 
-      {/* Key terms */}
+      {/* Key terms — exam-ready definitions */}
       {d.keyTerms && d.keyTerms.length > 0 && (
         <div>
-          <div className="text-xs font-medium text-ink-faint uppercase tracking-wide mb-3">
-            Key terms
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <div className="text-xs font-medium text-ink-faint uppercase tracking-wide">
+              Definitions — exam wording
+            </div>
+            <SpeakButton text={d.keyTerms.map((k) => `${k.term}. ${k.def}`).join(" ")} />
           </div>
+          <p className="text-ink-faint text-xs mb-3 leading-relaxed">
+            Write these close to word-for-word. The chips are the phrases the mark
+            scheme is scanning for.
+          </p>
           <div className="grid gap-2">
             {d.keyTerms.map((k) => (
               <div key={k.term} className="rounded-xl border border-line/60 bg-surface px-4 py-3">
-                <span className="text-ink font-medium">{k.term}</span>
-                <span className="text-ink-soft text-sm"> — {k.def}</span>
+                <div className="text-ink font-medium text-sm">{k.term}</div>
+                <RichText text={k.def} className="text-ink-soft text-sm mt-1 leading-relaxed" />
+                {k.keywords && k.keywords.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {k.keywords.map((w) => (
+                      <span
+                        key={w}
+                        className="text-[0.68rem] px-2 py-0.5 rounded-full bg-econ-soft text-econ border border-econ/25"
+                      >
+                        {w}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>

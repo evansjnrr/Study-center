@@ -21,7 +21,10 @@ export interface DLine {
 }
 export interface KeyTerm {
   term: string;
+  /** Exam-ready definition, phrased the way Cambridge mark schemes award it. */
   def: string;
+  /** The words an examiner is scanning for — include these verbatim. */
+  keywords?: string[];
 }
 export interface DiagramTemplate {
   id: string;
@@ -73,8 +76,12 @@ export const DIAGRAMS: DiagramTemplate[] = [
       "Markets may adjust slowly — frictions, contracts and information gaps delay the return to equilibrium.",
     ],
     keyTerms: [
-      { term: "Equilibrium", def: "The price at which quantity demanded equals quantity supplied." },
-      { term: "Excess demand", def: "A shortage: quantity demanded exceeds quantity supplied at the current price." },
+      { term: "Demand", def: "The quantity of a good consumers are **willing and able** to buy at each price over a given period of time.", keywords: ["willing and able", "at each price", "given time period"] },
+      { term: "Supply", def: "The quantity of a good producers are **willing and able** to sell at each price over a given period of time.", keywords: ["willing and able", "at each price"] },
+      { term: "Equilibrium", def: "The price at which **quantity demanded equals quantity supplied**, so there is no tendency for price to change; the market clears.", keywords: ["quantity demanded equals quantity supplied", "market clears", "no tendency to change"] },
+      { term: "Excess demand", def: "A **shortage**: at the ruling price, quantity demanded exceeds quantity supplied, creating upward pressure on price.", keywords: ["shortage", "quantity demanded exceeds quantity supplied", "upward pressure on price"] },
+      { term: "Excess supply", def: "A **surplus**: at the ruling price, quantity supplied exceeds quantity demanded, creating downward pressure on price.", keywords: ["surplus", "downward pressure on price"] },
+      { term: "Movement vs shift", def: "A change in the good's **own price** causes a movement **along** the curve (a change in quantity demanded/supplied); any **other** determinant **shifts** the whole curve (a change in demand/supply).", keywords: ["own price", "movement along", "shift of the curve", "change in quantity demanded"] },
     ],
   },
   {
@@ -102,6 +109,14 @@ export const DIAGRAMS: DiagramTemplate[] = [
     evaluation: [
       "The rise in price vs quantity depends on the **elasticity of supply**: inelastic supply → mostly price rises; elastic supply → mostly quantity rises.",
       "Subsidies have an **opportunity cost** and may simply be captured as higher prices if supply can't expand.",
+    ],
+    keyTerms: [
+      { term: "Increase in demand", def: "A **rightward shift** of the whole demand curve, caused by a change in a **non-price determinant**, so more is demanded **at every price**.", keywords: ["rightward shift", "at every price", "non-price determinant"] },
+      { term: "Normal good", def: "A good for which demand **rises as consumer income rises** (positive income elasticity of demand).", keywords: ["income rises", "positive income elasticity"] },
+      { term: "Inferior good", def: "A good for which demand **falls as consumer income rises** (negative income elasticity of demand).", keywords: ["negative income elasticity"] },
+      { term: "Substitute", def: "A good bought **instead of** another; a rise in the price of one causes a rise in demand for the other (positive cross elasticity).", keywords: ["instead of", "positive cross elasticity"] },
+      { term: "Complement", def: "A good bought **together with** another; a rise in the price of one causes a fall in demand for the other (negative cross elasticity).", keywords: ["together with", "negative cross elasticity"] },
+      { term: "Subsidy", def: "A **payment by government to producers** (or consumers) to lower the price and encourage output or consumption.", keywords: ["payment by government", "lower price", "encourage output"] },
     ],
   },
   {
@@ -131,8 +146,11 @@ export const DIAGRAMS: DiagramTemplate[] = [
       "May need to be paired with measures that **increase supply** (e.g. building more housing) to avoid worsening shortages.",
     ],
     keyTerms: [
-      { term: "Price ceiling", def: "A government-imposed maximum price, set below equilibrium to help consumers." },
-      { term: "Shortage", def: "Quantity demanded exceeds quantity supplied at the ruling price." },
+      { term: "Price ceiling (maximum price)", def: "A **legally imposed maximum price**, set **below the free-market equilibrium**, intended to make a good more affordable for consumers.", keywords: ["legally imposed maximum", "below equilibrium", "affordable"] },
+      { term: "Binding", def: "A price control only has an effect if it is **binding** — a ceiling must be **below** equilibrium (a floor **above** it), otherwise the market simply clears normally.", keywords: ["below equilibrium", "otherwise no effect"] },
+      { term: "Shortage", def: "**Quantity demanded exceeds quantity supplied** at the ruling price; because price cannot legally rise, the shortage **persists**.", keywords: ["quantity demanded exceeds quantity supplied", "persists"] },
+      { term: "Black market", def: "An **illegal (parallel) market** in which the good is resold **above** the legal maximum price, arising because of the unsatisfied excess demand.", keywords: ["illegal market", "above the maximum price", "excess demand"] },
+      { term: "Rationing", def: "Non-price methods of allocating the limited supply — **queues, waiting lists or first-come-first-served** — used because price can no longer perform the rationing function.", keywords: ["queues", "waiting lists", "rationing function of price"] },
     ],
   },
   {
@@ -160,6 +178,13 @@ export const DIAGRAMS: DiagramTemplate[] = [
     evaluation: [
       "The unemployment effect depends on the **elasticity of demand for labour** — if inelastic, job losses are small.",
       "In a **monopsony** (single dominant employer), a minimum wage can actually raise both wages and employment.",
+    ],
+    keyTerms: [
+      { term: "Price floor (minimum price)", def: "A **legally imposed minimum price**, set **above the free-market equilibrium**, intended to raise the income of producers or workers.", keywords: ["legally imposed minimum", "above equilibrium"] },
+      { term: "National minimum wage", def: "A **legally enforced wage floor** below which employers may not pay, designed to reduce poverty among low-paid workers.", keywords: ["legally enforced", "wage floor", "reduce poverty"] },
+      { term: "Excess supply of labour", def: "At the minimum wage, the **quantity of labour supplied exceeds the quantity demanded** — shown on the diagram as unemployment.", keywords: ["quantity supplied exceeds quantity demanded", "unemployment"] },
+      { term: "Derived demand", def: "Demand for labour is **derived** from the demand for the good or service it produces — it is not wanted for its own sake.", keywords: ["derived from demand for the product"] },
+      { term: "Monopsony", def: "A market with a **single dominant buyer** (here, one major employer), which can push the wage **below** the competitive level.", keywords: ["single dominant buyer", "below the competitive wage"] },
     ],
   },
   {
@@ -189,8 +214,12 @@ export const DIAGRAMS: DiagramTemplate[] = [
       "Demand for such goods is often **inelastic and habit-forming**, so a tax may cut consumption little while hitting the poorest hardest (regressive).",
     ],
     keyTerms: [
-      { term: "Externality", def: "A cost or benefit imposed on a third party not involved in the transaction." },
-      { term: "Welfare loss", def: "The loss of social surplus when output differs from the social optimum." },
+      { term: "Externality", def: "A **cost or benefit** imposed on a **third party** who is **not involved in the transaction** — the classic cause of market failure.", keywords: ["third party", "not involved in the transaction", "spillover"] },
+      { term: "Market failure", def: "Where the **free market fails to allocate resources efficiently**, so output differs from the socially optimal level.", keywords: ["fails to allocate resources efficiently", "socially optimal"] },
+      { term: "MPB / MSB", def: "**Marginal Private Benefit** is the benefit to the individual consumer; **Marginal Social Benefit** = MPB **plus** any external benefit (or **minus** any external cost).", keywords: ["marginal private benefit", "marginal social benefit", "external cost"] },
+      { term: "Social optimum", def: "The output where **MSB = MSC**, at which society's net welfare is maximised.", keywords: ["MSB = MSC", "welfare maximised"] },
+      { term: "Welfare loss (deadweight loss)", def: "The **loss of social surplus** from producing beyond (or below) the social optimum — shown as the **triangle** between MSB and MSC out to the market quantity.", keywords: ["loss of social welfare", "triangle", "beyond the social optimum"] },
+      { term: "Indirect tax", def: "A tax on **expenditure** (on a good or service) used to **internalise the externality** — raising private cost to equal social cost.", keywords: ["tax on expenditure", "internalise the externality", "polluter pays"] },
     ],
   },
   {
@@ -219,6 +248,16 @@ export const DIAGRAMS: DiagramTemplate[] = [
       "Monopoly isn't all bad: **economies of scale** can lower costs, and supernormal profit can fund **innovation** (dynamic efficiency).",
       "**Natural monopolies** (water, rail) avoid wasteful duplication — the case for regulation rather than competition.",
     ],
+    keyTerms: [
+      { term: "Monopoly", def: "A market with a **single seller** (or a firm with ≥25% market share) protected by **high barriers to entry**; it is a **price maker**.", keywords: ["single seller", "barriers to entry", "price maker"] },
+      { term: "Barriers to entry", def: "Obstacles preventing new firms entering — **economies of scale, patents, high sunk costs, legal protection or brand loyalty** — which sustain supernormal profit in the long run.", keywords: ["patents", "economies of scale", "sunk costs", "long run"] },
+      { term: "Profit maximisation", def: "Producing where **MC = MR**; at this output the last unit adds exactly as much to revenue as to cost, so profit cannot be increased.", keywords: ["MC = MR"] },
+      { term: "Supernormal (abnormal) profit", def: "Profit **above normal profit** — earned when **AR > AC** — which in monopoly persists long-run because of barriers to entry.", keywords: ["above normal profit", "AR exceeds AC"] },
+      { term: "Normal profit", def: "The **minimum return needed to keep the firm in the industry**; it occurs where AR = AC and is counted as a cost.", keywords: ["minimum return to stay in the industry", "AR = AC"] },
+      { term: "Allocative efficiency", def: "Achieved where **P = MC**, so the value consumers place on the last unit equals its cost. Monopoly is allocatively **inefficient** because **P > MC**.", keywords: ["P = MC", "P exceeds MC"] },
+      { term: "Productive efficiency", def: "Producing at the **minimum point of the average cost curve**, where output is made at lowest possible unit cost.", keywords: ["minimum of AC", "lowest unit cost"] },
+      { term: "Natural monopoly", def: "An industry where **economies of scale are so large** that one firm can supply the whole market at lower cost than several — so competition would waste resources.", keywords: ["economies of scale", "one firm supplies at lower cost"] },
+    ],
   },
   {
     id: "ppf",
@@ -242,6 +281,15 @@ export const DIAGRAMS: DiagramTemplate[] = [
     evaluation: [
       "A straight-line PPF would imply constant opportunity cost (perfectly substitutable resources) — rarely realistic.",
       "Choosing more capital goods today (vs consumer goods) shifts the future PPF out faster.",
+    ],
+    keyTerms: [
+      { term: "Scarcity", def: "**Unlimited wants** set against **limited (finite) resources** — the fundamental economic problem that forces choice.", keywords: ["unlimited wants", "limited resources", "forces choice"] },
+      { term: "Opportunity cost", def: "The **value of the next best alternative forgone** when a choice is made.", keywords: ["next best alternative forgone"] },
+      { term: "Production Possibility Frontier", def: "A curve showing the **maximum combinations of two goods** an economy can produce when all resources are **fully and efficiently employed** with existing technology.", keywords: ["maximum combinations", "fully and efficiently employed", "given technology"] },
+      { term: "Productive efficiency (on the PPF)", def: "Any point **on** the frontier: it is impossible to produce more of one good **without producing less** of the other.", keywords: ["on the curve", "without producing less of the other"] },
+      { term: "Increasing opportunity cost", def: "The reason the PPF is **concave (bowed outwards)**: resources are **not equally suited** to both goods, so each extra unit costs progressively more of the other.", keywords: ["bowed outwards", "resources not equally suited"] },
+      { term: "Economic growth", def: "An **outward shift of the PPF**, caused by more or better resources, improved technology, or rising productivity.", keywords: ["outward shift", "more or better resources", "technology"] },
+      { term: "Capital vs consumer goods", def: "**Capital goods** are used to produce other goods; choosing more of them lowers consumption today but shifts the **future PPF outwards faster**.", keywords: ["capital goods", "future growth"] },
     ],
   },
   {
@@ -269,6 +317,15 @@ export const DIAGRAMS: DiagramTemplate[] = [
       "The minimum of ATC is the **productively efficient** level of output.",
       "Long-run cost curves depend on the **minimum efficient scale** of the industry.",
     ],
+    keyTerms: [
+      { term: "Fixed costs", def: "Costs that **do not vary with output** in the short run (rent, insurance); they must be paid even at zero output.", keywords: ["do not vary with output", "short run"] },
+      { term: "Variable costs", def: "Costs that **change directly with the level of output** (raw materials, piece-rate wages).", keywords: ["vary directly with output"] },
+      { term: "Marginal cost", def: "The **addition to total cost** of producing **one more unit** of output.", keywords: ["addition to total cost", "one more unit"] },
+      { term: "Law of diminishing returns", def: "In the **short run**, as more of a variable factor is added to a **fixed factor**, the **marginal product eventually falls** — which is why MC eventually rises.", keywords: ["short run", "fixed factor", "marginal product eventually falls"] },
+      { term: "Why MC cuts AC at its minimum", def: "When **MC < AC** the average is pulled **down**; when **MC > AC** it is pulled **up**. So MC must cross AC exactly at AC's **lowest point**.", keywords: ["MC below AC pulls average down", "minimum point"] },
+      { term: "Economies of scale", def: "**Long-run** falls in **average cost** as the scale of output rises (purchasing, technical, managerial, financial, marketing, risk-bearing).", keywords: ["long run", "falling average cost", "scale of output"] },
+      { term: "Diseconomies of scale", def: "**Long-run rises in average cost** beyond a certain size, usually from **communication problems, coordination difficulties and falling worker motivation**.", keywords: ["rising average cost", "coordination", "communication"] },
+    ],
   },
   {
     id: "ped",
@@ -295,7 +352,13 @@ export const DIAGRAMS: DiagramTemplate[] = [
       "Estimates are imprecise: they rely on past data and 'other things equal', which rarely holds.",
     ],
     keyTerms: [
-      { term: "PED", def: "The responsiveness of quantity demanded to a change in the good's price." },
+      { term: "Price elasticity of demand (PED)", def: "The **responsiveness of quantity demanded to a change in the good's own price**: $\\text{PED} = \\dfrac{\\%\\Delta Q_d}{\\%\\Delta P}$. It is normally **negative**.", keywords: ["responsiveness of quantity demanded", "% change in quantity ÷ % change in price"] },
+      { term: "Price elastic demand", def: "|PED| **> 1**: quantity demanded changes **proportionately more** than price. Shown as a **flatter** curve.", keywords: ["greater than one", "proportionately more"] },
+      { term: "Price inelastic demand", def: "|PED| **< 1**: quantity demanded changes **proportionately less** than price. Shown as a **steeper** curve.", keywords: ["less than one", "proportionately less"] },
+      { term: "Determinants of PED", def: "**Substitutes** available, whether it is a **necessity or luxury**, the **proportion of income** spent on it, **time period**, and **how narrowly the good is defined** (habit-forming goods are inelastic).", keywords: ["substitutes", "necessity or luxury", "proportion of income", "time"] },
+      { term: "PED and total revenue", def: "If demand is **inelastic**, raising price **raises** total revenue; if **elastic**, raising price **lowers** it. (TR = P × Q.)", keywords: ["inelastic: raise price raises revenue", "elastic: raise price lowers revenue"] },
+      { term: "Income elasticity of demand (YED)", def: "The **responsiveness of demand to a change in income**: positive for **normal** goods, negative for **inferior** goods.", keywords: ["responsiveness to income", "normal", "inferior"] },
+      { term: "Cross elasticity of demand (XED)", def: "The **responsiveness of demand for one good to a change in the price of another**: positive for **substitutes**, negative for **complements**.", keywords: ["positive: substitutes", "negative: complements"] },
     ],
   },
   {
@@ -323,8 +386,15 @@ export const DIAGRAMS: DiagramTemplate[] = [
       "Long-run growth needs **supply-side** improvements (skills, investment, productivity) that shift AS right.",
     ],
     keyTerms: [
-      { term: "Multiplier", def: "The ratio of the final change in national income to the initial change in spending." },
-      { term: "Output gap", def: "The difference between actual and potential (full-capacity) output." },
+      { term: "Aggregate Demand", def: "The **total planned expenditure** on an economy's goods and services at each price level: **AD = C + I + G + (X − M)**.", keywords: ["total planned expenditure", "C + I + G + (X − M)", "at each price level"] },
+      { term: "Aggregate Supply", def: "The **total planned output** producers are willing to supply at each price level in a given period.", keywords: ["total planned output", "at each price level"] },
+      { term: "Multiplier", def: "The ratio of the **final change in national income** to the **initial change in injection**; spending is re-spent round the circular flow.", keywords: ["final change in national income", "initial injection", "circular flow"] },
+      { term: "Output gap", def: "The difference between **actual output and potential (full-capacity) output**. A **negative** gap means spare capacity; a **positive** gap means the economy is over-heating.", keywords: ["actual and potential output", "spare capacity"] },
+      { term: "Demand-pull inflation", def: "A sustained rise in the price level caused by **excess aggregate demand** when the economy is near full capacity.", keywords: ["excess aggregate demand", "near full capacity"] },
+      { term: "Cost-push inflation", def: "A sustained rise in the price level caused by **rising costs of production** (wages, imported raw materials), shifting **AS left**.", keywords: ["rising costs of production", "AS shifts left"] },
+      { term: "Crowding out", def: "Where **increased government borrowing raises interest rates**, reducing private-sector investment and offsetting the fiscal expansion.", keywords: ["government borrowing", "raises interest rates", "reduces private investment"] },
+      { term: "Fiscal vs monetary policy", def: "**Fiscal** = government **spending and taxation**; **monetary** = the central bank's **interest rates and money supply**. Both are demand-side.", keywords: ["spending and taxation", "interest rates", "demand-side"] },
+      { term: "Supply-side policy", def: "Measures to raise **productive capacity** — education, training, infrastructure, deregulation, tax incentives — shifting **AS right** and enabling growth **without inflation**.", keywords: ["productive capacity", "AS shifts right", "without inflation"] },
     ],
   },
   {
@@ -352,6 +422,16 @@ export const DIAGRAMS: DiagramTemplate[] = [
     evaluation: [
       "The effect on the trade balance depends on the **Marshall–Lerner condition** and the **J-curve** — it improves only if demand is elastic enough, and only over time.",
       "A depreciation can import inflation via dearer imported raw materials.",
+    ],
+    keyTerms: [
+      { term: "Exchange rate", def: "The **price of one currency expressed in terms of another**.", keywords: ["price of one currency in terms of another"] },
+      { term: "Depreciation", def: "A **fall in the value of a currency** under a **floating** exchange rate, caused by market forces.", keywords: ["fall in value", "floating", "market forces"] },
+      { term: "Devaluation", def: "A **deliberate reduction in the value** of a currency by the government under a **fixed** exchange rate system.", keywords: ["deliberate", "fixed exchange rate"] },
+      { term: "Appreciation", def: "A **rise in the value of a currency** under a floating system.", keywords: ["rise in value", "floating"] },
+      { term: "SPICED", def: "**S**trong **P**ound = **I**mports **C**heaper, **E**xports **D**earer — so a weaker currency makes **exports cheaper and imports dearer**.", keywords: ["exports cheaper", "imports dearer"] },
+      { term: "Hot money", def: "Short-term **speculative capital flows** moving between countries chasing **higher interest rates** or expected currency gains.", keywords: ["speculative capital flows", "interest rate differentials"] },
+      { term: "Marshall–Lerner condition", def: "A depreciation improves the current account **only if the combined price elasticities of demand for exports and imports exceed 1** (PEDx + PEDm > 1).", keywords: ["sum of elasticities greater than one", "current account"] },
+      { term: "J-curve effect", def: "After a depreciation the current account **worsens first** (demand is inelastic in the short run) and **improves later** as volumes adjust.", keywords: ["worsens first then improves", "inelastic in the short run"] },
     ],
   },
 ];

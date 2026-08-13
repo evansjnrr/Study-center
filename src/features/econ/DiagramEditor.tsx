@@ -128,21 +128,64 @@ export function DiagramEditor({ id }: { id: string }) {
         <text x={PLOT.x0 - 6} y={PLOT.y0 + 2} fill="rgb(var(--ink-soft))" fontSize="10" textAnchor="end">{template.yLabel}</text>
         <text x={PLOT.x1} y={PLOT.y1 + 16} fill="rgb(var(--ink-soft))" fontSize="10" textAnchor="end">{template.xLabel}</text>
 
-        {/* intersections (equilibria) drawn under the curves */}
+        {/* intersections (equilibria) drawn under the curves, with the
+            P/Q axis labels Cambridge expects to see marked on. */}
         {template.intersections?.map(([a, b], i) => {
           const la = lines.find((l) => l.id === a);
           const lb = lines.find((l) => l.id === b);
           if (!la || !lb || la.type !== "line" || lb.type !== "line") return null;
           const pt = intersect(la, lb);
           if (!pt) return null;
+          const sub = template.intersections!.length > 1 ? String(i + 1) : "";
+          const pLabel = (template.yLabel[0] || "P") + sub;
+          const qLabel = (template.xLabel[0] || "Q") + sub;
           return (
             <g key={i}>
               <line x1={pt.x} y1={pt.y} x2={pt.x} y2={PLOT.y1} stroke="rgb(var(--ink-faint))" strokeDasharray="3 3" />
               <line x1={PLOT.x0} y1={pt.y} x2={pt.x} y2={pt.y} stroke="rgb(var(--ink-faint))" strokeDasharray="3 3" />
               <circle cx={pt.x} cy={pt.y} r="3.5" fill="rgb(var(--ink))" />
+              {/* value labels on each axis */}
+              <text x={PLOT.x0 - 5} y={pt.y + 3.5} fill="rgb(var(--ink))" fontSize="10" textAnchor="end" fontWeight="600">
+                {pLabel}
+              </text>
+              <text x={pt.x} y={PLOT.y1 + 13} fill="rgb(var(--ink))" fontSize="10" textAnchor="middle" fontWeight="600">
+                {qLabel}
+              </text>
             </g>
           );
         })}
+
+        {/* Price-control gap: shows the shortage / surplus between the two
+            curves at the controlled price — the bit that earns the marks. */}
+        {(() => {
+          const ctrl = lines.find((l) => l.id === "PC" || l.id === "NMW");
+          if (!ctrl) return null;
+          const y = ctrl.p1.y;
+          const others = lines.filter((l) => l.id !== ctrl.id && l.type === "line");
+          if (others.length < 2) return null;
+          const xs = others
+            .map((l) => xAtY(l, y))
+            .filter((x): x is number => x !== null)
+            .sort((p, q) => p - q);
+          if (xs.length < 2 || Math.abs(xs[1] - xs[0]) < 4) return null;
+          const isCeiling = ctrl.id === "PC";
+          return (
+            <g>
+              <line
+                x1={xs[0]} y1={y} x2={xs[1]} y2={y}
+                stroke={isCeiling ? COLORS.bad : COLORS.third}
+                strokeWidth="6" strokeLinecap="round" opacity="0.28"
+              />
+              <text
+                x={(xs[0] + xs[1]) / 2} y={y - 8}
+                fill={isCeiling ? COLORS.bad : COLORS.third}
+                fontSize="10" textAnchor="middle" fontWeight="600"
+              >
+                {isCeiling ? "shortage" : "excess supply"}
+              </text>
+            </g>
+          );
+        })()}
 
         {/* curves / lines */}
         {lines.map((l) => (
@@ -236,6 +279,16 @@ function intersect(a: DLine, b: DLine): DPoint | null {
   const y = p.y + t * (q.y - p.y);
   if (x < PLOT.x0 - 4 || x > PLOT.x1 + 4 || y < PLOT.y0 - 4 || y > PLOT.y1 + 4) return null;
   return { x, y };
+}
+
+/** x-coordinate where a straight line reaches a given y (null if horizontal). */
+function xAtY(l: DLine, y: number): number | null {
+  const dy = l.p2.y - l.p1.y;
+  if (Math.abs(dy) < 1e-6) return null;
+  const t = (y - l.p1.y) / dy;
+  const x = l.p1.x + t * (l.p2.x - l.p1.x);
+  if (x < PLOT.x0 - 4 || x > PLOT.x1 + 4) return null;
+  return x;
 }
 
 function clone(lines: DLine[]): DLine[] {

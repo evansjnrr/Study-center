@@ -81,6 +81,42 @@ function CSDetail({ topicId }: { topicId: string }) {
         </ul>
       </div>
 
+      {/* Cambridge-style definitions */}
+      {t.keyTerms && t.keyTerms.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between gap-3 mb-1">
+            <div className="text-xs font-medium text-ink-faint uppercase tracking-wide">
+              Definitions — exam wording
+            </div>
+            <SpeakButton text={t.keyTerms.map((k) => `${k.term}. ${k.def}`).join(" ")} />
+          </div>
+          <p className="text-ink-faint text-xs mb-3 leading-relaxed">
+            Learn these close to word-for-word. The chips are the phrases the mark
+            scheme is scanning for.
+          </p>
+          <div className="grid gap-2">
+            {t.keyTerms.map((k) => (
+              <div key={k.term} className="rounded-xl border border-line/60 bg-surface px-4 py-3">
+                <div className="text-ink font-medium text-sm">{k.term}</div>
+                <RichText text={k.def} className="text-ink-soft text-sm mt-1 leading-relaxed" />
+                {k.keywords && k.keywords.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {k.keywords.map((w) => (
+                      <span
+                        key={w}
+                        className="text-[0.68rem] px-2 py-0.5 rounded-full bg-compsci-soft text-compsci border border-compsci/25"
+                      >
+                        {w}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Worked examples with optional alternatives */}
       <div className="space-y-6">
         {t.examples.map((ex, i) => (

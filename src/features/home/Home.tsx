@@ -5,11 +5,13 @@ import { PHYSICS_TOPICS } from "@/data/topics";
 import { DIAGRAMS } from "@/features/econ/diagrams";
 import { allCards } from "@/lib/db";
 import { dueCards } from "@/lib/srs";
-import { nextExam, daysUntil, examsOnNextDate } from "@/data/exams";
+import { nextExam, daysUntil, examsOn, type Exam } from "@/data/exams";
+import { useToday } from "@/lib/useToday";
 
 export function Home() {
   const navigate = useApp((s) => s.navigate);
   const [dueCount, setDueCount] = React.useState<number | null>(null);
+  const today = useToday(); // re-renders when the day rolls over
 
   React.useEffect(() => {
     allCards().then((c) => setDueCount(dueCards(c).length));
@@ -18,10 +20,12 @@ export function Home() {
   // Kept as constants so the home screen doesn't pull the whole visualizer /
   // CS bundle into the initial load (they're code-split behind their routes).
   const interactiveCount = 12;
-  const csTopicCount = 12;
-  const exam = nextExam();
-  const examDays = exam ? daysUntil(exam.date) : undefined;
-  const sameDay = examsOnNextDate();
+  const csTopicCount = 13;
+
+  // `today` is a dependency so these recompute when the date changes.
+  const now = React.useMemo(() => new Date(), [today]);
+  const nextAny = nextExam(undefined, now);
+  const nextReal = nextExam("real", now);
 
   return (
     <div className="max-w-3xl mx-auto px-5 sm:px-6 pt-14 sm:pt-20 pb-24">
@@ -84,22 +88,20 @@ export function Home() {
         </Card>
 
         <Card className="p-5">
-          <div className="text-xs font-medium uppercase tracking-wide text-econ">Next exam</div>
-          {exam ? (
+          <div className="text-xs font-medium uppercase tracking-wide text-econ">
+            {nextAny?.kind === "mock" ? "Next mock" : "Next exam"}
+          </div>
+          {nextAny ? (
             <>
-              <div className="font-serif text-xl text-ink mt-2">
-                {examDays === 0 ? "Today" : examDays === 1 ? "Tomorrow" : `${examDays} days`}
-              </div>
-              <p className="text-ink-soft text-sm mt-2">
-                {new Date(exam.date + "T00:00:00").toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })}
-              </p>
-              <div className="flex flex-wrap gap-1.5 mt-3">
-                {sameDay.map((e) => (
-                  <span key={e.component} className="text-xs px-2 py-0.5 rounded-full bg-surface-2 text-ink-soft">
-                    {e.component}{e.label ? ` · ${e.label}` : ""}
-                  </span>
-                ))}
-              </div>
+              <Countdown exam={nextAny} now={now} />
+              {/* If the nearest is a mock, still show how far the real papers are. */}
+              {nextAny.kind === "mock" && nextReal && (
+                <div className="mt-4 pt-3 border-t border-line/50 text-sm text-ink-soft">
+                  Real exams start in{" "}
+                  <span className="text-ink font-medium">{daysUntil(nextReal.date, now)} days</span>{" "}
+                  <span className="text-ink-faint">({nextReal.component}, 6 Oct)</span>
+                </div>
+              )}
             </>
           ) : (
             <div className="text-ink-soft mt-2">No exams scheduled.</div>
@@ -112,6 +114,42 @@ export function Home() {
         reopen exactly as you left them.
       </p>
     </div>
+  );
+}
+
+function Countdown({ exam, now }: { exam: Exam; now: Date }) {
+  const days = daysUntil(exam.date, now);
+  const sameDay = examsOn(exam.date);
+  const label = days === 0 ? "Today" : days === 1 ? "Tomorrow" : `${days} days`;
+  return (
+    <>
+      <div
+        className={
+          "font-serif text-xl mt-2 " +
+          (days <= 3 ? "text-mark-bad" : days <= 10 ? "text-mark-warn" : "text-ink")
+        }
+      >
+        {label}
+      </div>
+      <p className="text-ink-soft text-sm mt-2">
+        {new Date(exam.date + "T00:00:00").toLocaleDateString(undefined, {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+        })}
+      </p>
+      <div className="flex flex-wrap gap-1.5 mt-3">
+        {sameDay.map((e) => (
+          <span
+            key={e.component + e.label}
+            className="text-xs px-2 py-0.5 rounded-full bg-surface-2 text-ink-soft"
+          >
+            {e.component}
+            {e.label ? ` · ${e.label}` : ""}
+          </span>
+        ))}
+      </div>
+    </>
   );
 }
 
