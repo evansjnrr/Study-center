@@ -3,7 +3,7 @@ import { useApp } from "@/lib/store";
 import { Card, Chip } from "@/components/ui";
 import { PHYSICS_TOPICS } from "@/data/topics";
 import { DIAGRAMS } from "@/features/econ/diagrams";
-import { allCards } from "@/lib/db";
+import { allCards, dueRedo } from "@/lib/db";
 import { dueCards } from "@/lib/srs";
 import { nextExam, daysUntil, examsOn, type Exam } from "@/data/exams";
 import { useToday } from "@/lib/useToday";
@@ -13,8 +13,11 @@ export function Home() {
   const [dueCount, setDueCount] = React.useState<number | null>(null);
   const today = useToday(); // re-renders when the day rolls over
 
+  const [redoDue, setRedoDue] = React.useState(0);
+
   React.useEffect(() => {
     allCards().then((c) => setDueCount(dueCards(c).length));
+    dueRedo().then((r) => setRedoDue(r.length));
   }, []);
 
   // Kept as constants so the home screen doesn't pull the whole visualizer /
@@ -32,16 +35,46 @@ export function Home() {
       <div className="animate-fade-up">
         <p className="text-ink-faint text-sm mb-4">{greeting()}</p>
         <h1 className="font-serif text-3xl sm:text-[2.6rem] leading-[1.2] text-ink">
-          See the idea, then draw it yourself.
+          Learn it, then prove it.
         </h1>
         <p className="text-ink-soft mt-4 max-w-xl">
-          A visual study room for three subjects — interactive physics you can play
-          with, economics diagrams you can reshape and keep, and computer science
-          worked through with an alternative for every idea.
+          Practise real exam-style questions, mark yourself against the scheme, and
+          let the app hunt down what you keep getting wrong.
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-4 mt-10">
+      {/* The exam loop — the three things you actually do */}
+      <div className="grid sm:grid-cols-3 gap-4 mt-9">
+        <ActionCard
+          icon="🎯" title="Practice" accent="physics"
+          body="Choose subject, topics and difficulty. Timed or untimed."
+          onClick={() => navigate({ name: "practice" })}
+        />
+        <ActionCard
+          icon="🔴" title="Fix my weaknesses" accent="econ"
+          body={redoDue > 0 ? `${redoDue} question${redoDue === 1 ? "" : "s"} due for a redo.` : "Redo the questions you got wrong."}
+          badge={redoDue > 0 ? String(redoDue) : undefined}
+          onClick={() => navigate({ name: "practice", preset: "redo" })}
+        />
+        <ActionCard
+          icon="📝" title="Exam mode" accent="compsci"
+          body="A full paper under real conditions, then a marked result."
+          onClick={() => navigate({ name: "practice", preset: "exam" })}
+        />
+      </div>
+
+      <button
+        onClick={() => navigate({ name: "progress" })}
+        className="w-full mt-4 rounded-2xl border border-line/60 bg-surface hover:bg-surface-2 px-5 py-3.5 flex items-center justify-between transition-colors"
+      >
+        <span className="text-ink text-sm font-medium">📊 My performance</span>
+        <span className="text-ink-faint text-sm">accuracy, weak topics, repeated mistakes →</span>
+      </button>
+
+      <div className="text-xs font-medium text-ink-faint uppercase tracking-wide mt-10 mb-3">
+        Learn &amp; reference
+      </div>
+      <div className="grid sm:grid-cols-3 gap-4">
         <BigCard
           accent="physics"
           eyebrow="Physics 9702"
@@ -114,6 +147,26 @@ export function Home() {
         reopen exactly as you left them.
       </p>
     </div>
+  );
+}
+
+function ActionCard({
+  icon, title, body, accent, badge, onClick,
+}: {
+  icon: string; title: string; body: string;
+  accent: "physics" | "econ" | "compsci"; badge?: string; onClick: () => void;
+}) {
+  const ring =
+    accent === "physics" ? "hover:border-physics/50" : accent === "econ" ? "hover:border-econ/50" : "hover:border-compsci/50";
+  return (
+    <Card onClick={onClick} className={`lifted p-5 ${ring}`}>
+      <div className="flex items-start justify-between">
+        <span className="text-2xl" aria-hidden>{icon}</span>
+        {badge && <Chip accent="bad">{badge}</Chip>}
+      </div>
+      <div className="font-serif text-lg text-ink mt-3">{title}</div>
+      <p className="text-ink-soft text-sm mt-1.5 leading-relaxed">{body}</p>
+    </Card>
   );
 }
 

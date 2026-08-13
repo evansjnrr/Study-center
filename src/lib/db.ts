@@ -1,5 +1,6 @@
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 import type { Flashcard, Note, ReviewLog, SavedDiagram, Settings } from "./types";
+import type { QAttempt, Question, RedoItem } from "./questions";
 
 interface StudyDB extends DBSchema {
   settings: {
@@ -24,12 +25,29 @@ interface StudyDB extends DBSchema {
     value: ReviewLog;
     indexes: { "by-at": number };
   };
+  questions: {
+    key: string;
+    value: Question;
+    indexes: { "by-subject": string; "by-topic": string };
+  };
+  qattempts: {
+    key: string;
+    value: QAttempt;
+    indexes: { "by-at": number; "by-question": string; "by-topic": string };
+  };
+  redo: {
+    key: string; // questionId
+    value: RedoItem;
+    indexes: { "by-due": number };
+  };
 }
 
 // Internal IndexedDB name — kept as "claw" so any economics graphs already
 // saved under the old name are not orphaned by the rename.
 const DB_NAME = "claw";
-const DB_VERSION = 5;
+// v7 repairs a v6 upgrade that created the exam-engine "questions" store and
+// then immediately deleted it via the legacy-cleanup list.
+const DB_VERSION = 7;
 
 let dbPromise: Promise<IDBPDatabase<StudyDB>> | null = null;
 
@@ -55,8 +73,24 @@ export function db(): Promise<IDBPDatabase<StudyDB>> {
           const rv = d.createObjectStore("reviews", { keyPath: "id" });
           rv.createIndex("by-at", "at");
         }
-        // Drop legacy stores from the paper/question era, if present.
-        for (const name of ["questions", "attempts", "progress", "retest", "blocks"]) {
+        if (!d.objectStoreNames.contains("questions")) {
+          const qs = d.createObjectStore("questions", { keyPath: "id" });
+          qs.createIndex("by-subject", "subject");
+          qs.createIndex("by-topic", "topicId");
+        }
+        if (!d.objectStoreNames.contains("qattempts")) {
+          const qa = d.createObjectStore("qattempts", { keyPath: "id" });
+          qa.createIndex("by-at", "at");
+          qa.createIndex("by-question", "questionId");
+          qa.createIndex("by-topic", "topicId");
+        }
+        if (!d.objectStoreNames.contains("redo")) {
+          const rd = d.createObjectStore("redo", { keyPath: "questionId" });
+          rd.createIndex("by-due", "due");
+        }
+        // Drop stores from the original (removed) tutor build. NOTE: "questions"
+        // is deliberately NOT in this list — it is now the exam-engine bank.
+        for (const name of ["attempts", "progress", "retest", "blocks"]) {
           if (d.objectStoreNames.contains(name as any)) {
             d.deleteObjectStore(name as any);
           }
@@ -128,6 +162,52 @@ export async function getNote(id: string): Promise<Note | undefined> {
 
 export async function putNote(n: Note) {
   await (await db()).put("notes", n);
+}
+
+// -------------------- Exam engine: questions / attempts / redo --------------------
+export async function putQuestions(qs: Question[]) {
+  const d = await db();
+  const tx = d.transaction("questions", "readwrite");
+  await Promise.all(qs.map((q) => tx.store.put(q)));
+  await tx.done;
+}
+
+export async function allQuestions(): Promise<Question[]> {
+  return (await db()).getAll("questions");
+}
+
+export async function countQuestions(): Promise<number> {
+  return (await db()).count("questions");
+}
+
+export async function getQuestion(id: string): Promise<Question | undefined> {
+  return (await db()).get("questions", id);
+}
+
+export async function putQAttempt(a: QAttempt) {
+  await (await db()).put("qattempts", a);
+}
+
+export async function allQAttempts(): Promise<QAttempt[]> {
+  return (await db()).getAll("qattempts");
+}
+
+export async function putRedo(r: RedoItem) {
+  await (await db()).put("redo", r);
+}
+
+export async function getRedo(questionId: string): Promise<RedoItem | undefined> {
+  return (await db()).get("redo", questionId);
+}
+
+export async function allRedo(): Promise<RedoItem[]> {
+  return (await db()).getAll("redo");
+}
+
+/** Questions currently due for a redo (wrong before, and the wait has elapsed). */
+export async function dueRedo(now = Date.now()): Promise<RedoItem[]> {
+  const all = await allRedo();
+  return all.filter((r) => !r.mastered && r.due <= now);
 }
 
 // -------------------- Backup / restore / reset --------------------

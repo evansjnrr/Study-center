@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import type { Settings } from "./types";
-import { getSettings, putSettings, countCards, putCards } from "./db";
+import { getSettings, putSettings, countCards, putCards, countQuestions, putQuestions } from "./db";
 import { seedCards } from "@/data/flashcards";
+import { QUESTION_BANK } from "@/data/questionBank";
 
 // ------------------------------------------------------------------
 // A visual study tool: physics concept visuals + economics graphs.
@@ -13,6 +14,8 @@ export type Route =
   | { name: "econ"; diagramId?: string } // economics graph editor
   | { name: "cs"; topicId?: string } // computer science examples
   | { name: "cards"; mode?: string } // spaced-repetition flashcards
+  | { name: "practice"; preset?: "redo" | "exam" } // exam-performance engine
+  | { name: "progress" } // weakness dashboard
   | { name: "settings" };
 
 interface AppState {
@@ -50,8 +53,9 @@ export const useApp = create<AppState>((set, get) => ({
     // Merge so any newly-added setting fields fall back to their defaults.
     const settings = { ...DEFAULT_SETTINGS, ...(saved ?? {}) };
     await putSettings(settings);
-    // Seed the flashcard decks once.
+    // Seed the flashcard decks and the question bank once.
     if ((await countCards()) === 0) await putCards(seedCards());
+    if ((await countQuestions()) === 0) await putQuestions(QUESTION_BANK);
     set({ settings, ready: true });
     get().applyTheme();
   },

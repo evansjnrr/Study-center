@@ -10,6 +10,8 @@ const EconGraphs = React.lazy(() => import("@/features/econ/EconGraphs").then((m
 const ComputerScience = React.lazy(() => import("@/features/cs/ComputerScience").then((m) => ({ default: m.ComputerScience })));
 const Flashcards = React.lazy(() => import("@/features/cards/Flashcards").then((m) => ({ default: m.Flashcards })));
 const SettingsScreen = React.lazy(() => import("@/features/settings/Settings").then((m) => ({ default: m.SettingsScreen })));
+const Practice = React.lazy(() => import("@/features/practice/Practice").then((m) => ({ default: m.Practice })));
+const Weakness = React.lazy(() => import("@/features/practice/Weakness").then((m) => ({ default: m.Weakness })));
 
 export default function App() {
   const { ready, boot } = useApp();
@@ -67,6 +69,10 @@ function Screen() {
       return <ComputerScience topicId={route.topicId} />;
     case "cards":
       return <Flashcards />;
+    case "practice":
+      return <Practice preset={route.preset} />;
+    case "progress":
+      return <Weakness />;
     case "settings":
       return <SettingsScreen />;
     default:
