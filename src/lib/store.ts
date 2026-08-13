@@ -15,6 +15,8 @@ export type Route =
   | { name: "cs"; topicId?: string } // computer science examples
   | { name: "cards"; mode?: string } // spaced-repetition flashcards
   | { name: "practice"; preset?: "redo" | "exam" } // exam-performance engine
+  | { name: "exam" } // full paper under exam conditions
+  | { name: "plan" } // "what should I study?" session generator
   | { name: "progress" } // weakness dashboard
   | { name: "settings" };
 

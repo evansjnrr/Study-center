@@ -12,6 +12,8 @@ const Flashcards = React.lazy(() => import("@/features/cards/Flashcards").then((
 const SettingsScreen = React.lazy(() => import("@/features/settings/Settings").then((m) => ({ default: m.SettingsScreen })));
 const Practice = React.lazy(() => import("@/features/practice/Practice").then((m) => ({ default: m.Practice })));
 const Weakness = React.lazy(() => import("@/features/practice/Weakness").then((m) => ({ default: m.Weakness })));
+const ExamMode = React.lazy(() => import("@/features/practice/ExamMode").then((m) => ({ default: m.ExamMode })));
+const SessionPlanner = React.lazy(() => import("@/features/practice/SessionPlanner").then((m) => ({ default: m.SessionPlanner })));
 
 export default function App() {
   const { ready, boot } = useApp();
@@ -71,6 +73,10 @@ function Screen() {
       return <Flashcards />;
     case "practice":
       return <Practice preset={route.preset} />;
+    case "exam":
+      return <ExamMode />;
+    case "plan":
+      return <SessionPlanner />;
     case "progress":
       return <Weakness />;
     case "settings":

@@ -59,13 +59,22 @@ export function Home() {
         <ActionCard
           icon="📝" title="Exam mode" accent="compsci"
           body="A full paper under real conditions, then a marked result."
-          onClick={() => navigate({ name: "practice", preset: "exam" })}
+          onClick={() => navigate({ name: "exam" })}
         />
       </div>
 
+      {/* Decide-for-me shortcut */}
+      <button
+        onClick={() => navigate({ name: "plan" })}
+        className="w-full mt-4 rounded-2xl border border-physics/40 bg-physics-soft/60 hover:bg-physics-soft px-5 py-4 flex items-center justify-between transition-colors active:scale-[0.99]"
+      >
+        <span className="text-physics font-medium">🎯 Give me my next session</span>
+        <span className="text-physics/70 text-sm">builds a plan from your weak spots →</span>
+      </button>
+
       <button
         onClick={() => navigate({ name: "progress" })}
-        className="w-full mt-4 rounded-2xl border border-line/60 bg-surface hover:bg-surface-2 px-5 py-3.5 flex items-center justify-between transition-colors"
+        className="w-full mt-3 rounded-2xl border border-line/60 bg-surface hover:bg-surface-2 px-5 py-3.5 flex items-center justify-between transition-colors"
       >
         <span className="text-ink text-sm font-medium">📊 My performance</span>
         <span className="text-ink-faint text-sm">accuracy, weak topics, repeated mistakes →</span>
