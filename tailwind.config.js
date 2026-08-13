@@ -1,0 +1,98 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  darkMode: "class",
+  theme: {
+    extend: {
+      fontFamily: {
+        // Modern display/UI sans — self-hosted variable font.
+        sans: [
+          "Plus Jakarta Sans Variable",
+          "Plus Jakarta Sans",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "sans-serif",
+        ],
+        // "serif" is repurposed as the display face for headings (same family,
+        // differentiated by weight/tracking in index.css).
+        serif: [
+          "Plus Jakarta Sans Variable",
+          "Plus Jakarta Sans",
+          "system-ui",
+          "sans-serif",
+        ],
+        mono: [
+          "JetBrains Mono Variable",
+          "JetBrains Mono",
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "monospace",
+        ],
+      },
+      colors: {
+        // Warm neutral base — bone / warm grey / soft cream.
+        // Driven by CSS variables so dark mode can be tuned warm, not blue.
+        paper: "rgb(var(--paper) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        "surface-2": "rgb(var(--surface-2) / <alpha-value>)",
+        line: "rgb(var(--line) / <alpha-value>)",
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        "ink-soft": "rgb(var(--ink-soft) / <alpha-value>)",
+        "ink-faint": "rgb(var(--ink-faint) / <alpha-value>)",
+        // Marking colours — soft, never harsh
+        "mark-good": "rgb(var(--mark-good) / <alpha-value>)",
+        "mark-good-bg": "rgb(var(--mark-good-bg) / <alpha-value>)",
+        "mark-bad": "rgb(var(--mark-bad) / <alpha-value>)",
+        "mark-bad-bg": "rgb(var(--mark-bad-bg) / <alpha-value>)",
+        "mark-warn": "rgb(var(--mark-warn) / <alpha-value>)",
+        // Subject accents (one soft accent per subject for wayfinding)
+        physics: "rgb(var(--physics) / <alpha-value>)",
+        "physics-soft": "rgb(var(--physics-soft) / <alpha-value>)",
+        compsci: "rgb(var(--compsci) / <alpha-value>)",
+        "compsci-soft": "rgb(var(--compsci-soft) / <alpha-value>)",
+        econ: "rgb(var(--econ) / <alpha-value>)",
+        "econ-soft": "rgb(var(--econ-soft) / <alpha-value>)",
+      },
+      borderRadius: {
+        xl: "1rem",
+        "2xl": "1.25rem",
+        "3xl": "1.75rem",
+      },
+      boxShadow: {
+        soft: "0 1px 2px rgb(var(--shadow) / 0.04), 0 4px 16px rgb(var(--shadow) / 0.06)",
+        "soft-lg":
+          "0 2px 4px rgb(var(--shadow) / 0.05), 0 12px 40px rgb(var(--shadow) / 0.10)",
+      },
+      transitionTimingFunction: {
+        settle: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+      },
+      keyframes: {
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "fade-up": {
+          "0%": { opacity: "0", transform: "translateY(6px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-in-right": {
+          "0%": { opacity: "0", transform: "translateX(24px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        "slide-up-panel": {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in 200ms cubic-bezier(0.22,0.61,0.36,1)",
+        "fade-up": "fade-up 220ms cubic-bezier(0.22,0.61,0.36,1)",
+        "slide-in-right": "slide-in-right 200ms cubic-bezier(0.22,0.61,0.36,1)",
+        "slide-up-panel": "slide-up-panel 240ms cubic-bezier(0.22,0.61,0.36,1)",
+      },
+    },
+  },
+  plugins: [],
+};

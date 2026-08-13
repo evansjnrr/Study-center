@@ -1,0 +1,17 @@
+# Config for deploying to Netlify (drag-and-drop the dist/ folder at
+# app.netlify.com/drop, or connect this project to a repo).
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback: serve the app for any path (client-side routing).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Let the service worker update itself; don't cache it hard.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"

@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Design tokens — modern: deep black + indigo/cyan.                    */
+/* ------------------------------------------------------------------ */
+:root {
+  /* Light: clean, cool near-white with indigo accent. */
+  --paper: 247 248 250; /* #F7F8FA */
+  --surface: 255 255 255;
+  --surface-2: 240 242 246;
+  --line: 224 227 233;
+  --ink: 22 24 31;
+  --ink-soft: 82 88 100;
+  --ink-faint: 138 144 156;
+  --shadow: 20 24 40;
+
+  --mark-good: 22 163 110;
+  --mark-good-bg: 224 244 235;
+  --mark-bad: 217 70 70;
+  --mark-bad-bg: 250 228 228;
+  --mark-warn: 176 120 20;
+
+  --physics: 79 70 229; /* indigo-600 */
+  --physics-soft: 233 233 253;
+  --compsci: 124 58 237; /* violet-600 */
+  --compsci-soft: 240 234 254;
+  --econ: 8 145 178; /* cyan-700 */
+  --econ-soft: 222 244 249;
+
+  color-scheme: light;
+}
+
+.dark {
+  /* Dark: #070709 with indigo #6366F1 + cyan #06B6D4. */
+  --paper: 7 7 9; /* #070709 */
+  --surface: 15 16 21; /* #0F1015 */
+  --surface-2: 24 25 33;
+  --line: 42 44 54; /* hairline (reads like rgba(255,255,255,.08) at low opacity) */
+  --ink: 237 238 242; /* #EDEEF2 */
+  --ink-soft: 155 160 174; /* #9BA0AE */
+  --ink-faint: 107 112 128; /* #6B7080 */
+  --shadow: 0 0 0;
+
+  --mark-good: 52 211 153; /* emerald */
+  --mark-good-bg: 18 42 34;
+  --mark-bad: 244 118 110;
+  --mark-bad-bg: 48 24 26;
+  --mark-warn: 234 179 8; /* amber */
+
+  --physics: 99 102 241; /* indigo #6366F1 */
+  --physics-soft: 30 31 58;
+  --compsci: 139 92 246; /* violet #8B5CF6 */
+  --compsci-soft: 38 30 60;
+  --econ: 34 197 214; /* cyan (brightened #06B6D4 for contrast) */
+  --econ-soft: 12 42 50;
+
+  color-scheme: dark;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased;
+  transition: background-color 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* A subtle ambient glow behind the whole app (indigo/cyan mesh). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 38% at 50% -6%, rgb(var(--physics) / 0.12), transparent 70%),
+    radial-gradient(45% 35% at 92% 6%, rgb(var(--econ) / 0.08), transparent 70%);
+}
+
+/* Display face for headings — same family, heavier + tighter tracking. */
+@layer base {
+  .font-serif {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Comfortable measure + generous line height for reading text */
+.prose-paper {
+  @apply font-sans text-ink leading-relaxed;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* "Lifted" — important panels sit on a lighter tone of the black background
+   with a soft accent glow, so they read as elevated above the page. */
+.lifted {
+  background:
+    radial-gradient(130% 80% at 50% -10%, rgb(var(--physics) / 0.10), transparent 60%),
+    linear-gradient(180deg, rgb(var(--surface-2)), rgb(var(--surface)));
+  box-shadow:
+    0 14px 46px rgb(var(--shadow) / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.05);
+  transition: box-shadow 250ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.lifted:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 20px 60px rgb(var(--shadow) / 0.55),
+    inset 0 1px 0 rgb(255 255 255 / 0.07);
+}
+
+/* A soft mesh glow behind a section heading. */
+.glow-head {
+  position: relative;
+}
+.glow-head::before {
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: 30%;
+  top: -40px;
+  height: 140px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(50% 60% at 20% 40%, rgb(var(--physics) / 0.18), transparent 70%);
+  filter: blur(20px);
+}
+
+/* Thin, quiet scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--line)) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--line));
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* KaTeX inherits ink colour + sits inline nicely */
+.katex {
+  font-size: 1.02em;
+}
+.katex-display {
+  margin: 0.35em 0;
+}
+
+/* Focus ring — soft, never harsh */
+:focus-visible {
+  outline: 2px solid rgb(var(--physics));
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Respect reduced motion — system preference or the in-app toggle. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
