@@ -77,6 +77,13 @@ export function onlyRoboticVoices(): boolean {
   return vs.length > 0 && !vs.some(isNaturalVoice);
 }
 
+/** Best voice that works without a network connection (for offline use). */
+export function bestLocalVoice(): SpeechSynthesisVoice | undefined {
+  const vs = englishVoices().filter((v) => v.localService);
+  if (!vs.length) return undefined;
+  return [...vs].sort((a, b) => scoreVoice(b) - scoreVoice(a))[0];
+}
+
 // Turn rich markdown/LaTeX text into something worth reading aloud:
 // drop maths (it reads as gibberish) and strip markdown markers.
 export function toSpeech(rich: string): string {
@@ -115,6 +122,20 @@ export function speak(text: string, opts: SpeakOptions = {}) {
   const chunks = text.match(/[^.!?;:]+[.!?;:]*/g)?.map((c) => c.trim()).filter(Boolean) ?? [text];
   let i = 0;
 
+  // Cloud voices (Edge's "Natural" ones) need a network connection. If one
+  // fails — offline, or the service is unreachable — fall back to the best
+  // on-device voice so read-aloud still works.
+  let usedFallback = false;
+  const fallbackIfRemoteFails = (): boolean => {
+    if (usedFallback || !voice || voice.localService) return false;
+    const local = bestLocalVoice();
+    if (!local) return false;
+    usedFallback = true;
+    voice = local;
+    i = Math.max(0, i - 1); // retry the chunk that failed
+    return true;
+  };
+
   const next = () => {
     if (mine !== session) return; // superseded / stopped
     if (i >= chunks.length) {
@@ -133,7 +154,11 @@ export function speak(text: string, opts: SpeakOptions = {}) {
     u.rate = robotic ? rate * 0.92 : rate;
     u.pitch = robotic ? 0.92 : 1.0;
     u.onend = next;
-    u.onerror = next;
+    u.onerror = () => {
+      if (mine !== session) return;
+      fallbackIfRemoteFails();
+      next();
+    };
     synth.speak(u);
   };
   next();
