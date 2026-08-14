@@ -65,10 +65,11 @@ export function EconGraphs({ diagramId }: { diagramId?: string }) {
 
       <div className="label mt-12 mb-2">A2 · Topics 7–11</div>
       <div className="rule mb-5" />
-      <Section title="Theory of the firm" diagrams={a2} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
+      <Section title="Microeconomics" diagrams={a2.filter((d) => d.category === "Microeconomics")} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
+      <Section title="Macroeconomics" diagrams={a2.filter((d) => d.category === "Macroeconomics")} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
       <p className="text-ink-faint text-xs leading-relaxed">
-        Most A2 economics is analysis and evaluation built on the AS diagrams rather than
-        new ones — the labour market, money and banking, and macro policy all reuse the
+        The rest of A2 is analysis and evaluation built on the AS diagrams rather than new
+        ones — money and banking, exchange rate systems and macro policy all reuse the
         supply-and-demand and AD/AS frames above.
       </p>
     </div>

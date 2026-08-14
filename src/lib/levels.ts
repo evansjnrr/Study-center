@@ -86,6 +86,10 @@ const CS_A2 = new Set([
 const ECON_DIAGRAM_A2 = new Set([
   "monopoly", // 7 Market structures
   "cost-curves", // 7 Costs and revenue
+  "kinked-demand", // 7 Market structures — oligopoly
+  "indifference-budget", // 7 Utility and indifference curve analysis
+  "lorenz-curve", // 8 Equity and redistribution of income and wealth
+  "phillips-curve", // 9/10 Inflation, unemployment and macro policy
 ]);
 
 export function diagramLevel(diagramId: string): SyllabusLevel {
