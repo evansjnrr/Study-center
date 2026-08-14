@@ -5,10 +5,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // Modern display/UI sans — self-hosted variable font.
+        // Geometric sans — the closest freely-licensed match for Cera CY.
+        // Self-hosted variable font, so it still works offline.
         sans: [
-          "Plus Jakarta Sans Variable",
-          "Plus Jakarta Sans",
+          "Jost Variable",
+          "Jost",
           "system-ui",
           "-apple-system",
           "Segoe UI",
@@ -16,12 +17,7 @@ export default {
         ],
         // "serif" is repurposed as the display face for headings (same family,
         // differentiated by weight/tracking in index.css).
-        serif: [
-          "Plus Jakarta Sans Variable",
-          "Plus Jakarta Sans",
-          "system-ui",
-          "sans-serif",
-        ],
+        serif: ["Jost Variable", "Jost", "system-ui", "sans-serif"],
         mono: [
           "JetBrains Mono Variable",
           "JetBrains Mono",
@@ -55,10 +51,12 @@ export default {
         econ: "rgb(var(--econ) / <alpha-value>)",
         "econ-soft": "rgb(var(--econ-soft) / <alpha-value>)",
       },
+      // Squarer than before — the reference's language is rectangular, with
+      // just enough softening to avoid looking like a wireframe.
       borderRadius: {
-        xl: "1rem",
-        "2xl": "1.25rem",
-        "3xl": "1.75rem",
+        xl: "0.5rem",
+        "2xl": "0.625rem",
+        "3xl": "0.875rem",
       },
       boxShadow: {
         soft: "0 1px 2px rgb(var(--shadow) / 0.04), 0 4px 16px rgb(var(--shadow) / 0.06)",

@@ -266,7 +266,7 @@ function Sitting({
             <button key={x.id} onClick={() => setIdx(i)}
               aria-label={`Question ${i + 1}${done ? ", answered" : ""}`}
               className={cx("w-8 h-8 rounded-lg text-xs border transition-all active:scale-90",
-                i === idx ? "border-physics bg-physics text-white"
+                i === idx ? "border-ink bg-ink text-paper"
                   : done ? "border-mark-good/50 bg-mark-good-bg text-mark-good"
                   : "border-line/60 bg-surface-2 text-ink-faint")}>
               {i + 1}
@@ -442,7 +442,7 @@ function MarkPaper({
                       className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-all active:scale-[0.99]",
                         on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface")}>
                       <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",
-                        on ? "bg-mark-good border-mark-good text-white" : "border-line text-transparent")}>✓</span>
+                        on ? "bg-mark-good border-mark-good text-paper" : "border-line text-transparent")}>✓</span>
                       <span className="flex-1"><RichText text={p.text} className="text-ink-soft text-sm leading-relaxed" /></span>
                       <span className="text-ink-faint text-xs shrink-0">{p.marks}</span>
                     </button>

@@ -23,7 +23,9 @@
       "Bash(xargs -n1 basename)",
       "Skill(claude-api)",
       "Skill(claude-api:*)",
-      "Bash(git commit -q -m ' *)"
+      "Bash(git commit -q -m ' *)",
+      "Bash(perl -pi -e 's/bg-mark-good border-mark-good text-white/bg-mark-good border-mark-good text-paper/' src/features/practice/ExamMode.tsx src/features/practice/Practice.tsx)",
+      "Bash(npm uninstall *)"
     ]
   }
 }

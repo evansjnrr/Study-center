@@ -5,45 +5,47 @@ export function cx(...parts: (string | false | null | undefined)[]): string {
 }
 
 type BtnProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "soft" | "ghost" | "quiet";
+  variant?: "primary" | "outline" | "soft" | "ghost" | "quiet";
   size?: "sm" | "md" | "lg";
+  /**
+   * Retained so existing call sites keep working. The palette is monochrome
+   * now, so it no longer changes the colour — a primary action is always the
+   * off-white, whatever subject it belongs to.
+   */
   accent?: "physics" | "compsci" | "econ" | "ink";
 };
 
 export function Button({
   variant = "soft",
   size = "md",
-  accent = "ink",
   className,
   children,
   ...rest
 }: BtnProps) {
   const sizes = {
-    sm: "px-3 py-1.5 text-sm rounded-xl",
-    md: "px-4 py-2.5 text-[0.95rem] rounded-2xl",
-    lg: "px-6 py-3.5 text-base rounded-2xl",
+    sm: "px-3.5 py-1.5 text-xs rounded-xl",
+    md: "px-5 py-2.5 text-[0.8rem] rounded-xl",
+    lg: "px-7 py-3.5 text-[0.85rem] rounded-xl",
   }[size];
 
-  const accentBg =
-    accent === "physics"
-      ? "bg-physics text-white shadow-[0_6px_24px_rgb(var(--physics)/0.45)]"
-      : accent === "compsci"
-      ? "bg-compsci text-white shadow-[0_6px_24px_rgb(var(--compsci)/0.45)]"
-      : accent === "econ"
-      ? "bg-econ text-white shadow-[0_6px_24px_rgb(var(--econ)/0.40)]"
-      : "bg-ink text-paper shadow-soft";
+  // CTAs are set in wide-tracked caps, the way the reference sets its buttons.
+  const caps = "uppercase tracking-[0.14em] font-semibold";
 
   const variants = {
-    primary: cx(accentBg, "hover:brightness-110 active:brightness-95"),
-    soft: "bg-surface-2 text-ink hover:bg-line/50 border border-line/60",
-    ghost: "bg-transparent text-ink-soft hover:bg-surface-2",
-    quiet: "bg-transparent text-ink-faint hover:text-ink",
+    primary: cx(caps, "bg-ink text-paper hover:bg-ink/90 active:bg-ink/80"),
+    outline: cx(
+      caps,
+      "bg-transparent text-ink border border-ink/35 hover:border-ink/70 hover:bg-ink/[0.04]",
+    ),
+    soft: "bg-surface-2 text-ink hover:bg-line/50 border border-line/60 font-medium",
+    ghost: "bg-transparent text-ink-soft hover:bg-surface-2 font-medium",
+    quiet: "bg-transparent text-ink-faint hover:text-ink font-medium",
   }[variant];
 
   return (
     <button
       className={cx(
-        "font-medium transition-all duration-200 ease-settle disabled:opacity-40 disabled:pointer-events-none inline-flex items-center justify-center gap-2 active:scale-[0.96] select-none",
+        "transition-all duration-200 ease-settle disabled:opacity-35 disabled:pointer-events-none inline-flex items-center justify-center gap-2 active:scale-[0.98] select-none",
         sizes,
         variants,
         className,
@@ -71,9 +73,11 @@ export function Card({
     <Comp
       onClick={onClick}
       className={cx(
-        "bg-surface border border-line/70 rounded-3xl shadow-soft",
+        // Hairline-bordered panel on graphite — no drop shadow by default,
+        // depth comes from the tone step, as in the reference.
+        "bg-surface border border-line/60 rounded-2xl",
         onClick &&
-          "text-left w-full hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 ease-settle cursor-pointer",
+          "text-left w-full hover:border-line hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.995] transition-all duration-200 ease-settle cursor-pointer",
         className,
       )}
     >
@@ -91,19 +95,21 @@ export function Chip({
   accent?: "physics" | "compsci" | "econ" | "good" | "bad" | "warn";
   className?: string;
 }) {
+  // Subject chips are monochrome — the subject is always named in the text
+  // beside them, so hue isn't carrying the meaning. Mark chips stay coloured.
   const styles: Record<string, string> = {
-    physics: "bg-physics-soft text-physics",
-    compsci: "bg-compsci-soft text-compsci",
-    econ: "bg-econ-soft text-econ",
-    good: "bg-mark-good-bg text-mark-good",
-    bad: "bg-mark-bad-bg text-mark-bad",
-    warn: "bg-[rgb(var(--mark-warn)/0.14)] text-mark-warn",
-    neutral: "bg-surface-2 text-ink-soft",
+    physics: "bg-surface-2 text-ink-soft border border-line/60",
+    compsci: "bg-surface-2 text-ink-soft border border-line/60",
+    econ: "bg-surface-2 text-ink-soft border border-line/60",
+    good: "bg-mark-good-bg text-mark-good border border-mark-good/25",
+    bad: "bg-mark-bad-bg text-mark-bad border border-mark-bad/25",
+    warn: "bg-[rgb(var(--mark-warn)/0.12)] text-mark-warn border border-mark-warn/25",
+    neutral: "bg-surface-2 text-ink-soft border border-line/60",
   };
   return (
     <span
       className={cx(
-        "inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium",
+        "inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[0.65rem] font-semibold uppercase tracking-[0.14em]",
         styles[accent ?? "neutral"],
         className,
       )}
@@ -134,16 +140,23 @@ export function Spinner({ label }: { label?: string }) {
   );
 }
 
-// A quiet, thin progress bar (no ticking countdown).
-export function ProgressBar({ value, accent = "physics" }: { value: number; accent?: string }) {
-  const bg =
-    accent === "physics" ? "bg-physics" : accent === "compsci" ? "bg-compsci" : accent === "econ" ? "bg-econ" : "bg-ink";
+// A hairline progress rule. Monochrome — `accent` is accepted only so the
+// existing call sites don't all need editing.
+export function ProgressBar({ value }: { value: number; accent?: string }) {
   return (
-    <div className="h-1 w-full rounded-full bg-line/50 overflow-hidden">
+    <div className="h-px w-full bg-line/70 overflow-hidden">
       <div
-        className={cx("h-full rounded-full transition-all duration-500 ease-settle", bg)}
+        className="h-full bg-ink transition-all duration-500 ease-settle"
         style={{ width: `${Math.max(0, Math.min(100, value * 100))}%` }}
       />
     </div>
   );
+}
+
+/**
+ * A tiny wide-tracked uppercase caption — the reference leans on these
+ * heavily to label sections without shouting.
+ */
+export function Label({ children, className }: { children: React.ReactNode; className?: string }) {
+  return <div className={cx("label", className)}>{children}</div>;
 }

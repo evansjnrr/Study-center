@@ -13,15 +13,20 @@ export function TopBar() {
 
   return (
     <header className="sticky top-3 z-30 px-3 sm:px-4">
-      <div className="max-w-4xl mx-auto min-h-12 py-1 flex items-center justify-between gap-2 rounded-full border border-line/70 bg-surface/60 backdrop-blur-xl pl-4 pr-2 shadow-[0_10px_36px_rgb(var(--shadow)/0.35)]">
+      <div className="max-w-4xl mx-auto min-h-12 py-1 flex items-center justify-between gap-2 rounded-xl border border-line/70 bg-surface/70 backdrop-blur-xl pl-4 pr-2">
         <button
           onClick={() => navigate({ name: "home" })}
-          className="flex items-center gap-2.5 text-ink hover:opacity-80 transition-opacity"
+          className="flex items-center gap-2.5 text-ink hover:opacity-70 transition-opacity"
         >
-          <span className="w-6 h-6 rounded-lg grid place-items-center" style={{ background: "linear-gradient(135deg, rgb(var(--physics)), rgb(var(--econ)))" }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 15l3-6 2 4 2-3 3 5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          {/* Stacked monogram, the way the reference sets its mark. */}
+          <span className="font-serif text-[0.6rem] font-bold leading-[1.05] tracking-[0.1em] text-ink text-left">
+            ST
+            <br />
+            CE
           </span>
-          <span className="font-serif text-lg text-ink">Study Center</span>
+          <span className="text-ink text-xs font-semibold uppercase tracking-[0.22em]">
+            Study Center
+          </span>
         </button>
 
         <div className="flex items-center gap-1">

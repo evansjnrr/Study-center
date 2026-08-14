@@ -215,9 +215,10 @@ function Setup({
           <button
             role="switch" aria-checked={timed} onClick={() => setTimed((v) => !v)}
             className={cx("shrink-0 w-11 h-6 rounded-full relative transition-colors border",
-              timed ? "bg-physics border-physics" : "bg-surface-2 border-line/70")}
+              timed ? "bg-ink border-ink" : "bg-surface-2 border-line/70")}
           >
-            <span className={cx("absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform",
+            <span className={cx("absolute top-0.5 w-4 h-4 rounded-full transition-transform",
+              timed ? "bg-paper" : "bg-ink-faint",
               timed ? "translate-x-[22px]" : "translate-x-0.5")} />
           </button>
         </label>
@@ -417,7 +418,7 @@ function Runner({
                             on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface hover:border-line")}
                         >
                           <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",
-                            on ? "bg-mark-good border-mark-good text-white" : "border-line text-transparent")}>
+                            on ? "bg-mark-good border-mark-good text-paper" : "border-line text-transparent")}>
                             ✓
                           </span>
                           <span className="flex-1">

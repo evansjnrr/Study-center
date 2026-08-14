@@ -453,10 +453,15 @@ function Toggle({ label, desc, on, onChange }: { label: string; desc: string; on
         onClick={() => onChange(!on)}
         className={cx(
           "shrink-0 w-11 h-6 rounded-full relative transition-colors duration-200 border",
-          on ? "bg-physics border-physics" : "bg-surface-2 border-line/70",
+          on ? "bg-ink border-ink" : "bg-surface-2 border-line/70",
         )}
       >
-        <span className={cx("absolute top-0.5 w-4 h-4 rounded-full bg-white transition-transform duration-200", on ? "translate-x-[22px]" : "translate-x-0.5")} />
+        <span
+          className={cx(
+            "absolute top-0.5 w-4 h-4 rounded-full transition-transform duration-200",
+            on ? "bg-paper translate-x-[22px]" : "bg-ink-faint translate-x-0.5",
+          )}
+        />
       </button>
     </div>
   );
