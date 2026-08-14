@@ -1,8 +1,13 @@
 import React from "react";
 import { useApp } from "@/lib/store";
 import { Card, IconBack, cx } from "@/components/ui";
-import { exportAll, importAll, clearData, countCards, putCards } from "@/lib/db";
+import {
+  exportAll, importAll, clearData, countCards, putCards,
+  allQuestions, putQuestions,
+} from "@/lib/db";
 import { seedCards } from "@/data/flashcards";
+import { parseQuestions, IMPORT_TEMPLATE } from "@/lib/importQuestions";
+import { testApiKey, examinerErrorMessage } from "@/lib/examiner";
 import {
   speechAvailable,
   loadVoices,
@@ -93,6 +98,12 @@ export function SettingsScreen() {
         </div>
       </Card>
 
+      {/* AI examiner */}
+      <ExaminerCard />
+
+      {/* Past-paper import */}
+      <QuestionImportCard />
+
       {/* Read aloud */}
       <ReadAloudCard />
 
@@ -143,10 +154,191 @@ export function SettingsScreen() {
         <p className="text-ink-soft text-sm leading-relaxed">
           A visual study room for Cambridge A-Level Physics 9702, Economics 9708 and
           Computer Science 9618 — interactive models, editable diagrams, worked
-          examples and spaced-repetition flashcards. Local-first: nothing is sent anywhere.
+          examples, exam practice with Cambridge mark schemes and spaced-repetition
+          flashcards. Local-first: everything is stored on this device and nothing is
+          sent anywhere — the one exception is the AI examiner, which sends the question
+          and your answer to Anthropic, and only when you ask it to.
         </p>
       </Card>
     </div>
+  );
+}
+
+function ExaminerCard() {
+  const { settings, saveSettings } = useApp();
+  const [draft, setDraft] = React.useState(settings.apiKey ?? "");
+  const [show, setShow] = React.useState(false);
+  const [status, setStatus] = React.useState<{ ok: boolean; text: string } | null>(null);
+  const [busy, setBusy] = React.useState(false);
+
+  async function saveAndTest() {
+    const key = draft.trim();
+    setBusy(true);
+    setStatus(null);
+    try {
+      if (key) await testApiKey(key);
+      await saveSettings({ apiKey: key || undefined });
+      setStatus({ ok: true, text: key ? "Key saved and working." : "Key removed." });
+    } catch (e) {
+      setStatus({ ok: false, text: examinerErrorMessage(e) });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Card className="p-5 mb-4">
+      <h2 className="text-ink font-medium mb-1">AI examiner</h2>
+      <p className="text-ink-faint text-sm mb-4 leading-relaxed">
+        With a Claude API key, the app can mark your answers against the mark scheme,
+        tell you exactly which point you missed, and show a full-mark answer. The
+        deterministic mark scheme is still the record — Claude only pre-ticks it.
+        Your key is stored only in this browser and is sent nowhere but Anthropic.
+      </p>
+
+      <label className="block mb-3">
+        <span className="text-xs text-ink-faint">Anthropic API key</span>
+        <div className="mt-1 flex gap-2">
+          <input
+            type={show ? "text" : "password"}
+            value={draft}
+            onChange={(e) => { setDraft(e.target.value); setStatus(null); }}
+            placeholder="sk-ant-…"
+            autoComplete="off"
+            spellCheck={false}
+            className="flex-1 min-w-0 rounded-xl bg-surface-2 border border-line/60 px-3 py-2 text-sm text-ink font-mono outline-none focus:border-physics/50"
+          />
+          <ActionBtn onClick={() => setShow((v) => !v)}>{show ? "Hide" : "Show"}</ActionBtn>
+        </div>
+      </label>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <ActionBtn onClick={saveAndTest}>
+          {busy ? "Checking…" : draft.trim() ? "Save & test key" : "Remove key"}
+        </ActionBtn>
+        <a
+          href="https://console.anthropic.com/settings/keys"
+          target="_blank"
+          rel="noreferrer"
+          className="text-ink-faint text-xs hover:text-ink underline decoration-line"
+        >
+          Get a key ↗
+        </a>
+      </div>
+
+      {status && (
+        <div className={cx("mt-3 text-sm", status.ok ? "text-mark-good" : "text-mark-bad")}>
+          {status.text}
+        </div>
+      )}
+
+      <div className="mt-4 pt-4 border-t border-line/50">
+        <Toggle
+          label="Mark automatically"
+          desc="Send the answer to Claude the moment you reveal the mark scheme, without asking."
+          on={settings.autoMarkWithAI}
+          onChange={(v) => saveSettings({ autoMarkWithAI: v })}
+        />
+      </div>
+    </Card>
+  );
+}
+
+function QuestionImportCard() {
+  const [count, setCount] = React.useState<number | null>(null);
+  const [imported, setImported] = React.useState(0);
+  const [msg, setMsg] = React.useState<{ ok: boolean; text: string } | null>(null);
+  const [problems, setProblems] = React.useState<string[]>([]);
+  const [showFormat, setShowFormat] = React.useState(false);
+  const fileRef = React.useRef<HTMLInputElement>(null);
+
+  const refresh = React.useCallback(async () => {
+    const qs = await allQuestions();
+    setCount(qs.length);
+    setImported(qs.filter((q) => q.source === "imported").length);
+  }, []);
+
+  React.useEffect(() => { refresh(); }, [refresh]);
+
+  async function doImport(file: File) {
+    setMsg(null);
+    setProblems([]);
+    try {
+      const { questions, problems } = parseQuestions(await file.text());
+      await putQuestions(questions);
+      await refresh();
+      setProblems(problems);
+      setMsg({
+        ok: true,
+        text: `Added ${questions.length} question${questions.length === 1 ? "" : "s"}. They're in Practice and Exam mode now.`,
+      });
+    } catch (e: any) {
+      setMsg({ ok: false, text: e?.message ?? "Import failed." });
+    }
+  }
+
+  return (
+    <Card className="p-5 mb-4">
+      <h2 className="text-ink font-medium mb-1">Your own past papers</h2>
+      <p className="text-ink-faint text-sm mb-4 leading-relaxed">
+        The built-in bank is original Cambridge-style material — real past papers are
+        copyright, so they aren't shipped with the app. If you own a paper and its mark
+        scheme, add it as JSON and it joins the bank on this device: practice, exam mode,
+        the redo schedule and the weakness dashboard all pick it up.
+      </p>
+
+      <div className="text-ink-soft text-sm mb-4">
+        {count === null ? "…" : (
+          <>
+            <span className="text-ink font-medium">{count}</span> questions in the bank
+            {imported > 0 && <span className="text-ink-faint"> · {imported} imported by you</span>}
+          </>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <ActionBtn onClick={() => fileRef.current?.click()}>↑ Import questions (JSON)</ActionBtn>
+        <ActionBtn onClick={() => setShowFormat((v) => !v)}>
+          {showFormat ? "Hide the format" : "What's the format?"}
+        </ActionBtn>
+      </div>
+      <input
+        ref={fileRef} type="file" accept="application/json,.json" hidden
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) doImport(f);
+          e.target.value = "";
+        }}
+      />
+
+      {showFormat && (
+        <div className="mt-3 animate-fade-up">
+          <p className="text-ink-faint text-xs mb-2 leading-relaxed">
+            A JSON array. <span className="text-ink-soft">subject</span>, {" "}
+            <span className="text-ink-soft">topicId</span>, {" "}
+            <span className="text-ink-soft">stem</span> and {" "}
+            <span className="text-ink-soft">markScheme</span> are required; the total marks
+            are taken from the mark scheme. Use <span className="text-ink-soft">$…$</span> for
+            maths and <span className="text-ink-soft">**bold**</span> for part labels.
+          </p>
+          <pre className="rounded-xl bg-surface-2 border border-line/50 p-3 text-[0.7rem] text-ink-soft overflow-x-auto font-mono leading-relaxed">
+{IMPORT_TEMPLATE}
+          </pre>
+        </div>
+      )}
+
+      {msg && (
+        <div className={cx("mt-3 text-sm", msg.ok ? "text-mark-good" : "text-mark-bad")}>
+          {msg.text}
+        </div>
+      )}
+      {problems.length > 0 && (
+        <ul className="mt-2 text-xs text-mark-warn space-y-1">
+          {problems.slice(0, 8).map((p, i) => <li key={i}>• {p}</li>)}
+          {problems.length > 8 && <li>• …and {problems.length - 8} more.</li>}
+        </ul>
+      )}
+    </Card>
   );
 }
 

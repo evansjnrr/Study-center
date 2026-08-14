@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { Settings } from "./types";
-import { getSettings, putSettings, countCards, putCards, countQuestions, putQuestions } from "./db";
+import { getSettings, putSettings, countCards, putCards, putQuestions } from "./db";
 import { seedCards } from "@/data/flashcards";
 import { QUESTION_BANK } from "@/data/questionBank";
 
@@ -42,6 +42,7 @@ const DEFAULT_SETTINGS: Settings = {
   randomizeOnOpen: true,
   speechRate: 1,
   bigTapTargets: false,
+  autoMarkWithAI: false,
 };
 
 export const useApp = create<AppState>((set, get) => ({
@@ -55,9 +56,12 @@ export const useApp = create<AppState>((set, get) => ({
     // Merge so any newly-added setting fields fall back to their defaults.
     const settings = { ...DEFAULT_SETTINGS, ...(saved ?? {}) };
     await putSettings(settings);
-    // Seed the flashcard decks and the question bank once.
+    // Seed the flashcard decks once.
     if ((await countCards()) === 0) await putCards(seedCards());
-    if ((await countQuestions()) === 0) await putQuestions(QUESTION_BANK);
+    // Upsert the built-in question bank on every boot so a new app version's
+    // questions appear immediately. Keyed by id, so it never touches the
+    // past papers you imported yourself.
+    await putQuestions(QUESTION_BANK);
     set({ settings, ready: true });
     get().applyTheme();
   },

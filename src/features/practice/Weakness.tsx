@@ -2,7 +2,7 @@ import React from "react";
 import { useApp } from "@/lib/store";
 import { allQAttempts, allRedo } from "@/lib/db";
 import {
-  computeTopicHealth, MISTAKE_LABEL,
+  computeTopicHealth, MISTAKE_LABEL, prettifyTopicId,
   type MistakeReason, type QAttempt, type RedoItem, type SubjectCode, type TopicHealth,
 } from "@/lib/questions";
 import { topicById } from "@/data/topics";
@@ -21,7 +21,7 @@ const SUBJECT_ACCENT: Record<SubjectCode, "physics" | "econ" | "compsci"> = {
 };
 
 function topicName(id: string): string {
-  return topicById(id)?.name ?? csTopicById(id)?.name ?? id;
+  return topicById(id)?.name ?? csTopicById(id)?.name ?? prettifyTopicId(id);
 }
 
 export function Weakness() {

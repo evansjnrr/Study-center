@@ -2,13 +2,15 @@ import React from "react";
 import { useApp } from "@/lib/store";
 import { allQuestions, getRedo, putQAttempt, putRedo } from "@/lib/db";
 import {
-  CRITERION_LABEL, MISTAKE_LABEL, estimateGrade, scheduleAfterAttempt,
+  CRITERION_LABEL, MISTAKE_LABEL, estimateGrade, prettifyTopicId, scheduleAfterAttempt,
   type Criterion, type MistakeReason, type QAttempt, type Question, type SubjectCode,
 } from "@/lib/questions";
 import { topicById } from "@/data/topics";
 import { csTopicById } from "@/features/cs/cs-data";
 import { Button, Card, Chip, IconBack, ProgressBar, cx } from "@/components/ui";
 import { RichText } from "@/components/Katex";
+import { examine, examinerErrorMessage, type ExamReport } from "@/lib/examiner";
+import { ExaminerReport, PointComment } from "./AIExaminer";
 
 const SUBJECTS: { code: SubjectCode; name: string; accent: "physics" | "econ" | "compsci" }[] = [
   { code: "9702", name: "Physics", accent: "physics" },
@@ -17,7 +19,7 @@ const SUBJECTS: { code: SubjectCode; name: string; accent: "physics" | "econ" | 
 ];
 
 function topicName(id: string): string {
-  return topicById(id)?.name ?? csTopicById(id)?.name ?? id;
+  return topicById(id)?.name ?? csTopicById(id)?.name ?? prettifyTopicId(id);
 }
 
 const DRAFT_KEY = "exam-draft-v1";
@@ -323,7 +325,35 @@ function MarkPaper({
   const [acc, setAcc] = React.useState<QAttempt[]>([]);
   const q = paper[i];
 
-  React.useEffect(() => { setEarned([]); setReasons([]); }, [i]);
+  // Claude marks the whole paper in one go, the way a teacher would take it
+  // home — then you step through and change anything it got wrong.
+  const apiKey = useApp((s) => s.settings.apiKey);
+  const [reports, setReports] = React.useState<Record<string, ExamReport>>({});
+  const [marking, setMarking] = React.useState(0); // 0 = idle, else 1-based
+  const [batchError, setBatchError] = React.useState("");
+
+  async function markWholePaper() {
+    setBatchError("");
+    const out: Record<string, ExamReport> = {};
+    for (let n = 0; n < paper.length; n++) {
+      setMarking(n + 1);
+      try {
+        out[paper[n].id] = await examine(paper[n], answers[paper[n].id] ?? "");
+        setReports({ ...out });
+      } catch (e) {
+        setBatchError(examinerErrorMessage(e));
+        break;
+      }
+    }
+    setMarking(0);
+  }
+
+  // Pre-tick the current question from Claude's verdict.
+  const report = q ? reports[q.id] : undefined;
+  React.useEffect(() => {
+    setEarned(report?.earnedPointIds ?? []);
+    setReasons(report?.mistakeReasons ?? []);
+  }, [i, report]);
 
   const awarded = q ? q.markScheme.filter((p) => earned.includes(p.id)).reduce((s, p) => s + p.marks, 0) : 0;
   const correct = q ? awarded >= q.marks : false;
@@ -359,6 +389,22 @@ function MarkPaper({
       </div>
       <ProgressBar value={i / paper.length} />
 
+      {apiKey?.trim() && Object.keys(reports).length < paper.length && (
+        <Button
+          variant="soft" accent="econ" className="w-full mt-4"
+          disabled={marking > 0} onClick={markWholePaper}
+        >
+          {marking > 0
+            ? `Claude is marking… ${marking} of ${paper.length}`
+            : Object.keys(reports).length
+              ? "✨ Finish marking the rest with Claude"
+              : "✨ Mark my whole paper with Claude"}
+        </Button>
+      )}
+      {batchError && (
+        <div className="mt-3 text-mark-bad text-sm">{batchError}</div>
+      )}
+
       <Card className="p-5 mt-4">
         <div className="text-ink-faint text-xs mb-2">Question {i + 1} · [{q.marks}]</div>
         <RichText text={q.stem} className="prose-paper text-ink" />
@@ -373,9 +419,15 @@ function MarkPaper({
         <div className="mt-3 text-ink-faint text-sm italic">You left this one blank.</div>
       )}
 
+      {report && (
+        <div className="mt-3">
+          <ExaminerReport report={report} error="" marksTotal={q.marks} />
+        </div>
+      )}
+
       <Card className="p-5 mt-3">
         <div className="text-xs font-medium text-physics uppercase tracking-wide mb-3">
-          Mark scheme — tick what you got
+          {report ? "Mark scheme — change anything Claude got wrong" : "Mark scheme — tick what you got"}
         </div>
         {[...byCriterion.entries()].map(([crit, points]) => (
           <div key={crit} className="mb-4 last:mb-0">
@@ -384,15 +436,20 @@ function MarkPaper({
               {points.map((p) => {
                 const on = earned.includes(p.id);
                 return (
-                  <button key={p.id}
-                    onClick={() => setEarned((e) => on ? e.filter((x) => x !== p.id) : [...e, p.id])}
-                    className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-all active:scale-[0.99]",
-                      on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface")}>
-                    <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",
-                      on ? "bg-mark-good border-mark-good text-white" : "border-line text-transparent")}>✓</span>
-                    <span className="flex-1"><RichText text={p.text} className="text-ink-soft text-sm leading-relaxed" /></span>
-                    <span className="text-ink-faint text-xs shrink-0">{p.marks}</span>
-                  </button>
+                  <div key={p.id}>
+                    <button
+                      onClick={() => setEarned((e) => on ? e.filter((x) => x !== p.id) : [...e, p.id])}
+                      className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-all active:scale-[0.99]",
+                        on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface")}>
+                      <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",
+                        on ? "bg-mark-good border-mark-good text-white" : "border-line text-transparent")}>✓</span>
+                      <span className="flex-1"><RichText text={p.text} className="text-ink-soft text-sm leading-relaxed" /></span>
+                      <span className="text-ink-faint text-xs shrink-0">{p.marks}</span>
+                    </button>
+                    <div className="px-3">
+                      <PointComment report={report ?? null} pointId={p.id} />
+                    </div>
+                  </div>
                 );
               })}
             </div>

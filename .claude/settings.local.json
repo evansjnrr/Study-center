@@ -20,7 +20,10 @@
       "Bash(curl -s https://study-center-tau.vercel.app/)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://study-center-tau.vercel.app/assets/definitely-not-real-12345.js)",
       "Bash(curl -s https://study-center-tau.vercel.app/assets/index-Cc8Wcm6v.js)",
-      "Bash(xargs -n1 basename)"
+      "Bash(xargs -n1 basename)",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)",
+      "Bash(git commit -q -m ' *)"
     ]
   }
 }

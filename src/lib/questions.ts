@@ -40,6 +40,41 @@ export const CRITERION_LABEL: Record<Criterion, string> = {
   explanation: "Explanation",
 };
 
+/**
+ * Economics topics only exist as question-bank ids (there's no econ topic
+ * dataset the way there is for physics and CS), so their display names live
+ * here. Kept in this file because it has no feature-module imports.
+ */
+export const ECON_TOPIC_NAME: Record<string, string> = {
+  "ec-basic-economic-problem": "The Basic Economic Problem",
+  "ec-price-system": "The Price System",
+  "ec-elasticity": "Elasticity",
+  "ec-market-failure": "Market Failure",
+  "ec-government-intervention": "Government Intervention",
+  "ec-firms-costs": "Firms, Costs & Revenue",
+  "ec-market-structure": "Market Structure",
+  "ec-labour": "The Labour Market",
+  "ec-national-income": "National Income & the Multiplier",
+  "ec-ad-as": "Aggregate Demand & Supply",
+  "ec-inflation-unemployment": "Inflation & Unemployment",
+  "ec-money-banking": "Money & Banking",
+  "ec-macro-policy": "Macroeconomic Policy",
+  "ec-trade": "International Trade",
+  "ec-exchange-rates": "Exchange Rates & the Balance of Payments",
+  "ec-growth-development": "Growth & Development",
+};
+
+/** Last-resort display name for a topic id (e.g. one you imported yourself). */
+export function prettifyTopicId(id: string): string {
+  return (
+    ECON_TOPIC_NAME[id] ??
+    id
+      .replace(/^(ec|cs|phy)-/, "")
+      .replace(/-/g, " ")
+      .replace(/^\w/, (c) => c.toUpperCase())
+  );
+}
+
 export interface MarkPoint {
   id: string;
   /** Exactly what earns this mark, in mark-scheme language. */

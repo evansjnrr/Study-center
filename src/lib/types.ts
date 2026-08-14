@@ -61,4 +61,9 @@ export interface Settings {
   speechRate: number; // 0.6 – 1.6
   // Touch comfort — larger tap targets for phone/tablet use
   bigTapTargets: boolean;
+  // AI examiner. The key never leaves this device except to call Anthropic
+  // directly from the browser; there is no backend.
+  apiKey?: string;
+  /** Mark with the AI as soon as the mark scheme is revealed, without asking. */
+  autoMarkWithAI: boolean;
 }

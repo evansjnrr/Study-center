@@ -4,8 +4,8 @@ import {
   allQuestions, allRedo, dueRedo, getRedo, putQAttempt, putRedo,
 } from "@/lib/db";
 import {
-  CRITERION_LABEL, MISTAKE_LABEL, estimateGrade, scheduleAfterAttempt,
-  suggestedSeconds,
+  CRITERION_LABEL, MISTAKE_LABEL, estimateGrade, prettifyTopicId,
+  scheduleAfterAttempt, suggestedSeconds,
   type Criterion, type MistakeReason, type PracticeMode, type QAttempt,
   type Question, type SubjectCode,
 } from "@/lib/questions";
@@ -13,6 +13,9 @@ import { topicById } from "@/data/topics";
 import { csTopicById } from "@/features/cs/cs-data";
 import { Button, Card, Chip, IconBack, ProgressBar, cx } from "@/components/ui";
 import { RichText } from "@/components/Katex";
+import {
+  ExaminerButton, ExaminerReport, PointComment, useExaminer,
+} from "./AIExaminer";
 
 const SUBJECTS: { code: SubjectCode; name: string; accent: "physics" | "econ" | "compsci" }[] = [
   { code: "9702", name: "Physics", accent: "physics" },
@@ -21,7 +24,7 @@ const SUBJECTS: { code: SubjectCode; name: string; accent: "physics" | "econ" | 
 ];
 
 function topicName(id: string): string {
-  return topicById(id)?.name ?? csTopicById(id)?.name ?? id.replace(/^(ec|cs|phy)-/, "").replace(/-/g, " ");
+  return topicById(id)?.name ?? csTopicById(id)?.name ?? prettifyTopicId(id);
 }
 
 type Stage = "setup" | "running" | "summary";
@@ -267,10 +270,32 @@ function Runner({
   const timed = mode === "timed" || mode === "exam";
   const limit = q ? suggestedSeconds(q) : 0;
 
+  // The AI examiner pre-ticks the scheme; whatever is left ticked is recorded.
+  const applyReport = React.useCallback((r: { earnedPointIds: string[]; mistakeReasons: MistakeReason[] }) => {
+    setEarned(r.earnedPointIds);
+    setReasons(r.mistakeReasons);
+  }, []);
+  const examiner = useExaminer(q, answer, applyReport);
+
+  const autoMark = useApp((s) => s.settings.autoMarkWithAI);
+  const apiKey = useApp((s) => s.settings.apiKey);
+
   React.useEffect(() => {
     setPhase("answering"); setAnswer(""); setEarned([]); setReasons([]);
     setStartedAt(Date.now()); setElapsed(0);
   }, [idx]);
+
+  // Optional: mark the moment the scheme is revealed, without a second tap.
+  const runExaminer = examiner.run;
+  React.useEffect(() => {
+    if (phase !== "marking") return;
+    if (!autoMark || !apiKey?.trim()) return;
+    if (!answer.trim()) return;
+    runExaminer();
+    // Deliberately keyed on the phase change only — re-running on every
+    // keystroke would fire a request per character.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, idx]);
 
   React.useEffect(() => {
     if (phase !== "answering") return;
@@ -355,12 +380,25 @@ function Runner({
         </>
       ) : (
         <div className="mt-4 space-y-4 animate-fade-up">
+          <ExaminerButton
+            busy={examiner.busy}
+            hasReport={!!examiner.report}
+            onRun={examiner.run}
+          />
+          <ExaminerReport
+            report={examiner.report}
+            error={examiner.error}
+            marksTotal={q.marks}
+          />
+
           <Card className="p-5">
             <div className="text-xs font-medium text-physics uppercase tracking-wide mb-1">
               Mark scheme — tick what you actually got
             </div>
             <p className="text-ink-faint text-xs mb-4">
-              Be honest. This is what builds an accurate picture of your weaknesses.
+              {examiner.report
+                ? "Claude's ticks are below. Change any it got wrong — this is what gets recorded."
+                : "Be honest. This is what builds an accurate picture of your weaknesses."}
             </p>
 
             {[...byCriterion.entries()].map(([crit, points]) => (
@@ -372,21 +410,25 @@ function Runner({
                   {points.map((p) => {
                     const on = earned.includes(p.id);
                     return (
-                      <button
-                        key={p.id}
-                        onClick={() => setEarned((e) => on ? e.filter((x) => x !== p.id) : [...e, p.id])}
-                        className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-all active:scale-[0.99]",
-                          on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface hover:border-line")}
-                      >
-                        <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",
-                          on ? "bg-mark-good border-mark-good text-white" : "border-line text-transparent")}>
-                          ✓
-                        </span>
-                        <span className="flex-1">
-                          <RichText text={p.text} className="text-ink-soft text-sm leading-relaxed" />
-                        </span>
-                        <span className="text-ink-faint text-xs shrink-0">{p.marks}</span>
-                      </button>
+                      <div key={p.id}>
+                        <button
+                          onClick={() => setEarned((e) => on ? e.filter((x) => x !== p.id) : [...e, p.id])}
+                          className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-all active:scale-[0.99]",
+                            on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface hover:border-line")}
+                        >
+                          <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",
+                            on ? "bg-mark-good border-mark-good text-white" : "border-line text-transparent")}>
+                            ✓
+                          </span>
+                          <span className="flex-1">
+                            <RichText text={p.text} className="text-ink-soft text-sm leading-relaxed" />
+                          </span>
+                          <span className="text-ink-faint text-xs shrink-0">{p.marks}</span>
+                        </button>
+                        <div className="px-3">
+                          <PointComment report={examiner.report} pointId={p.id} />
+                        </div>
+                      </div>
                     );
                   })}
                 </div>

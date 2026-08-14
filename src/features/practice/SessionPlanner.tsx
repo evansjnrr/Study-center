@@ -2,7 +2,9 @@ import React from "react";
 import { useApp } from "@/lib/store";
 import { allCards, allQAttempts, allRedo, dueRedo } from "@/lib/db";
 import { dueCards } from "@/lib/srs";
-import { computeTopicHealth, type SubjectCode, type TopicHealth } from "@/lib/questions";
+import {
+  computeTopicHealth, prettifyTopicId, type SubjectCode, type TopicHealth,
+} from "@/lib/questions";
 import { nextExam, daysUntil, type Exam } from "@/data/exams";
 import { topicById } from "@/data/topics";
 import { csTopicById } from "@/features/cs/cs-data";
@@ -20,7 +22,7 @@ const SUBJECT_ACCENT: Record<SubjectCode, "physics" | "econ" | "compsci"> = {
 };
 
 function topicName(id: string): string {
-  return topicById(id)?.name ?? csTopicById(id)?.name ?? id;
+  return topicById(id)?.name ?? csTopicById(id)?.name ?? prettifyTopicId(id);
 }
 
 interface Block {
