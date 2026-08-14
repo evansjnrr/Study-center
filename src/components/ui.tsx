@@ -45,7 +45,7 @@ export function Button({
   return (
     <button
       className={cx(
-        "transition-all duration-200 ease-settle disabled:opacity-35 disabled:pointer-events-none inline-flex items-center justify-center gap-2 active:scale-[0.98] select-none",
+        "transition-[background-color,border-color,color,transform,opacity] duration-200 ease-spring disabled:opacity-35 disabled:pointer-events-none inline-flex items-center justify-center gap-2 active:scale-[0.97] select-none",
         sizes,
         variants,
         className,
@@ -61,23 +61,29 @@ export function Card({
   className,
   children,
   onClick,
+  style,
   as = "div",
 }: {
   className?: string;
   children: React.ReactNode;
   onClick?: () => void;
+  /** Mainly for staggering an entrance animation via `animationDelay`. */
+  style?: React.CSSProperties;
   as?: "div" | "button";
 }) {
   const Comp: any = onClick ? "button" : as;
   return (
     <Comp
       onClick={onClick}
+      style={style}
       className={cx(
         // Hairline-bordered panel on graphite — no drop shadow by default,
         // depth comes from the tone step, as in the reference.
         "bg-surface border border-line/60 rounded-2xl",
         onClick &&
-          "text-left w-full hover:border-line hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.995] transition-all duration-200 ease-settle cursor-pointer",
+          // Only the properties that actually change — `transition-all` also
+          // animates layout properties, which is where dropped frames come from.
+          "text-left w-full hover:border-line hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.995] transition-[transform,border-color,background-color,box-shadow] duration-300 ease-settle cursor-pointer",
         className,
       )}
     >
@@ -146,7 +152,7 @@ export function ProgressBar({ value }: { value: number; accent?: string }) {
   return (
     <div className="h-px w-full bg-line/70 overflow-hidden">
       <div
-        className="h-full bg-ink transition-all duration-500 ease-settle"
+        className="h-full bg-ink transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-500 ease-settle"
         style={{ width: `${Math.max(0, Math.min(100, value * 100))}%` }}
       />
     </div>

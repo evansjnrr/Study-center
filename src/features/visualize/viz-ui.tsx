@@ -107,7 +107,7 @@ export function PlayButton({ running, onToggle }: { running: boolean; onToggle: 
   return (
     <button
       onClick={onToggle}
-      className="px-3 py-1.5 rounded-xl text-sm bg-physics-soft text-physics border border-physics/40 hover:brightness-110 active:scale-95 transition-all duration-150"
+      className="px-3 py-1.5 rounded-xl text-sm bg-physics-soft text-physics border border-physics/40 hover:brightness-110 active:scale-95 transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-150"
     >
       {running ? "❚❚ Pause" : "▶ Play"}
     </button>

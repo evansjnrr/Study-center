@@ -188,13 +188,13 @@ function Setup({
           <div className="flex flex-wrap gap-2">
             {SUBJECTS.map((s) => (
               <button key={s.code} onClick={() => setSubject(s.code)}
-                className={cx("px-3 py-1.5 rounded-xl text-sm border transition-all active:scale-95",
+                className={cx("px-3 py-1.5 rounded-xl text-sm border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
                   subject === s.code ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
                 {s.name}
               </button>
             ))}
             <button onClick={() => setSubject("all")}
-              className={cx("px-3 py-1.5 rounded-xl text-sm border transition-all active:scale-95",
+              className={cx("px-3 py-1.5 rounded-xl text-sm border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
                 subject === "all" ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
               Mixed
             </button>
@@ -206,7 +206,7 @@ function Setup({
           <div className="flex flex-wrap gap-2">
             {(["both", "AS", "A2"] as const).map((l) => (
               <button key={l} onClick={() => setLevel(l)}
-                className={cx("px-3 py-1.5 rounded-xl text-sm border transition-all active:scale-95",
+                className={cx("px-3 py-1.5 rounded-xl text-sm border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
                   level === l ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
                 {l === "both" ? "AS + A2" : LEVEL_LABEL[l]}
               </button>
@@ -286,7 +286,7 @@ function Sitting({
           return (
             <button key={x.id} onClick={() => setIdx(i)}
               aria-label={`Question ${i + 1}${done ? ", answered" : ""}`}
-              className={cx("w-8 h-8 rounded-lg text-xs border transition-all active:scale-90",
+              className={cx("w-8 h-8 rounded-lg text-xs border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-90",
                 i === idx ? "border-ink bg-ink text-paper"
                   : done ? "border-mark-good/50 bg-mark-good-bg text-mark-good"
                   : "border-line/60 bg-surface-2 text-ink-faint")}>
@@ -460,7 +460,7 @@ function MarkPaper({
                   <div key={p.id}>
                     <button
                       onClick={() => setEarned((e) => on ? e.filter((x) => x !== p.id) : [...e, p.id])}
-                      className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-all active:scale-[0.99]",
+                      className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-[0.99]",
                         on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface")}>
                       <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",
                         on ? "bg-mark-good border-mark-good text-paper" : "border-line text-transparent")}>✓</span>
@@ -491,7 +491,7 @@ function MarkPaper({
             {(Object.keys(MISTAKE_LABEL) as MistakeReason[]).map((r) => (
               <button key={r}
                 onClick={() => setReasons((p) => p.includes(r) ? p.filter((x) => x !== r) : [...p, r])}
-                className={cx("px-3 py-1.5 rounded-xl text-sm border transition-all active:scale-95",
+                className={cx("px-3 py-1.5 rounded-xl text-sm border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
                   reasons.includes(r) ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
                 {MISTAKE_LABEL[r]}
               </button>

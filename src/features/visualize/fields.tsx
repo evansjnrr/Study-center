@@ -47,7 +47,7 @@ export function FieldViz() {
             key={k}
             onClick={() => setKind(k)}
             className={cx(
-              "px-3 py-1.5 rounded-xl text-sm border capitalize transition-all duration-150 active:scale-95",
+              "px-3 py-1.5 rounded-xl text-sm border capitalize transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-150 active:scale-95",
               kind === k ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60",
             )}
           >

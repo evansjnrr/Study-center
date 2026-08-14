@@ -171,7 +171,7 @@ export function SessionPlanner() {
         <div className="flex gap-2 mt-3 flex-wrap no-grow">
           {[30, 60, 90, 120].map((m) => (
             <button key={m} onClick={() => { setMinutes(m); setPlan(null); }}
-              className={cx("px-3 py-1.5 rounded-xl text-sm border transition-all active:scale-95",
+              className={cx("px-3 py-1.5 rounded-xl text-sm border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
                 minutes === m ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
               {m} min
             </button>

@@ -275,7 +275,7 @@ function Pill({ active, onClick, children }: { active: boolean; onClick: () => v
   return (
     <button
       onClick={onClick}
-      className={cx("px-3 py-1.5 rounded-xl text-sm border transition-all active:scale-95",
+      className={cx("px-3 py-1.5 rounded-xl text-sm border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
         active ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60 hover:text-ink")}
     >
       {children}
@@ -446,7 +446,7 @@ function Runner({
                       <div key={p.id}>
                         <button
                           onClick={() => setEarned((e) => on ? e.filter((x) => x !== p.id) : [...e, p.id])}
-                          className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-all active:scale-[0.99]",
+                          className={cx("w-full text-left rounded-xl border px-3 py-2.5 flex gap-3 items-start transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-[0.99]",
                             on ? "border-mark-good/40 bg-mark-good-bg/40" : "border-line/60 bg-surface hover:border-line")}
                         >
                           <span className={cx("mt-0.5 w-5 h-5 rounded-md border grid place-items-center shrink-0 text-xs",

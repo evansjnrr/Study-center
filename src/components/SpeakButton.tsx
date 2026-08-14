@@ -46,7 +46,7 @@ export function SpeakButton({
       onClick={toggle}
       aria-label={speaking ? "Stop reading aloud" : "Read this aloud"}
       className={cx(
-        "inline-flex items-center gap-1.5 text-xs rounded-xl px-2.5 py-1.5 border transition-all active:scale-95",
+        "inline-flex items-center gap-1.5 text-xs rounded-xl px-2.5 py-1.5 border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
         speaking
           ? "bg-physics-soft text-physics border-physics/40"
           : "bg-surface-2 text-ink-soft border-line/60 hover:text-ink",

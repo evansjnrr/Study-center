@@ -200,7 +200,7 @@ function ReviewSession({
 
       <button
         onClick={() => setFlipped((f) => !f)}
-        className="flex-1 my-5 rounded-3xl border border-line/70 bg-surface shadow-soft px-6 py-10 text-center flex flex-col items-center justify-center min-h-[280px] transition-all duration-200 ease-settle hover:shadow-soft-lg active:scale-[0.99]"
+        className="flex-1 my-5 rounded-3xl border border-line/70 bg-surface shadow-soft px-6 py-10 text-center flex flex-col items-center justify-center min-h-[280px] transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-200 ease-settle hover:shadow-soft-lg active:scale-[0.99]"
       >
         <RichText text={current.front} className="prose-paper text-xl text-ink" />
         {flipped && (
@@ -241,7 +241,7 @@ function GradeBtn({ label, hint, tone, onClick, k }: { label: string; hint: stri
     warn: "border-mark-warn/40 text-mark-warn hover:bg-[rgb(var(--mark-warn)/0.12)]",
   }[tone];
   return (
-    <button onClick={onClick} className={cx("rounded-2xl border bg-surface py-3 px-2 text-center transition-all duration-150 active:scale-95", tones)}>
+    <button onClick={onClick} className={cx("rounded-2xl border bg-surface py-3 px-2 text-center transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-150 active:scale-95", tones)}>
       <div className="font-medium text-sm">{label}</div>
       <div className="text-ink-faint text-[0.7rem] mt-0.5">{hint}</div>
       <div className="text-ink-faint text-[0.6rem] mt-1 opacity-70">{k}</div>

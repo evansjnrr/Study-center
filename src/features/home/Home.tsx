@@ -7,6 +7,7 @@ import { allCards, dueRedo } from "@/lib/db";
 import { dueCards } from "@/lib/srs";
 import { nextExam, daysUntil, examsOn, type Exam } from "@/data/exams";
 import { useToday } from "@/lib/useToday";
+import { Ambience } from "./Ambience";
 
 export function Home() {
   const navigate = useApp((s) => s.navigate);
@@ -32,37 +33,39 @@ export function Home() {
   const nextReal = nextExam("real", now);
 
   return (
-    <div className="max-w-3xl mx-auto px-5 sm:px-6 pt-14 sm:pt-20 pb-24">
-      <div className="animate-fade-up text-center">
-        <div className="label mb-5">{greeting()}</div>
-        <h1 className="display font-serif text-ink text-[2.4rem] sm:text-[4rem]">
-          Learn it,
-          <br />
-          then prove it.
-        </h1>
-        <div className="mx-auto mt-7 w-10 rule" />
-        <p className="text-ink-soft mt-7 max-w-lg mx-auto leading-relaxed">
-          Practise real exam-style questions, mark yourself against the scheme, and
-          let the app hunt down what you keep getting wrong.
-        </p>
-      </div>
+    <>
+      <Ambience />
+      <div className="above-ambience max-w-3xl mx-auto px-5 sm:px-6 pt-12 sm:pt-20 pb-24">
+        <div className="text-center animate-rise">
+          <div className="label mb-4 sm:mb-5">{greeting()}</div>
+          <h1 className="display font-serif text-ink text-[2.1rem] xs:text-[2.4rem] sm:text-[3.2rem] md:text-[4rem]">
+            Learn it,
+            <br />
+            then prove it.
+          </h1>
+          <div className="mx-auto mt-6 sm:mt-7 w-10 rule" />
+          <p className="text-ink-soft mt-6 sm:mt-7 max-w-lg mx-auto leading-relaxed text-[0.95rem] sm:text-base">
+            Practise real exam-style questions, mark yourself against the scheme, and
+            let the app hunt down what you keep getting wrong.
+          </p>
+        </div>
 
       {/* The exam loop — the three things you actually do */}
-      <div className="label mt-16 mb-4">The loop</div>
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="label mt-12 sm:mt-16 mb-4 animate-rise" style={{ animationDelay: "60ms" }}>The loop</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <ActionCard
-          index="01" title="Practice"
+          index="01" title="Practice" delay={100}
           body="Choose subject, topics and difficulty. Timed or untimed."
           onClick={() => navigate({ name: "practice" })}
         />
         <ActionCard
-          index="02" title="Fix my weaknesses"
+          index="02" title="Fix my weaknesses" delay={160}
           body={redoDue > 0 ? `${redoDue} question${redoDue === 1 ? "" : "s"} due for a redo.` : "Redo the questions you got wrong."}
           badge={redoDue > 0 ? String(redoDue) : undefined}
           onClick={() => navigate({ name: "practice", preset: "redo" })}
         />
         <ActionCard
-          index="03" title="Exam mode"
+          index="03" title="Exam mode" delay={220}
           body="A full paper under real conditions, then a marked result."
           onClick={() => navigate({ name: "exam" })}
         />
@@ -71,26 +74,28 @@ export function Home() {
       {/* Decide-for-me shortcut */}
       <button
         onClick={() => navigate({ name: "plan" })}
-        className="w-full mt-4 rounded-xl border border-ink/30 hover:border-ink/60 bg-transparent hover:bg-ink/[0.03] px-5 py-4 flex items-center justify-between gap-4 transition-colors active:scale-[0.995]"
+        style={{ animationDelay: "280ms" }}
+        className="animate-rise w-full mt-3 sm:mt-4 rounded-xl border border-ink/30 hover:border-ink/60 bg-transparent hover:bg-ink/[0.05] px-5 py-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 transition-[background-color,border-color,transform] duration-300 ease-settle active:scale-[0.99]"
       >
         <span className="text-ink text-xs font-semibold uppercase tracking-[0.14em]">
           Give me my next session
         </span>
-        <span className="text-ink-faint text-xs text-right">builds a plan from your weak spots →</span>
+        <span className="text-ink-faint text-xs sm:text-right">builds a plan from your weak spots →</span>
       </button>
 
       <button
         onClick={() => navigate({ name: "progress" })}
-        className="w-full mt-3 rounded-xl border border-line/60 bg-surface hover:bg-surface-2 px-5 py-4 flex items-center justify-between gap-4 transition-colors"
+        style={{ animationDelay: "330ms" }}
+        className="animate-rise w-full mt-3 rounded-xl border border-line/60 bg-surface hover:bg-surface-2 hover:border-line px-5 py-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 transition-[background-color,border-color,transform] duration-300 ease-settle active:scale-[0.99]"
       >
         <span className="text-ink-soft text-xs font-semibold uppercase tracking-[0.14em]">
           My performance
         </span>
-        <span className="text-ink-faint text-xs text-right">accuracy, weak topics, repeated mistakes →</span>
+        <span className="text-ink-faint text-xs sm:text-right">accuracy, weak topics, repeated mistakes →</span>
       </button>
 
-      <div className="label mt-16 mb-4">Learn &amp; reference</div>
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="label mt-12 sm:mt-16 mb-4">Learn &amp; reference</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <BigCard
           accent="physics"
           eyebrow="Physics 9702"
@@ -159,22 +164,27 @@ export function Home() {
         </Card>
       </div>
 
-      <p className="mt-12 text-ink-faint text-sm">
-        Everything is saved on this device — your cards, notes and edited graphs
-        reopen exactly as you left them.
-      </p>
-    </div>
+        <p className="mt-12 text-ink-faint text-sm">
+          Everything is saved on this device — your cards, notes and edited graphs
+          reopen exactly as you left them.
+        </p>
+      </div>
+    </>
   );
 }
 
 function ActionCard({
-  index, title, body, badge, onClick,
+  index, title, body, badge, delay = 0, onClick,
 }: {
   index: string; title: string; body: string;
-  badge?: string; onClick: () => void;
+  badge?: string; delay?: number; onClick: () => void;
 }) {
   return (
-    <Card onClick={onClick} className="lifted p-5 hover:border-ink/40">
+    <Card
+      onClick={onClick}
+      style={{ animationDelay: `${delay}ms` }}
+      className="animate-rise lifted p-5 hover:border-ink/40"
+    >
       <div className="flex items-start justify-between">
         {/* The reference numbers its panels rather than decorating them. */}
         <span className="font-mono text-xs text-ink-faint">.{index}</span>

@@ -708,7 +708,7 @@ export function WorkedExamples({ topicId }: { topicId: string }) {
             key={i}
             onClick={() => load(i)}
             className={cx(
-              "px-2.5 py-1.5 rounded-xl text-xs border transition-all duration-200 active:scale-95",
+              "px-2.5 py-1.5 rounded-xl text-xs border transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-200 active:scale-95",
               i === level ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-faint border-line/60 hover:text-ink-soft",
             )}
           >

@@ -24,7 +24,9 @@ export function TopBar() {
             <br />
             CE
           </span>
-          <span className="text-ink text-xs font-semibold uppercase tracking-[0.22em]">
+          {/* The wordmark is the first thing to go when space is tight — the
+              monogram still identifies the button. */}
+          <span className="hidden xs:inline text-ink text-xs font-semibold uppercase tracking-[0.18em] sm:tracking-[0.22em]">
             Study Center
           </span>
         </button>

@@ -183,7 +183,7 @@ function ExampleCard({ ex }: { ex: CSExample }) {
           <button
             onClick={() => setShowAlt((v) => !v)}
             className={cx(
-              "inline-flex items-center gap-2 text-sm rounded-xl px-3 py-1.5 border transition-all duration-150 active:scale-[0.97]",
+              "inline-flex items-center gap-2 text-sm rounded-xl px-3 py-1.5 border transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-150 active:scale-[0.97]",
               showAlt
                 ? "bg-compsci-soft text-compsci border-compsci/40"
                 : "bg-surface-2 text-ink-soft border-line/60 hover:text-ink",

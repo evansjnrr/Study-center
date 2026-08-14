@@ -4,6 +4,11 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      // Small phones get their own step — 375px-wide screens were having to
+      // wear the same type scale as a tablet.
+      screens: {
+        xs: "400px",
+      },
       fontFamily: {
         // Geometric sans — the closest freely-licensed match for Cera CY.
         // Self-hosted variable font, so it still works offline.
@@ -65,6 +70,11 @@ export default {
       },
       transitionTimingFunction: {
         settle: "cubic-bezier(0.22, 0.61, 0.36, 1)",
+        // A touch of overshoot — makes taps feel like they respond rather
+        // than merely change.
+        spring: "cubic-bezier(0.34, 1.32, 0.58, 1)",
+        // Slow out, for anything large or ambient.
+        drift: "cubic-bezier(0.4, 0, 0.2, 1)",
       },
       keyframes: {
         "fade-in": {
@@ -83,12 +93,19 @@ export default {
           "0%": { transform: "translateY(100%)" },
           "100%": { transform: "translateY(0)" },
         },
+        // Entrance for stacked content — a longer, softer version of fade-up
+        // that reads well when several are staggered behind each other.
+        rise: {
+          "0%": { opacity: "0", transform: "translate3d(0, 14px, 0)" },
+          "100%": { opacity: "1", transform: "translate3d(0, 0, 0)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 200ms cubic-bezier(0.22,0.61,0.36,1)",
-        "fade-up": "fade-up 220ms cubic-bezier(0.22,0.61,0.36,1)",
+        "fade-up": "fade-up 260ms cubic-bezier(0.22,0.61,0.36,1) both",
         "slide-in-right": "slide-in-right 200ms cubic-bezier(0.22,0.61,0.36,1)",
         "slide-up-panel": "slide-up-panel 240ms cubic-bezier(0.22,0.61,0.36,1)",
+        rise: "rise 520ms cubic-bezier(0.22,0.61,0.36,1) both",
       },
     },
   },

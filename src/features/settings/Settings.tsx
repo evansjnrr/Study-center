@@ -74,7 +74,7 @@ export function SettingsScreen() {
               key={t}
               onClick={() => saveSettings({ theme: t })}
               className={cx(
-                "px-4 py-2 rounded-xl text-sm capitalize border transition-all active:scale-95",
+                "px-4 py-2 rounded-xl text-sm capitalize border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
                 settings.theme === t ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60",
               )}
             >
@@ -187,7 +187,7 @@ function LevelCard() {
             key={o.v}
             onClick={() => saveSettings({ level: o.v })}
             className={cx(
-              "w-full text-left rounded-xl border px-4 py-3 transition-all active:scale-[0.995]",
+              "w-full text-left rounded-xl border px-4 py-3 transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-[0.995]",
               settings.level === o.v
                 ? "border-ink/40 bg-ink/[0.04]"
                 : "border-line/60 bg-surface-2 hover:border-line",
@@ -520,7 +520,7 @@ function ActionBtn({ children, onClick, danger }: { children: React.ReactNode; o
     <button
       onClick={onClick}
       className={cx(
-        "px-3.5 py-2 rounded-xl text-sm border transition-all active:scale-95",
+        "px-3.5 py-2 rounded-xl text-sm border transition-[background-color,border-color,color,transform,box-shadow,opacity] active:scale-95",
         danger
           ? "bg-mark-bad-bg/40 text-mark-bad border-mark-bad/30 hover:bg-mark-bad-bg/70"
           : "bg-surface-2 text-ink-soft border-line/60 hover:bg-line/40 hover:text-ink",

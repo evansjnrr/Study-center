@@ -21,7 +21,7 @@ export function NumberBaseConverter() {
             key={i}
             onClick={() => toggle(i)}
             className={cx(
-              "w-10 sm:w-12 py-3 rounded-xl border text-lg font-mono transition-all duration-150 active:scale-90 hover:brightness-110",
+              "w-10 sm:w-12 py-3 rounded-xl border text-lg font-mono transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-150 active:scale-90 hover:brightness-110",
               b
                 ? "bg-compsci-soft text-compsci border-compsci/50"
                 : "bg-surface-2 text-ink-faint border-line/60",
@@ -308,7 +308,7 @@ export function VonNeumannViz() {
           return (
             <div
               key={r}
-              className="rounded-xl border px-2 py-3 text-center transition-all duration-300"
+              className="rounded-xl border px-2 py-3 text-center transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-300"
               style={{
                 borderColor: active ? phaseTone : "rgb(var(--line))",
                 background: active ? "rgb(var(--surface-2))" : "rgb(var(--surface))",

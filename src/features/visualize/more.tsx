@@ -93,7 +93,7 @@ export function CapacitorViz() {
       <div className="flex gap-2">
         {(["charge", "discharge"] as const).map((m) => (
           <button key={m} onClick={() => setMode(m)}
-            className={cx("px-3 py-1.5 rounded-xl text-sm border capitalize transition-all duration-150 active:scale-95", mode === m ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
+            className={cx("px-3 py-1.5 rounded-xl text-sm border capitalize transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-150 active:scale-95", mode === m ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
             {m}
           </button>
         ))}
@@ -162,7 +162,7 @@ export function PhotoelectricViz() {
       <div className="flex gap-2 flex-wrap">
         {MATERIALS.map((m, i) => (
           <button key={m.name} onClick={() => setMatIdx(i)}
-            className={cx("px-2.5 py-1.5 rounded-xl text-xs border transition-all duration-150 active:scale-95", i === matIdx ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
+            className={cx("px-2.5 py-1.5 rounded-xl text-xs border transition-[background-color,border-color,color,transform,box-shadow,opacity] duration-150 active:scale-95", i === matIdx ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
             {m.name} (φ={m.phi})
           </button>
         ))}

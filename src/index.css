@@ -79,6 +79,26 @@ body,
   height: 100%;
 }
 
+html {
+  /* In-page jumps glide instead of teleporting. */
+  scroll-behavior: smooth;
+  /* Stops the whole page rubber-banding when a panel hits its end. */
+  overscroll-behavior-y: none;
+}
+
+/* Interaction feel. `manipulation` drops the ~300ms double-tap-to-zoom wait on
+   touch devices, and killing the tap highlight removes the grey flash that
+   makes every press look laggy. */
+button,
+a[href],
+[role="switch"],
+[role="button"],
+summary,
+label {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   @apply bg-paper text-ink font-sans antialiased;
 }
@@ -138,6 +158,112 @@ body::before {
   border: 0;
 }
 
+/* ------------------------------------------------------------------ */
+/* Ambient backdrop (home screen).                                     */
+/*                                                                      */
+/* Soft, slow, monochrome — light pooling in a dark room rather than    */
+/* anything you could point at. Animation is transform/opacity only so  */
+/* it stays on the compositor; the blooms are radial gradients rather   */
+/* than blurred elements, because a large `filter: blur()` repaints     */
+/* every frame and this must not cost anything on a phone.             */
+/* ------------------------------------------------------------------ */
+.ambience {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  /* Fade the whole field out down the page so it never fights the text. */
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 42%, transparent 88%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 42%, transparent 88%);
+}
+
+.ambience-bloom {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(var(--ink) / 0.085),
+    rgb(var(--ink) / 0.03) 42%,
+    transparent 70%
+  );
+}
+
+/* Three blooms on different paths and periods, so the field never repeats
+   visibly — the movement should be hard to notice and impossible to time. */
+.ambience-bloom:nth-child(1) {
+  width: 68vw;
+  height: 68vw;
+  max-width: 760px;
+  max-height: 760px;
+  top: -26vw;
+  left: 50%;
+  margin-left: -34vw;
+  animation: bloom-a 34s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+.ambience-bloom:nth-child(2) {
+  width: 46vw;
+  height: 46vw;
+  max-width: 520px;
+  max-height: 520px;
+  top: 6vh;
+  right: -12vw;
+  opacity: 0.75;
+  animation: bloom-b 43s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+.ambience-bloom:nth-child(3) {
+  width: 52vw;
+  height: 52vw;
+  max-width: 600px;
+  max-height: 600px;
+  top: 22vh;
+  left: -18vw;
+  opacity: 0.6;
+  animation: bloom-c 51s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+@keyframes bloom-a {
+  from { transform: translate3d(-4%, -2%, 0) scale(1); }
+  to   { transform: translate3d(5%, 4%, 0) scale(1.14); }
+}
+@keyframes bloom-b {
+  from { transform: translate3d(3%, 5%, 0) scale(1.08); }
+  to   { transform: translate3d(-7%, -4%, 0) scale(0.92); }
+}
+@keyframes bloom-c {
+  from { transform: translate3d(2%, -4%, 0) scale(0.96); }
+  to   { transform: translate3d(-5%, 6%, 0) scale(1.1); }
+}
+
+/* A fine static grain. Stops the large flat gradients from banding on cheap
+   panels, and gives the graphite a matte, papery texture. */
+.ambience-grain {
+  position: absolute;
+  inset: -50%;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Anything sitting on the backdrop needs its own layer. */
+.above-ambience {
+  position: relative;
+  z-index: 1;
+}
+
+/* With motion reduced the blooms hold a still, composed frame rather than
+   snapping to the end of their path. */
+.reduce-motion .ambience-bloom {
+  animation: none !important;
+  transform: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambience-bloom {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 /* Comfortable measure + generous line height for reading text */
 .prose-paper {
   @apply font-sans text-ink leading-relaxed;
@@ -152,8 +278,11 @@ body::before {
   box-shadow:
     0 14px 46px rgb(var(--shadow) / 0.45),
     inset 0 1px 0 rgb(255 255 255 / 0.045);
-  transition: box-shadow 250ms cubic-bezier(0.22, 0.61, 0.36, 1),
-    transform 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  /* Includes border-colour so a lifted card's hover ring fades in with the
+     rest of the movement instead of snapping. */
+  transition: box-shadow 300ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 300ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    border-color 300ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 .lifted:hover {
   transform: translateY(-2px);

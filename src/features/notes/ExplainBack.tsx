@@ -67,7 +67,7 @@ export function ExplainBack({
         <button
           onClick={save}
           disabled={!dirty}
-          className="text-sm rounded-xl px-3 py-1.5 bg-surface-2 text-ink-soft border border-line/60 disabled:opacity-40 active:scale-95 transition-all"
+          className="text-sm rounded-xl px-3 py-1.5 bg-surface-2 text-ink-soft border border-line/60 disabled:opacity-40 active:scale-95 transition-[background-color,border-color,transform,opacity] duration-200 ease-spring"
         >
           Save
         </button>

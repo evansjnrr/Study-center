@@ -111,7 +111,7 @@ function BarRow({ bars, accent }: { bars: { label: string; value: number }[]; ac
       {bars.map((b, i) => (
         <div key={i} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
           <span className="text-[0.6rem] text-ink-faint opacity-0 group-hover:opacity-100 transition-opacity">{b.value}</span>
-          <div className={cx("w-full rounded-md transition-all", b.value ? color : "bg-line/30")} style={{ height: `${(b.value / max) * 100}%`, minHeight: b.value ? "4px" : "2px" }} />
+          <div className={cx("w-full rounded-md transition-[height,background-color] duration-500 ease-settle", b.value ? color : "bg-line/30")} style={{ height: `${(b.value / max) * 100}%`, minHeight: b.value ? "4px" : "2px" }} />
           <span className="text-[0.58rem] text-ink-faint">{b.label}</span>
         </div>
       ))}
