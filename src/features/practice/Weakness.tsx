@@ -5,6 +5,7 @@ import {
   computeTopicHealth, MISTAKE_LABEL, prettifyTopicId,
   type MistakeReason, type QAttempt, type RedoItem, type SubjectCode, type TopicHealth,
 } from "@/lib/questions";
+import { LEVEL_LABEL, topicLevel } from "@/lib/levels";
 import { topicById } from "@/data/topics";
 import { csTopicById } from "@/features/cs/cs-data";
 import { Button, Card, Chip, IconBack, ProgressBar, cx } from "@/components/ui";
@@ -176,6 +177,7 @@ function TopicRow({ h }: { h: TopicHealth }) {
       <div className="flex-1 min-w-0">
         <div className="text-ink text-sm truncate">{topicName(h.topicId)}</div>
         <div className="text-ink-faint text-xs mt-0.5">
+          {topicLevel(h.topicId) && `${LEVEL_LABEL[topicLevel(h.topicId)!]} · `}
           {h.attempted} attempted · {h.mistakes} mistake{h.mistakes === 1 ? "" : "s"}
           {h.repeatedMistakes > 0 && ` · ${h.repeatedMistakes} repeated`}
         </div>

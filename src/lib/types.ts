@@ -66,4 +66,9 @@ export interface Settings {
   apiKey?: string;
   /** Mark with the AI as soon as the mark scheme is revealed, without asking. */
   autoMarkWithAI: boolean;
+  /**
+   * Which half of the syllabus you're studying. Sets the default filter for
+   * practice, exam mode and the topic indexes; "both" shows everything.
+   */
+  level: "AS" | "A2" | "both";
 }

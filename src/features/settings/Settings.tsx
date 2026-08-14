@@ -67,7 +67,7 @@ export function SettingsScreen() {
       {/* Appearance */}
       <Card className="p-5 mb-4">
         <h2 className="text-ink font-medium mb-1">Appearance</h2>
-        <p className="text-ink-faint text-sm mb-3">Dark is a true, neutral black; light is a clean cool white.</p>
+        <p className="text-ink-faint text-sm mb-3">Dark is a matte graphite; light is a clean cool white.</p>
         <div className="flex gap-2 mb-4">
           {(["light", "dark", "system"] as const).map((t) => (
             <button
@@ -97,6 +97,9 @@ export function SettingsScreen() {
           />
         </div>
       </Card>
+
+      {/* Syllabus level */}
+      <LevelCard />
 
       {/* AI examiner */}
       <ExaminerCard />
@@ -161,6 +164,51 @@ export function SettingsScreen() {
         </p>
       </Card>
     </div>
+  );
+}
+
+function LevelCard() {
+  const { settings, saveSettings } = useApp();
+  const options = [
+    { v: "AS" as const, name: "AS Level", desc: "First year. Physics topics 1–11, Economics 1–6, Computer Science 1–12." },
+    { v: "A2" as const, name: "A2 only", desc: "The second-year content alone — everything AS doesn't cover." },
+    { v: "both" as const, name: "AS + A2", desc: "The full A Level. AS content is assumed knowledge in the A2 papers." },
+  ];
+  return (
+    <Card className="p-5 mb-4">
+      <h2 className="text-ink font-medium mb-1">Which level are you on?</h2>
+      <p className="text-ink-faint text-sm mb-4 leading-relaxed">
+        Sets the default filter for practice, exam mode and the topic indexes. You can
+        still switch level on any of those screens.
+      </p>
+      <div className="space-y-2">
+        {options.map((o) => (
+          <button
+            key={o.v}
+            onClick={() => saveSettings({ level: o.v })}
+            className={cx(
+              "w-full text-left rounded-xl border px-4 py-3 transition-all active:scale-[0.995]",
+              settings.level === o.v
+                ? "border-ink/40 bg-ink/[0.04]"
+                : "border-line/60 bg-surface-2 hover:border-line",
+            )}
+          >
+            <div className="flex items-center gap-2">
+              <span
+                className={cx(
+                  "w-3.5 h-3.5 rounded-full border grid place-items-center shrink-0",
+                  settings.level === o.v ? "border-ink" : "border-line",
+                )}
+              >
+                {settings.level === o.v && <span className="w-1.5 h-1.5 rounded-full bg-ink" />}
+              </span>
+              <span className="text-ink text-sm font-medium">{o.name}</span>
+            </div>
+            <div className="text-ink-faint text-xs mt-1.5 ml-5.5 leading-relaxed">{o.desc}</div>
+          </button>
+        ))}
+      </div>
+    </Card>
   );
 }
 

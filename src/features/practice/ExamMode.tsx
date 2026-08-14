@@ -5,6 +5,9 @@ import {
   CRITERION_LABEL, MISTAKE_LABEL, estimateGrade, prettifyTopicId, scheduleAfterAttempt,
   type Criterion, type MistakeReason, type QAttempt, type Question, type SubjectCode,
 } from "@/lib/questions";
+import {
+  LEVEL_LABEL, matchesLevel, questionLevel, type LevelFilter,
+} from "@/lib/levels";
 import { topicById } from "@/data/topics";
 import { csTopicById } from "@/features/cs/cs-data";
 import { Button, Card, Chip, IconBack, ProgressBar, cx } from "@/components/ui";
@@ -63,8 +66,10 @@ export function ExamMode() {
     setResume(loadDraft());
   }, []);
 
-  function begin(subject: SubjectCode | "all", minutes: number) {
-    let pool = bank.filter((q) => subject === "all" || q.subject === subject);
+  function begin(subject: SubjectCode | "all", minutes: number, level: LevelFilter) {
+    const pool = bank
+      .filter((q) => subject === "all" || q.subject === subject)
+      .filter((q) => matchesLevel(questionLevel(q), level));
     if (!pool.length) return;
     // Build a paper: shuffle, then take questions until we roughly fill the time
     // at Cambridge's ~1 mark per minute.
@@ -143,12 +148,15 @@ function Setup({
   bank, resume, onBegin, onResume, onDiscard, onBack,
 }: {
   bank: Question[]; resume: Draft | null;
-  onBegin: (s: SubjectCode | "all", m: number) => void;
+  onBegin: (s: SubjectCode | "all", m: number, level: LevelFilter) => void;
   onResume: (d: Draft) => void; onDiscard: () => void; onBack: () => void;
 }) {
   const [subject, setSubject] = React.useState<SubjectCode | "all">("9702");
   const [minutes, setMinutes] = React.useState(45);
-  const available = bank.filter((q) => subject === "all" || q.subject === subject);
+  const [level, setLevel] = React.useState<LevelFilter>(useApp.getState().settings.level);
+  const available = bank
+    .filter((q) => subject === "all" || q.subject === subject)
+    .filter((q) => matchesLevel(questionLevel(q), level));
   const totalMarks = available.reduce((s, q) => s + q.marks, 0);
 
   return (
@@ -194,6 +202,19 @@ function Setup({
         </div>
 
         <div>
+          <div className="text-xs text-ink-faint mb-2">Level</div>
+          <div className="flex flex-wrap gap-2">
+            {(["both", "AS", "A2"] as const).map((l) => (
+              <button key={l} onClick={() => setLevel(l)}
+                className={cx("px-3 py-1.5 rounded-xl text-sm border transition-all active:scale-95",
+                  level === l ? "bg-physics-soft text-physics border-physics/40" : "bg-surface-2 text-ink-soft border-line/60")}>
+                {l === "both" ? "AS + A2" : LEVEL_LABEL[l]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs text-ink-faint">Duration</span>
             <span className="text-ink font-mono text-sm">{minutes} min</span>
@@ -211,7 +232,7 @@ function Setup({
         </div>
 
         <Button variant="primary" accent="physics" size="lg" className="w-full"
-          disabled={!available.length} onClick={() => onBegin(subject, minutes)}>
+          disabled={!available.length} onClick={() => onBegin(subject, minutes, level)}>
           Start the paper
         </Button>
       </Card>

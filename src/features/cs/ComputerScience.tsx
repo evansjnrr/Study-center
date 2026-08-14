@@ -1,6 +1,7 @@
 import React from "react";
 import { useApp } from "@/lib/store";
 import { CS_TOPICS, csTopicById, type CSBlock, type CSExample } from "./cs-data";
+import { topicLevel } from "@/lib/levels";
 import { Button, Card, Chip, IconBack, cx } from "@/components/ui";
 import { RichText } from "@/components/Katex";
 import { CodeBlock } from "@/components/Code";
@@ -21,23 +22,45 @@ export function ComputerScience({ topicId }: { topicId?: string }) {
         <span className="text-compsci"> alternative approach</span> you can reveal and
         compare.
       </p>
-      <div className="grid sm:grid-cols-2 gap-3">
-        {CS_TOPICS.map((t) => (
-          <Card key={t.id} onClick={() => navigate({ name: "cs", topicId: t.id })} className="px-4 py-3.5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <div className="text-ink font-medium">{t.name}</div>
-                <div className="text-ink-faint text-sm mt-0.5">{t.summary}</div>
+      {(["AS", "A2"] as const).map((lvl) => {
+        const topics = CS_TOPICS.filter((t) => topicLevel(t.id) === lvl);
+        if (!topics.length) return null;
+        return (
+          <section key={lvl} className="mb-10 last:mb-0">
+            <div className="flex items-baseline justify-between mb-3">
+              <div className="label">
+                {lvl === "AS" ? "AS Level · Papers 1–2" : "A2 · Papers 3–4"}
               </div>
-              {t.component ? (
-                <Chip accent="compsci">interactive</Chip>
-              ) : (
-                <span className="text-ink-faint text-xs mt-1 shrink-0">example</span>
-              )}
+              <span className="text-ink-faint text-xs">{topics.length} topics</span>
             </div>
-          </Card>
-        ))}
-      </div>
+            <div className="rule mb-4" />
+            {lvl === "A2" && (
+              <p className="text-ink-faint text-xs mb-4 leading-relaxed">
+                The AS topics above are revisited in more depth at A Level — floating-point
+                representation, protocols, virtual machines, encryption and recursion all
+                extend a section you have already met.
+              </p>
+            )}
+            <div className="grid sm:grid-cols-2 gap-3">
+              {topics.map((t) => (
+                <Card key={t.id} onClick={() => navigate({ name: "cs", topicId: t.id })} className="px-4 py-3.5">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <div className="text-ink font-medium">{t.name}</div>
+                      <div className="text-ink-faint text-sm mt-0.5">{t.summary}</div>
+                    </div>
+                    {t.component ? (
+                      <Chip accent="compsci">interactive</Chip>
+                    ) : (
+                      <span className="text-ink-faint text-xs mt-1 shrink-0">example</span>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }

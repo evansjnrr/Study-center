@@ -43,6 +43,7 @@ const DEFAULT_SETTINGS: Settings = {
   speechRate: 1,
   bigTapTargets: false,
   autoMarkWithAI: false,
+  level: "both",
 };
 
 export const useApp = create<AppState>((set, get) => ({

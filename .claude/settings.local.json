@@ -25,7 +25,9 @@
       "Skill(claude-api:*)",
       "Bash(git commit -q -m ' *)",
       "Bash(perl -pi -e 's/bg-mark-good border-mark-good text-white/bg-mark-good border-mark-good text-paper/' src/features/practice/ExamMode.tsx src/features/practice/Practice.tsx)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "WebFetch(domain:www.cambridgeinternational.org)",
+      "WebFetch(domain:www.studocu.com)"
     ]
   }
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { useApp } from "@/lib/store";
 import { DIAGRAMS, diagramById, type DiagramTemplate } from "./diagrams";
+import { diagramLevel } from "@/lib/levels";
 import { DiagramEditor } from "./DiagramEditor";
 import { allDiagrams } from "@/lib/db";
 import { Card, Chip, IconBack } from "@/components/ui";
@@ -43,8 +44,9 @@ export function EconGraphs({ diagramId }: { diagramId?: string }) {
     );
   }
 
-  const micro = DIAGRAMS.filter((d) => d.category === "Microeconomics");
-  const macro = DIAGRAMS.filter((d) => d.category === "Macroeconomics");
+  // Split by syllabus level first, then by micro/macro inside each.
+  const as = DIAGRAMS.filter((d) => diagramLevel(d.id) === "AS");
+  const a2 = DIAGRAMS.filter((d) => diagramLevel(d.id) === "A2");
 
   return (
     <div className="max-w-3xl mx-auto px-5 sm:px-6 py-8">
@@ -56,8 +58,19 @@ export function EconGraphs({ diagramId }: { diagramId?: string }) {
         exactly as you left it.
       </p>
 
-      <Section title="Microeconomics" diagrams={micro} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
-      <Section title="Macroeconomics" diagrams={macro} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
+      <div className="label mb-2">AS Level · Topics 1–6</div>
+      <div className="rule mb-5" />
+      <Section title="Microeconomics" diagrams={as.filter((d) => d.category === "Microeconomics")} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
+      <Section title="Macroeconomics" diagrams={as.filter((d) => d.category === "Macroeconomics")} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
+
+      <div className="label mt-12 mb-2">A2 · Topics 7–11</div>
+      <div className="rule mb-5" />
+      <Section title="Theory of the firm" diagrams={a2} savedIds={savedIds} onOpen={(id) => navigate({ name: "econ", diagramId: id })} />
+      <p className="text-ink-faint text-xs leading-relaxed">
+        Most A2 economics is analysis and evaluation built on the AS diagrams rather than
+        new ones — the labour market, money and banking, and macro policy all reuse the
+        supply-and-demand and AD/AS frames above.
+      </p>
     </div>
   );
 }

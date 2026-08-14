@@ -879,8 +879,8 @@ export const QUESTION_BANK: Question[] = [
 
   // -------------------- Computer Science 9618 --------------------
   {
-    id: "c-com-1", subject: "9618", paper: "Paper 1", topicId: "cs-communication",
-    subtopic: "Packet switching", marks: 6, difficulty: 2, source: "original",
+    id: "c-com-1", subject: "9618", paper: "Paper 3", topicId: "cs-communication",
+    subtopic: "Packet switching", marks: 6, difficulty: 2, source: "original", level: "A2",
     stem: "**Describe** how data is transmitted across the internet using packet switching, and **explain** one advantage over circuit switching.",
     markScheme: [
       { id: "m1", text: "The data is divided into packets of a fixed maximum size", marks: 1, criterion: "knowledge" },
@@ -892,8 +892,8 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-com-2", subject: "9618", paper: "Paper 1", topicId: "cs-communication",
-    subtopic: "Protocols", marks: 5, difficulty: 2, source: "original",
+    id: "c-com-2", subject: "9618", paper: "Paper 3", topicId: "cs-communication",
+    subtopic: "Protocols", marks: 5, difficulty: 2, source: "original", level: "A2",
     stem: "**(a)** **Explain** what is meant by a protocol and why protocols are necessary. **[2]**\n**(b)** **State** the purpose of each of TCP, IP and HTTPS. **[3]**",
     markScheme: [
       { id: "m1", text: "A protocol is an agreed set of rules governing how data is transmitted between devices", marks: 1, criterion: "knowledge" },
@@ -917,8 +917,8 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-sw-2", subject: "9618", paper: "Paper 1", topicId: "cs-software",
-    subtopic: "Operating systems", marks: 5, difficulty: 2, source: "original",
+    id: "c-sw-2", subject: "9618", paper: "Paper 3", topicId: "cs-software",
+    subtopic: "Operating systems", marks: 5, difficulty: 2, source: "original", level: "A2",
     stem: "**Explain** the role of the operating system in memory management and in process (CPU) scheduling.",
     markScheme: [
       { id: "m1", text: "Memory management allocates memory to each process and keeps a record of what is allocated and free", marks: 1, criterion: "knowledge" },
@@ -1015,6 +1015,112 @@ export const QUESTION_BANK: Question[] = [
       { id: "m3", text: "Otherwise discards the half that cannot contain the target and repeats on the remaining half until found or the list is empty", marks: 1, criterion: "algorithm" },
       { id: "m4", text: "Binary search halves the number of items each time, so at most about 10 comparisons ($2^{10} > 1000$)", marks: 1, criterion: "analysis" },
       { id: "m5", text: "Linear search checks each item in turn — up to 1000 comparisons; the difference grows rapidly with list size ($O(\\log n)$ vs $O(n)$)", marks: 1, criterion: "analysis" },
+    ],
+  },
+
+  // ---------- Computer Science 9618: A Level only (sections 13–20) ----------
+  {
+    id: "c-a2-fp-1", subject: "9618", paper: "Paper 3", topicId: "cs-data-representation",
+    subtopic: "Floating-point numbers (13.3)", marks: 6, difficulty: 3, source: "original", level: "A2",
+    stem: "A floating-point number uses an 8-bit mantissa and a 4-bit exponent, both in two's complement.\n\n**(a)** Calculate the denary value of `01100000 0010`. **[3]**\n**(b)** **Explain** what is meant by a *normalised* floating-point number and **state** one benefit of normalisation. **[3]**",
+    markScheme: [
+      { id: "m1", text: "Mantissa $01100000 = +0.75$ (bits are $0.1100000$ after the implied point)", marks: 1, criterion: "working" },
+      { id: "m2", text: "Exponent $0010 = +2$, so value $= 0.75 \\times 2^{2}$", marks: 1, criterion: "working" },
+      { id: "m3", text: "$= 3.0$", marks: 1, criterion: "answer" },
+      { id: "m4", text: "Normalised: a positive number starts $0.1$ and a negative number starts $1.0$", marks: 1, criterion: "knowledge" },
+      { id: "m5", text: "It removes leading digits that carry no information", marks: 1, criterion: "explanation" },
+      { id: "m6", text: "Benefit: maximum precision for the bits available, and one unique representation per value", marks: 1, criterion: "explanation" },
+    ],
+    guidance: "Work out the mantissa first, then shift by the exponent. Getting the sign of the exponent wrong is the usual error.",
+  },
+  {
+    id: "c-a2-hw-1", subject: "9618", paper: "Paper 3", topicId: "cs-hardware",
+    subtopic: "Boolean algebra & logic circuits (15.2)", marks: 5, difficulty: 3, source: "original", level: "A2",
+    stem: "**(a)** Using Boolean algebra, **simplify** $X = A.B + A.\\overline{B} + \\overline{A}.B$, showing each step. **[3]**\n**(b)** **State** the name of the law used in your first step. **[1]**\n**(c)** **State** why simplifying a logic circuit is useful. **[1]**",
+    markScheme: [
+      { id: "m1", text: "Factorises the first two terms: $A.(B + \\overline{B})$", marks: 1, criterion: "algorithm" },
+      { id: "m2", text: "$B + \\overline{B} = 1$, so this reduces to $A$; expression is now $A + \\overline{A}.B$", marks: 1, criterion: "algorithm" },
+      { id: "m3", text: "Applies absorption to give $X = A + B$", marks: 1, criterion: "answer" },
+      { id: "m4", text: "Distributive law (accept factorisation)", marks: 1, criterion: "knowledge" },
+      { id: "m5", text: "Fewer logic gates — cheaper to manufacture, faster, and lower power consumption", marks: 1, criterion: "explanation" },
+    ],
+  },
+  {
+    id: "c-a2-vm-1", subject: "9618", paper: "Paper 3", topicId: "cs-hardware",
+    subtopic: "Virtual machines (15.1)", marks: 5, difficulty: 2, source: "original", level: "A2",
+    stem: "**(a)** **Explain** what is meant by a virtual machine. **[2]**\n**(b)** **State** one benefit and one drawback of using a virtual machine. **[2]**\n**(c)** **State** what is meant by parallel processing. **[1]**",
+    markScheme: [
+      { id: "m1", text: "Software that emulates a complete computer system, running as a process on a host machine", marks: 1, criterion: "knowledge" },
+      { id: "m2", text: "It provides a guest operating system with what appears to be its own dedicated hardware", marks: 1, criterion: "explanation" },
+      { id: "m3", text: "Benefit — e.g. run software written for another platform, isolate/sandbox software, use one physical machine for several servers", marks: 1, criterion: "explanation" },
+      { id: "m4", text: "Drawback — the emulation layer means it runs more slowly than native, and a host failure takes down every guest", marks: 1, criterion: "evaluation" },
+      { id: "m5", text: "Parallel processing: several instructions or data items are processed simultaneously by multiple processors/cores", marks: 1, criterion: "knowledge" },
+    ],
+  },
+  {
+    id: "c-a2-sec-1", subject: "9618", paper: "Paper 3", topicId: "cs-security-ethics",
+    subtopic: "Encryption & digital certificates (17.1)", marks: 6, difficulty: 3, source: "original", level: "A2",
+    stem: "**Explain** how asymmetric encryption and a digital certificate together allow a user to trust that they are communicating with a genuine web server.",
+    markScheme: [
+      { id: "m1", text: "Asymmetric encryption uses a matched key pair — a public key that anyone may hold and a private key kept secret", marks: 1, criterion: "knowledge" },
+      { id: "m2", text: "Data encrypted with the public key can only be decrypted with the corresponding private key", marks: 1, criterion: "explanation" },
+      { id: "m3", text: "A digital certificate contains the server's public key plus identifying details, issued by a Certificate Authority", marks: 1, criterion: "knowledge" },
+      { id: "m4", text: "The CA signs the certificate with its own private key, creating a digital signature", marks: 1, criterion: "explanation" },
+      { id: "m5", text: "The browser verifies that signature using the CA's public key, which it already trusts", marks: 1, criterion: "analysis" },
+      { id: "m6", text: "A valid signature proves the public key really belongs to that server, so an imposter cannot substitute its own key", marks: 1, criterion: "analysis" },
+    ],
+    guidance: "The certificate is what links a public key to an identity. An answer about encryption alone can't score the trust marks.",
+  },
+  {
+    id: "c-a2-rec-1", subject: "9618", paper: "Paper 3", topicId: "cs-computational-thinking",
+    subtopic: "Recursion (19.2)", marks: 6, difficulty: 3, source: "original", level: "A2",
+    stem: "**(a)** **State** the two features every recursive algorithm must have. **[2]**\n**(b)** **Write** a recursive pseudocode function `Fact(n)` that returns $n!$. **[2]**\n**(c)** **Explain** why deep recursion can cause a program to crash. **[2]**",
+    markScheme: [
+      { id: "m1", text: "A base case that can be solved without further recursion", marks: 1, criterion: "knowledge" },
+      { id: "m2", text: "A general/recursive case that calls itself on a smaller problem, moving towards the base case", marks: 1, criterion: "knowledge" },
+      { id: "m3", text: "FUNCTION Fact(n : INTEGER) RETURNS INTEGER, with IF n <= 1 THEN RETURN 1", marks: 1, criterion: "algorithm" },
+      { id: "m4", text: "ELSE RETURN n * Fact(n - 1), with ENDIF / ENDFUNCTION", marks: 1, criterion: "syntax" },
+      { id: "m5", text: "Each unfinished call places a stack frame (return address, parameters, local variables) on the call stack", marks: 1, criterion: "explanation" },
+      { id: "m6", text: "With too many calls the stack runs out of memory — stack overflow", marks: 1, criterion: "explanation" },
+    ],
+  },
+  {
+    id: "c-a2-par-1", subject: "9618", paper: "Paper 4", topicId: "cs-oop",
+    subtopic: "Programming paradigms (20.1)", marks: 6, difficulty: 3, source: "original", level: "A2",
+    stem: "**(a)** **Explain** the difference between a low-level, an imperative and an object-oriented programming paradigm. **[3]**\n**(b)** **Explain** what is meant by *polymorphism* and *inheritance*, and how they relate. **[3]**",
+    markScheme: [
+      { id: "m1", text: "Low-level: instructions map closely to machine/assembly operations and the specific processor architecture", marks: 1, criterion: "knowledge" },
+      { id: "m2", text: "Imperative: a sequence of statements that change program state, organised into procedures", marks: 1, criterion: "knowledge" },
+      { id: "m3", text: "Object-oriented: the program is built from objects that bundle data with the methods that act on it", marks: 1, criterion: "knowledge" },
+      { id: "m4", text: "Inheritance: a subclass (derived class) takes on the attributes and methods of its superclass (base class)", marks: 1, criterion: "knowledge" },
+      { id: "m5", text: "Polymorphism: a subclass overrides an inherited method so the same call behaves differently per class", marks: 1, criterion: "explanation" },
+      { id: "m6", text: "Polymorphism depends on inheritance — the shared interface comes from the base class, letting one call site handle many types", marks: 1, criterion: "analysis" },
+    ],
+  },
+  {
+    id: "c-a2-file-1", subject: "9618", paper: "Paper 4", topicId: "cs-python",
+    subtopic: "File processing & exception handling (20.2)", marks: 6, difficulty: 3, source: "original", level: "A2",
+    stem: "**Write** a Python function `count_lines(path)` that opens a text file, returns the number of lines in it, and returns $-1$ with a message if the file does not exist. It must close the file whatever happens.",
+    markScheme: [
+      { id: "m1", text: "def count_lines(path): with a try block", marks: 1, criterion: "syntax" },
+      { id: "m2", text: "Opens the file for reading, e.g. with open(path) as f (or open + finally close)", marks: 1, criterion: "algorithm" },
+      { id: "m3", text: "Counts the lines — a loop with a counter, or len(f.readlines())", marks: 1, criterion: "algorithm" },
+      { id: "m4", text: "Returns the count on success", marks: 1, criterion: "algorithm" },
+      { id: "m5", text: "except FileNotFoundError (accept IOError/OSError) prints a message", marks: 1, criterion: "algorithm" },
+      { id: "m6", text: "Returns -1 in that case; file is closed either by `with` or by a finally block", marks: 1, criterion: "algorithm" },
+    ],
+    guidance: "`with open(...)` closes the file automatically — say so, or use an explicit finally, or you lose the last mark.",
+  },
+  {
+    id: "c-a2-ai-1", subject: "9618", paper: "Paper 3", topicId: "cs-security-ethics",
+    subtopic: "Artificial intelligence (18.1)", marks: 5, difficulty: 2, source: "original", level: "A2",
+    stem: "**(a)** **Explain** the difference between machine learning and deep learning. **[2]**\n**(b)** **Describe** how a supervised machine-learning model is trained. **[2]**\n**(c)** **State** one ethical concern raised by such a system. **[1]**",
+    markScheme: [
+      { id: "m1", text: "Machine learning: algorithms that improve their performance at a task from data, without being explicitly programmed for it", marks: 1, criterion: "knowledge" },
+      { id: "m2", text: "Deep learning is a subset using artificial neural networks with many hidden layers, learning features from raw data itself", marks: 1, criterion: "knowledge" },
+      { id: "m3", text: "It is given a labelled training set — inputs paired with the correct output", marks: 1, criterion: "explanation" },
+      { id: "m4", text: "Predictions are compared with the labels and the weights adjusted to reduce the error, repeated over many passes; tested on unseen data", marks: 1, criterion: "explanation" },
+      { id: "m5", text: "Ethical concern — e.g. bias inherited from the training data, no explanation for decisions, privacy of the data, accountability when it is wrong", marks: 1, criterion: "evaluation" },
     ],
   },
 ];

@@ -9,6 +9,10 @@ import {
   type Criterion, type MistakeReason, type PracticeMode, type QAttempt,
   type Question, type SubjectCode,
 } from "@/lib/questions";
+import {
+  LEVEL_LABEL, matchesLevel, questionLevel, topicLevel,
+  type LevelFilter,
+} from "@/lib/levels";
 import { topicById } from "@/data/topics";
 import { csTopicById } from "@/features/cs/cs-data";
 import { Button, Card, Chip, IconBack, ProgressBar, cx } from "@/components/ui";
@@ -35,6 +39,7 @@ interface Config {
   count: number;
   difficulty: 0 | 1 | 2 | 3; // 0 = any
   timed: boolean;
+  level: LevelFilter;
 }
 
 export function Practice({ preset }: { preset?: "redo" | "exam" }) {
@@ -63,6 +68,7 @@ export function Practice({ preset }: { preset?: "redo" | "exam" }) {
 
   function start(cfg: Config) {
     let pool = bank.filter((q) => cfg.subject === "all" || q.subject === cfg.subject);
+    pool = pool.filter((q) => matchesLevel(questionLevel(q), cfg.level));
     if (cfg.topics.length) pool = pool.filter((q) => cfg.topics.includes(q.topicId));
     if (cfg.difficulty) pool = pool.filter((q) => q.difficulty === cfg.difficulty);
     if (!pool.length) return;
@@ -115,8 +121,12 @@ function Setup({
   const [count, setCount] = React.useState(5);
   const [difficulty, setDifficulty] = React.useState<0 | 1 | 2 | 3>(0);
   const [timed, setTimed] = React.useState(preset === "exam");
+  // Defaults to whichever half of the syllabus you told Settings you're on.
+  const [level, setLevel] = React.useState<LevelFilter>(useApp.getState().settings.level);
 
-  const subjectPool = bank.filter((q) => subject === "all" || q.subject === subject);
+  const subjectPool = bank
+    .filter((q) => subject === "all" || q.subject === subject)
+    .filter((q) => matchesLevel(questionLevel(q), level));
   const availableTopics = [...new Set(subjectPool.map((q) => q.topicId))];
   const matching = subjectPool.filter(
     (q) => (!topics.length || topics.includes(q.topicId)) && (!difficulty || q.difficulty === difficulty),
@@ -163,6 +173,21 @@ function Setup({
           </div>
         </div>
 
+        <div>
+          <div className="text-xs text-ink-faint mb-2">Level</div>
+          <div className="flex flex-wrap gap-2">
+            {(["both", "AS", "A2"] as const).map((l) => (
+              <Pill
+                key={l}
+                active={level === l}
+                onClick={() => { setLevel(l); setTopics([]); }}
+              >
+                {l === "both" ? "AS + A2" : LEVEL_LABEL[l]}
+              </Pill>
+            ))}
+          </div>
+        </div>
+
         {availableTopics.length > 1 && (
           <div>
             <div className="text-xs text-ink-faint mb-2">
@@ -176,6 +201,12 @@ function Setup({
                   onClick={() => setTopics((p) => p.includes(t) ? p.filter((x) => x !== t) : [...p, t])}
                 >
                   {topicName(t)}
+                  {/* Only worth showing when both halves are in the list. */}
+                  {level === "both" && topicLevel(t) && (
+                    <span className="ml-1.5 text-[0.6rem] text-ink-faint align-middle">
+                      {LEVEL_LABEL[topicLevel(t)!]}
+                    </span>
+                  )}
                 </Pill>
               ))}
             </div>
@@ -227,7 +258,7 @@ function Setup({
           <Button
             variant="primary" accent="physics" size="lg"
             disabled={matching.length === 0}
-            onClick={() => onStart({ subject, topics, count, difficulty, timed })}
+            onClick={() => onStart({ subject, topics, count, difficulty, timed, level })}
             className="w-full"
           >
             {matching.length === 0
@@ -351,6 +382,7 @@ function Runner({
       <Card className="p-5 mt-5">
         <div className="flex items-center gap-2 mb-3 flex-wrap">
           <Chip accent={SUBJECTS.find((s) => s.code === q.subject)?.accent}>{q.paper}</Chip>
+          <Chip>{LEVEL_LABEL[questionLevel(q)]}</Chip>
           <span className="text-ink-faint text-xs">{topicName(q.topicId)}</span>
           <span className="ml-auto text-ink font-medium text-sm">[{q.marks}]</span>
         </div>

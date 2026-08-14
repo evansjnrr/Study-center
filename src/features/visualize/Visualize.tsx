@@ -1,5 +1,6 @@
 import { useApp } from "@/lib/store";
 import { PHYSICS_TOPICS, topicById } from "@/data/topics";
+import { topicLevel } from "@/lib/levels";
 import { vizFor, type VizEntry } from "./registry";
 import { Button, Card, Chip, IconBack } from "@/components/ui";
 import { RichText, renderInline } from "@/components/Katex";
@@ -23,31 +24,48 @@ export function Visualize({ topicId }: { topicId?: string }) {
         notice. The interactive ones also let you drag the numbers and watch the
         physics respond.
       </p>
-      <div className="grid sm:grid-cols-2 gap-3">
-        {PHYSICS_TOPICS.map((t) => {
-          const v = vizFor(t.id);
-          const interactive = !!v?.component;
-          return (
-            <Card
-              key={t.id}
-              onClick={() => navigate({ name: "viz", topicId: t.id })}
-              className="px-4 py-3.5"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-ink font-medium">{t.name}</div>
-                  <div className="text-ink-faint text-sm mt-0.5">{v?.summary}</div>
-                </div>
-                {interactive ? (
-                  <Chip accent="physics">interactive</Chip>
-                ) : (
-                  <span className="text-ink-faint text-xs mt-1 shrink-0">detailed</span>
-                )}
+      {/* Cambridge splits 9702 at topic 12: 1–11 are AS, the rest are A Level
+          only. Showing that split makes it obvious what's on which paper. */}
+      {(["AS", "A2"] as const).map((lvl) => {
+        const topics = PHYSICS_TOPICS.filter((t) => topicLevel(t.id) === lvl);
+        if (!topics.length) return null;
+        return (
+          <section key={lvl} className="mb-10 last:mb-0">
+            <div className="flex items-baseline justify-between mb-3">
+              <div className="label">
+                {lvl === "AS" ? "AS Level · Papers 1–3" : "A2 · Papers 4–5"}
               </div>
-            </Card>
-          );
-        })}
-      </div>
+              <span className="text-ink-faint text-xs">{topics.length} topics</span>
+            </div>
+            <div className="rule mb-4" />
+            <div className="grid sm:grid-cols-2 gap-3">
+              {topics.map((t) => {
+                const v = vizFor(t.id);
+                const interactive = !!v?.component;
+                return (
+                  <Card
+                    key={t.id}
+                    onClick={() => navigate({ name: "viz", topicId: t.id })}
+                    className="px-4 py-3.5"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-ink font-medium">{t.name}</div>
+                        <div className="text-ink-faint text-sm mt-0.5">{v?.summary}</div>
+                      </div>
+                      {interactive ? (
+                        <Chip accent="physics">interactive</Chip>
+                      ) : (
+                        <span className="text-ink-faint text-xs mt-1 shrink-0">detailed</span>
+                      )}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }

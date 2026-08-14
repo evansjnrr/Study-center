@@ -26,6 +26,7 @@ export const IMPORT_TEMPLATE = `[
     "topicId": "phy-kinematics",
     "marks": 4,
     "difficulty": 1,
+    "level": "AS",
     "stem": "A stone falls from rest... **(a)** Calculate the speed after 2.0 s. **[2]**",
     "data": "Take g = 9.81 m s^-2.",
     "guidance": "Ignore air resistance.",
@@ -121,6 +122,9 @@ export function parseQuestions(text: string): ImportResult {
       markScheme,
       guidance: typeof r.guidance === "string" && r.guidance.trim() ? r.guidance.trim() : undefined,
       source: "imported",
+      // Optional. Left unset, the level is worked out from the topic, then
+      // from the paper number — see lib/levels.ts.
+      level: r.level === "AS" || r.level === "A2" ? r.level : undefined,
     });
   });
 

@@ -99,6 +99,15 @@ export interface Question {
   markScheme: MarkPoint[];
   guidance?: string;
   source: "original" | "imported";
+  /**
+   * AS or A2. Normally left unset and derived from the topic — see
+   * `questionLevel()` in lib/levels.ts. Set it explicitly only to override
+   * that, e.g. on an imported past-paper question.
+   *
+   * Declared inline rather than importing SyllabusLevel because levels.ts
+   * imports from this file.
+   */
+  level?: "AS" | "A2";
 }
 
 /** Why a mark was lost — the user's own diagnosis. */
