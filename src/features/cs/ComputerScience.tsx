@@ -1,6 +1,8 @@
 import React from "react";
 import { useApp } from "@/lib/store";
-import { CS_TOPICS, csTopicById, type CSBlock, type CSExample } from "./cs-data";
+import {
+  CS_TOPICS_ORDERED, csTopicById, type CSBlock, type CSExample,
+} from "./cs-data";
 import { topicLevel } from "@/lib/levels";
 import { Button, Card, Chip, IconBack, cx } from "@/components/ui";
 import { RichText } from "@/components/Katex";
@@ -23,7 +25,7 @@ export function ComputerScience({ topicId }: { topicId?: string }) {
         compare.
       </p>
       {(["AS", "A2"] as const).map((lvl) => {
-        const topics = CS_TOPICS.filter((t) => topicLevel(t.id) === lvl);
+        const topics = CS_TOPICS_ORDERED.filter((t) => topicLevel(t.id) === lvl);
         if (!topics.length) return null;
         return (
           <section key={lvl} className="mb-10 last:mb-0">
@@ -36,17 +38,23 @@ export function ComputerScience({ topicId }: { topicId?: string }) {
             <div className="rule mb-4" />
             {lvl === "A2" && (
               <p className="text-ink-faint text-xs mb-4 leading-relaxed">
-                The AS topics above are revisited in more depth at A Level — floating-point
-                representation, protocols, virtual machines, encryption and recursion all
-                extend a section you have already met.
+                Several of these revisit an AS section in more depth — 13 extends 1, 14
+                extends 2, 16 extends 5 — so the AS content is assumed knowledge here.
               </p>
             )}
             <div className="grid sm:grid-cols-2 gap-3">
               {topics.map((t) => (
                 <Card key={t.id} onClick={() => navigate({ name: "cs", topicId: t.id })} className="px-4 py-3.5">
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <div className="text-ink font-medium">{t.name}</div>
+                    <div className="min-w-0">
+                      {/* The syllabus section number, so the index maps
+                          one-to-one onto Cambridge's contents page. */}
+                      <div className="text-ink font-medium">
+                        <span className="font-mono text-ink-faint text-xs mr-2">
+                          {String(t.section).padStart(2, "0")}
+                        </span>
+                        {t.name}
+                      </div>
                       <div className="text-ink-faint text-sm mt-0.5">{t.summary}</div>
                     </div>
                     {t.component ? (

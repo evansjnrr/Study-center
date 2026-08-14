@@ -68,15 +68,14 @@ const ECON_A2 = new Set([
 ]);
 
 /**
- * Computer Science 9618. The app groups the syllabus more broadly than
- * Cambridge numbers it, so most groups start at AS and are revisited in more
- * depth at A Level. Only these two are A Level territory outright:
- * section 20 Further Programming, examined on Papers 3 and 4.
+ * Computer Science 9618 topic ids carry their syllabus section — `cs-14-…`
+ * is section 14 — so the level falls straight out of the number: sections
+ * 1–12 are AS, 13–20 are A Level.
  */
-const CS_A2 = new Set([
-  "cs-oop", // 20.1 Programming paradigms
-  "cs-python", // Paper 4 practical programming
-]);
+function csSectionOf(topicId: string): number | undefined {
+  const n = Number(topicId.match(/^cs-(\d{2})-/)?.[1]);
+  return Number.isFinite(n) ? n : undefined;
+}
 
 /**
  * The economics diagram gallery is keyed by diagram, not by syllabus topic,
@@ -100,7 +99,10 @@ export function diagramLevel(diagramId: string): SyllabusLevel {
 export function topicLevel(topicId: string): SyllabusLevel | undefined {
   if (topicId.startsWith("phy-")) return PHYSICS_A2.has(topicId) ? "A2" : "AS";
   if (topicId.startsWith("ec-")) return ECON_A2.has(topicId) ? "A2" : "AS";
-  if (topicId.startsWith("cs-")) return CS_A2.has(topicId) ? "A2" : "AS";
+  if (topicId.startsWith("cs-")) {
+    const s = csSectionOf(topicId);
+    return s === undefined ? undefined : s >= 13 ? "A2" : "AS";
+  }
   return undefined;
 }
 

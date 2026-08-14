@@ -256,7 +256,7 @@ export const QUESTION_BANK: Question[] = [
 
   // ======================= COMPUTER SCIENCE 9618 =======================
   {
-    id: "c-dr-1", subject: "9618", paper: "Paper 1", topicId: "cs-data-representation",
+    id: "c-dr-1", subject: "9618", paper: "Paper 1", topicId: "cs-01-information-representation",
     subtopic: "Number systems", marks: 4, difficulty: 1, source: "original",
     stem: "**(a)** Convert the denary number 214 into 8-bit binary. **[2]**\n**(b)** Convert your answer to hexadecimal. **[1]**\n**(c)** **State** one reason why hexadecimal is used to represent binary. **[1]**",
     markScheme: [
@@ -267,7 +267,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-dr-2", subject: "9618", paper: "Paper 1", topicId: "cs-data-representation",
+    id: "c-dr-2", subject: "9618", paper: "Paper 1", topicId: "cs-01-information-representation",
     subtopic: "Two's complement", marks: 3, difficulty: 2, source: "original",
     stem: "**(a)** Show how −38 is represented in 8-bit two's complement. **[2]**\n**(b)** **Explain** what is meant by overflow. **[1]**",
     markScheme: [
@@ -277,7 +277,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-alg-1", subject: "9618", paper: "Paper 2", topicId: "cs-algorithm-design",
+    id: "c-alg-1", subject: "9618", paper: "Paper 2", topicId: "cs-09-algorithm-design",
     subtopic: "Searching", marks: 6, difficulty: 2, source: "original",
     stem: "**Write** an algorithm in **pseudocode** that uses a binary search to find a value `Target` in a sorted array `List` of `N` integers. The algorithm should output the index if found, or −1 if not.",
     markScheme: [
@@ -291,7 +291,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "Python/VB syntax used instead of pseudocode conventions loses the syntax mark.",
   },
   {
-    id: "c-tt-1", subject: "9618", paper: "Paper 2", topicId: "cs-trace-tables",
+    id: "c-tt-1", subject: "9618", paper: "Paper 2", topicId: "cs-12-software-development",
     subtopic: "Tracing", marks: 4, difficulty: 1, source: "original",
     stem: "Complete a trace table for this algorithm and state the output.\n\n```\nA ← 17\nB ← 5\nQ ← 0\nWHILE A >= B DO\n    A ← A - B\n    Q ← Q + 1\nENDWHILE\nOUTPUT Q, A\n```",
     markScheme: [
@@ -302,7 +302,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-db-1", subject: "9618", paper: "Paper 1", topicId: "cs-databases",
+    id: "c-db-1", subject: "9618", paper: "Paper 1", topicId: "cs-08-databases",
     subtopic: "SQL", marks: 4, difficulty: 2, source: "original",
     stem: "A table `Student(StudentID, Name, YearGroup, Grade)` exists.\n\n**Write** an SQL query to output the Name and Grade of all students in YearGroup 13, sorted alphabetically by Name.",
     markScheme: [
@@ -313,7 +313,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-hw-1", subject: "9618", paper: "Paper 1", topicId: "cs-hardware",
+    id: "c-hw-1", subject: "9618", paper: "Paper 1", topicId: "cs-04-processor-fundamentals",
     subtopic: "Fetch-decode-execute", marks: 5, difficulty: 2, source: "original",
     stem: "**Describe** the fetch stage of the fetch–decode–execute cycle, naming the registers used.",
     markScheme: [
@@ -325,7 +325,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-sec-1", subject: "9618", paper: "Paper 1", topicId: "cs-security-ethics",
+    id: "c-sec-1", subject: "9618", paper: "Paper 1", topicId: "cs-06-security-integrity",
     subtopic: "Encryption", marks: 5, difficulty: 2, source: "original",
     stem: "**(a)** **Explain** the difference between symmetric and asymmetric encryption. **[3]**\n**(b)** **State** one advantage of asymmetric encryption. **[2]**",
     markScheme: [
@@ -337,7 +337,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-ds-1", subject: "9618", paper: "Paper 2", topicId: "cs-data-structures",
+    id: "c-ds-1", subject: "9618", paper: "Paper 2", topicId: "cs-10-data-types-structures",
     subtopic: "Stacks", marks: 5, difficulty: 2, source: "original",
     stem: "**Write** pseudocode for a `Push` procedure that adds an item to a stack implemented as an array `Stack[1:MAX]` with a pointer `Top`. It must handle a full stack.",
     markScheme: [
@@ -349,7 +349,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-py-1", subject: "9618", paper: "Paper 4", topicId: "cs-python",
+    id: "c-py-1", subject: "9618", paper: "Paper 4", topicId: "cs-20-python",
     subtopic: "Validation", marks: 5, difficulty: 2, source: "original",
     stem: "**Write** a Python function `get_mark()` that repeatedly asks the user for a mark until they enter a whole number between 0 and 100, then returns it. It must not crash on non-numeric input.",
     markScheme: [
@@ -361,7 +361,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-oop-1", subject: "9618", paper: "Paper 4", topicId: "cs-oop",
+    id: "c-oop-1", subject: "9618", paper: "Paper 4", topicId: "cs-20-further-programming",
     subtopic: "Classes", marks: 6, difficulty: 3, source: "original",
     stem: "**Write** a class `Book` with private attributes `Title` and `Copies`, a constructor, a getter for `Title`, and a method `Borrow()` that reduces `Copies` by 1 only if at least one copy is available.",
     markScheme: [
@@ -879,7 +879,7 @@ export const QUESTION_BANK: Question[] = [
 
   // -------------------- Computer Science 9618 --------------------
   {
-    id: "c-com-1", subject: "9618", paper: "Paper 3", topicId: "cs-communication",
+    id: "c-com-1", subject: "9618", paper: "Paper 3", topicId: "cs-14-communication-internet",
     subtopic: "Packet switching", marks: 6, difficulty: 2, source: "original", level: "A2",
     stem: "**Describe** how data is transmitted across the internet using packet switching, and **explain** one advantage over circuit switching.",
     markScheme: [
@@ -892,7 +892,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-com-2", subject: "9618", paper: "Paper 3", topicId: "cs-communication",
+    id: "c-com-2", subject: "9618", paper: "Paper 3", topicId: "cs-14-communication-internet",
     subtopic: "Protocols", marks: 5, difficulty: 2, source: "original", level: "A2",
     stem: "**(a)** **Explain** what is meant by a protocol and why protocols are necessary. **[2]**\n**(b)** **State** the purpose of each of TCP, IP and HTTPS. **[3]**",
     markScheme: [
@@ -904,7 +904,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-sw-1", subject: "9618", paper: "Paper 1", topicId: "cs-software",
+    id: "c-sw-1", subject: "9618", paper: "Paper 1", topicId: "cs-05-system-software",
     subtopic: "Translators", marks: 6, difficulty: 2, source: "original",
     stem: "**Compare** a compiler with an interpreter, and **explain** why a developer might use an interpreter while writing a program but a compiler when releasing it.",
     markScheme: [
@@ -917,7 +917,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-sw-2", subject: "9618", paper: "Paper 3", topicId: "cs-software",
+    id: "c-sw-2", subject: "9618", paper: "Paper 3", topicId: "cs-16-system-software",
     subtopic: "Operating systems", marks: 5, difficulty: 2, source: "original", level: "A2",
     stem: "**Explain** the role of the operating system in memory management and in process (CPU) scheduling.",
     markScheme: [
@@ -929,7 +929,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-pse-1", subject: "9618", paper: "Paper 2", topicId: "cs-pseudocode",
+    id: "c-pse-1", subject: "9618", paper: "Paper 2", topicId: "cs-11-programming",
     subtopic: "Iteration", marks: 5, difficulty: 1, source: "original",
     stem: "An array `Scores` holds 30 integers with indices 1 to 30.\n\n**Write** pseudocode to find and output the largest value in the array and the index at which it occurs.",
     markScheme: [
@@ -942,7 +942,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "Initialising Max to 0 fails if every score is negative — Cambridge marks that as a logic error.",
   },
   {
-    id: "c-pse-2", subject: "9618", paper: "Paper 2", topicId: "cs-pseudocode",
+    id: "c-pse-2", subject: "9618", paper: "Paper 2", topicId: "cs-11-programming",
     subtopic: "Searching", marks: 5, difficulty: 2, source: "original",
     stem: "**Write** pseudocode for a linear search of an array `Names` of 100 strings for a value `Target`. It must output the index if found and a suitable message if not, and must stop as soon as the value is found.",
     markScheme: [
@@ -955,7 +955,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "A FOR loop that keeps going after the match loses the 'stop as soon as found' mark.",
   },
   {
-    id: "c-ct-1", subject: "9618", paper: "Paper 2", topicId: "cs-computational-thinking",
+    id: "c-ct-1", subject: "9618", paper: "Paper 2", topicId: "cs-09-algorithm-design",
     subtopic: "Abstraction and decomposition", marks: 6, difficulty: 2, source: "original",
     stem: "A team is writing software to run a city's traffic lights.\n\n**Explain**, with reference to this example, what is meant by **abstraction** and by **decomposition**, and **state** one benefit of each.",
     markScheme: [
@@ -969,7 +969,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "Both definitions must be applied to the traffic-light scenario. Generic textbook definitions cap at 2 marks.",
   },
   {
-    id: "c-dr-3", subject: "9618", paper: "Paper 1", topicId: "cs-data-representation",
+    id: "c-dr-3", subject: "9618", paper: "Paper 1", topicId: "cs-01-information-representation",
     subtopic: "Two's complement", marks: 4, difficulty: 2, source: "original",
     stem: "**(a)** Convert the denary value $-45$ into 8-bit two's complement. **[2]**\n**(b)** **State** the range of denary values that can be stored in 8-bit two's complement. **[1]**\n**(c)** **Explain** one advantage of two's complement over sign and magnitude. **[1]**",
     markScheme: [
@@ -980,7 +980,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-db-2", subject: "9618", paper: "Paper 1", topicId: "cs-databases",
+    id: "c-db-2", subject: "9618", paper: "Paper 1", topicId: "cs-08-databases",
     subtopic: "Normalisation", marks: 6, difficulty: 3, source: "original",
     stem: "A table stores: `OrderID`, `ProductID`, `ProductName`, `Quantity`, `CustomerID`, `CustomerName`. The primary key is the composite `(OrderID, ProductID)`.\n\n**Explain** why this table is not in third normal form and **describe** the changes needed.",
     markScheme: [
@@ -994,7 +994,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "Name the dependency type (partial vs transitive). 'It repeats data' on its own is not an A-Level answer.",
   },
   {
-    id: "c-ds-2", subject: "9618", paper: "Paper 2", topicId: "cs-data-structures",
+    id: "c-ds-2", subject: "9618", paper: "Paper 2", topicId: "cs-10-data-types-structures",
     subtopic: "Stacks and queues", marks: 5, difficulty: 2, source: "original",
     stem: "A stack initially contains, from bottom to top: `A`, `B`, `C`. The following operations are carried out:\n\n`POP`, `PUSH(D)`, `PUSH(E)`, `POP`\n\n**(a)** **State** the contents of the stack afterwards and the value of the stack pointer. **[3]**\n**(b)** **Explain** why a stack is described as LIFO and give one use of one. **[2]**",
     markScheme: [
@@ -1006,7 +1006,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-ad-2", subject: "9618", paper: "Paper 2", topicId: "cs-algorithm-design",
+    id: "c-ad-2", subject: "9618", paper: "Paper 2", topicId: "cs-09-algorithm-design",
     subtopic: "Searching efficiency", marks: 5, difficulty: 2, source: "original",
     stem: "**(a)** **State** the precondition that must be met before a binary search can be used. **[1]**\n**(b)** **Describe** how a binary search finds a value. **[2]**\n**(c)** A list holds 1000 items. **Explain** why binary search needs far fewer comparisons than linear search. **[2]**",
     markScheme: [
@@ -1020,7 +1020,7 @@ export const QUESTION_BANK: Question[] = [
 
   // ---------- Computer Science 9618: A Level only (sections 13–20) ----------
   {
-    id: "c-a2-fp-1", subject: "9618", paper: "Paper 3", topicId: "cs-data-representation",
+    id: "c-a2-fp-1", subject: "9618", paper: "Paper 3", topicId: "cs-13-data-representation",
     subtopic: "Floating-point numbers (13.3)", marks: 6, difficulty: 3, source: "original", level: "A2",
     stem: "A floating-point number uses an 8-bit mantissa and a 4-bit exponent, both in two's complement.\n\n**(a)** Calculate the denary value of `01100000 0010`. **[3]**\n**(b)** **Explain** what is meant by a *normalised* floating-point number and **state** one benefit of normalisation. **[3]**",
     markScheme: [
@@ -1034,7 +1034,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "Work out the mantissa first, then shift by the exponent. Getting the sign of the exponent wrong is the usual error.",
   },
   {
-    id: "c-a2-hw-1", subject: "9618", paper: "Paper 3", topicId: "cs-hardware",
+    id: "c-a2-hw-1", subject: "9618", paper: "Paper 3", topicId: "cs-15-hardware-virtual-machines",
     subtopic: "Boolean algebra & logic circuits (15.2)", marks: 5, difficulty: 3, source: "original", level: "A2",
     stem: "**(a)** Using Boolean algebra, **simplify** $X = A.B + A.\\overline{B} + \\overline{A}.B$, showing each step. **[3]**\n**(b)** **State** the name of the law used in your first step. **[1]**\n**(c)** **State** why simplifying a logic circuit is useful. **[1]**",
     markScheme: [
@@ -1046,7 +1046,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-a2-vm-1", subject: "9618", paper: "Paper 3", topicId: "cs-hardware",
+    id: "c-a2-vm-1", subject: "9618", paper: "Paper 3", topicId: "cs-15-hardware-virtual-machines",
     subtopic: "Virtual machines (15.1)", marks: 5, difficulty: 2, source: "original", level: "A2",
     stem: "**(a)** **Explain** what is meant by a virtual machine. **[2]**\n**(b)** **State** one benefit and one drawback of using a virtual machine. **[2]**\n**(c)** **State** what is meant by parallel processing. **[1]**",
     markScheme: [
@@ -1058,7 +1058,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-a2-sec-1", subject: "9618", paper: "Paper 3", topicId: "cs-security-ethics",
+    id: "c-a2-sec-1", subject: "9618", paper: "Paper 3", topicId: "cs-17-security",
     subtopic: "Encryption & digital certificates (17.1)", marks: 6, difficulty: 3, source: "original", level: "A2",
     stem: "**Explain** how asymmetric encryption and a digital certificate together allow a user to trust that they are communicating with a genuine web server.",
     markScheme: [
@@ -1072,7 +1072,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "The certificate is what links a public key to an identity. An answer about encryption alone can't score the trust marks.",
   },
   {
-    id: "c-a2-rec-1", subject: "9618", paper: "Paper 3", topicId: "cs-computational-thinking",
+    id: "c-a2-rec-1", subject: "9618", paper: "Paper 3", topicId: "cs-19-computational-thinking",
     subtopic: "Recursion (19.2)", marks: 6, difficulty: 3, source: "original", level: "A2",
     stem: "**(a)** **State** the two features every recursive algorithm must have. **[2]**\n**(b)** **Write** a recursive pseudocode function `Fact(n)` that returns $n!$. **[2]**\n**(c)** **Explain** why deep recursion can cause a program to crash. **[2]**",
     markScheme: [
@@ -1085,7 +1085,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-a2-par-1", subject: "9618", paper: "Paper 4", topicId: "cs-oop",
+    id: "c-a2-par-1", subject: "9618", paper: "Paper 4", topicId: "cs-20-further-programming",
     subtopic: "Programming paradigms (20.1)", marks: 6, difficulty: 3, source: "original", level: "A2",
     stem: "**(a)** **Explain** the difference between a low-level, an imperative and an object-oriented programming paradigm. **[3]**\n**(b)** **Explain** what is meant by *polymorphism* and *inheritance*, and how they relate. **[3]**",
     markScheme: [
@@ -1098,7 +1098,7 @@ export const QUESTION_BANK: Question[] = [
     ],
   },
   {
-    id: "c-a2-file-1", subject: "9618", paper: "Paper 4", topicId: "cs-python",
+    id: "c-a2-file-1", subject: "9618", paper: "Paper 4", topicId: "cs-20-python",
     subtopic: "File processing & exception handling (20.2)", marks: 6, difficulty: 3, source: "original", level: "A2",
     stem: "**Write** a Python function `count_lines(path)` that opens a text file, returns the number of lines in it, and returns $-1$ with a message if the file does not exist. It must close the file whatever happens.",
     markScheme: [
@@ -1112,7 +1112,7 @@ export const QUESTION_BANK: Question[] = [
     guidance: "`with open(...)` closes the file automatically — say so, or use an explicit finally, or you lose the last mark.",
   },
   {
-    id: "c-a2-ai-1", subject: "9618", paper: "Paper 3", topicId: "cs-security-ethics",
+    id: "c-a2-ai-1", subject: "9618", paper: "Paper 3", topicId: "cs-18-artificial-intelligence",
     subtopic: "Artificial intelligence (18.1)", marks: 5, difficulty: 2, source: "original", level: "A2",
     stem: "**(a)** **Explain** the difference between machine learning and deep learning. **[2]**\n**(b)** **Describe** how a supervised machine-learning model is trained. **[2]**\n**(c)** **State** one ethical concern raised by such a system. **[1]**",
     markScheme: [

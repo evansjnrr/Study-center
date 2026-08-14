@@ -23,7 +23,8 @@ export function Home() {
   // Kept as constants so the home screen doesn't pull the whole visualizer /
   // CS bundle into the initial load (they're code-split behind their routes).
   const interactiveCount = 12;
-  const csTopicCount = 13;
+  // The CS index follows Cambridge's own section numbering, 1–20.
+  const csSectionCount = 20;
 
   // `today` is a dependency so these recompute when the date changes.
   const now = React.useMemo(() => new Date(), [today]);
@@ -111,7 +112,7 @@ export function Home() {
           eyebrow="Computer Science 9618"
           title="Worked & alternatives"
           body="Every topic with a worked example — pseudocode, SQL, trace tables — plus an alternative approach you can reveal and compare."
-          meta={`${csTopicCount} topics`}
+          meta={`${csSectionCount} sections`}
           onClick={() => navigate({ name: "cs" })}
         />
       </div>

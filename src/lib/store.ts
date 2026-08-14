@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import type { Settings } from "./types";
-import { getSettings, putSettings, countCards, putCards, putQuestions } from "./db";
+import {
+  getSettings, putSettings, countCards, putCards, putQuestions, reconcileTopicIds,
+} from "./db";
 import { seedCards } from "@/data/flashcards";
 import { QUESTION_BANK } from "@/data/questionBank";
 
@@ -63,6 +65,9 @@ export const useApp = create<AppState>((set, get) => ({
     // questions appear immediately. Keyed by id, so it never touches the
     // past papers you imported yourself.
     await putQuestions(QUESTION_BANK);
+    // Questions must be current before this runs — it re-derives each saved
+    // attempt's topic from its question.
+    await reconcileTopicIds();
     set({ settings, ready: true });
     get().applyTheme();
     // Only animate theme changes made from Settings — never the first paint.

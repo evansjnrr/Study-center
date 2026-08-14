@@ -210,6 +210,55 @@ export async function dueRedo(now = Date.now()): Promise<RedoItem[]> {
   return all.filter((r) => !r.mastered && r.due <= now);
 }
 
+/**
+ * Re-point saved attempts and redo items at their question's current topic.
+ *
+ * The Computer Science topics were regrouped onto Cambridge's own section
+ * numbering (`cs-hardware` → `cs-04-processor-fundamentals`, and so on), which
+ * would otherwise orphan every attempt recorded against an old id. Rather than
+ * hard-coding an old→new table, each record is re-derived from the question it
+ * belongs to — exact, and it keeps working for any future regrouping.
+ *
+ * Returns how many rows were repaired, so boot can stay quiet when there's
+ * nothing to do.
+ */
+export async function reconcileTopicIds(): Promise<number> {
+  const d = await db();
+  const questions = await d.getAll("questions");
+  const topicOf = new Map(questions.map((q) => [q.id, q.topicId]));
+  let fixed = 0;
+
+  const attempts = await d.getAll("qattempts");
+  const stale = attempts.filter((a) => {
+    const t = topicOf.get(a.questionId);
+    return t !== undefined && t !== a.topicId;
+  });
+  if (stale.length) {
+    const tx = d.transaction("qattempts", "readwrite");
+    await Promise.all(
+      stale.map((a) => tx.store.put({ ...a, topicId: topicOf.get(a.questionId)! })),
+    );
+    await tx.done;
+    fixed += stale.length;
+  }
+
+  const redos = await d.getAll("redo");
+  const staleRedo = redos.filter((r) => {
+    const t = topicOf.get(r.questionId);
+    return t !== undefined && t !== r.topicId;
+  });
+  if (staleRedo.length) {
+    const tx = d.transaction("redo", "readwrite");
+    await Promise.all(
+      staleRedo.map((r) => tx.store.put({ ...r, topicId: topicOf.get(r.questionId)! })),
+    );
+    await tx.done;
+    fixed += staleRedo.length;
+  }
+
+  return fixed;
+}
+
 // -------------------- Backup / restore / reset --------------------
 export async function exportAll(): Promise<Record<string, any>> {
   const d = await db();

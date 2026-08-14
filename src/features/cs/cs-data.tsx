@@ -27,6 +27,12 @@ export interface CSKeyTerm {
 export interface CSTopic {
   id: string;
   name: string;
+  /**
+   * The Cambridge 9618 syllabus section this topic is. Sections 1–12 are AS
+   * (Papers 1–2); 13–20 are A Level (Papers 3–4). Shown on the card so the
+   * index maps one-to-one onto the syllabus contents page.
+   */
+  section: number;
   order: number;
   summary: string;
   // Interactive tool for this topic, if any.
@@ -39,8 +45,9 @@ export interface CSTopic {
 
 export const CS_TOPICS: CSTopic[] = [
   {
-    id: "cs-data-representation",
-    name: "Data Representation",
+    id: "cs-01-information-representation",
+    name: "Information Representation",
+    section: 1,
     order: 1,
     summary: "Binary, hexadecimal, two's complement and character sets.",
     component: NumberBaseConverter,
@@ -108,8 +115,9 @@ add 1       = 1101 0010   →  −46` },
     ],
   },
   {
-    id: "cs-communication",
-    name: "Communication & Networking",
+    id: "cs-02-communication",
+    name: "Communication",
+    section: 2,
     order: 2,
     summary: "Transmission methods, protocols and error checking.",
     detail: [
@@ -175,9 +183,10 @@ Receiver recomputes; a mismatch means corruption.` },
     ],
   },
   {
-    id: "cs-hardware",
-    name: "Hardware & the Processor",
-    order: 3,
+    id: "cs-04-processor-fundamentals",
+    name: "Processor Fundamentals",
+    section: 4,
+    order: 4,
     summary: "Von Neumann architecture and the fetch–decode–execute cycle.",
     component: VonNeumannViz,
     detail: [
@@ -249,9 +258,10 @@ EXECUTE
     ],
   },
   {
-    id: "cs-software",
+    id: "cs-05-system-software",
     name: "System Software",
-    order: 4,
+    section: 5,
+    order: 5,
     summary: "Operating systems, translators and interrupts.",
     detail: [
       "The **operating system** manages memory, processes, files, devices and security — hiding hardware complexity.",
@@ -315,9 +325,10 @@ STO 102    // store ACC into address 102` },
     ],
   },
   {
-    id: "cs-security-ethics",
-    name: "Security, Privacy & Ethics",
-    order: 5,
+    id: "cs-06-security-integrity",
+    name: "Security, Privacy & Data Integrity",
+    section: 6,
+    order: 6,
     summary: "Encryption, threats and protecting data.",
     detail: [
       "**Encryption** scrambles data so only the holder of the key can read it — protecting **confidentiality**.",
@@ -378,9 +389,10 @@ WHERE Name = ? AND Pass = ?;
     ],
   },
   {
-    id: "cs-databases",
-    name: "Databases & SQL",
-    order: 6,
+    id: "cs-08-databases",
+    name: "Databases",
+    section: 8,
+    order: 8,
     summary: "Relational databases, normalisation and SQL queries.",
     detail: [
       "A **relational database** stores data in linked tables; a **primary key** uniquely identifies each row, a **foreign key** links to another table.",
@@ -445,9 +457,10 @@ HAVING COUNT(*) > 5;` },
     ],
   },
   {
-    id: "cs-algorithm-design",
+    id: "cs-09-algorithm-design",
     name: "Algorithm Design & Problem-Solving",
-    order: 7,
+    section: 9,
+    order: 9,
     summary: "Searching and sorting — and how to choose.",
     component: SortVisualizer,
     detail: [
@@ -536,9 +549,10 @@ NEXT I` },
     ],
   },
   {
-    id: "cs-data-structures",
-    name: "Data Structures",
-    order: 8,
+    id: "cs-10-data-types-structures",
+    name: "Data Types & Structures",
+    section: 10,
+    order: 10,
     summary: "Stacks, queues and linked lists.",
     detail: [
       "A **stack** is **LIFO** (last in, first out) — think of a pile of plates. Operations: `push`, `pop`, `peek`.",
@@ -617,9 +631,10 @@ ENDWHILE` },
     ],
   },
   {
-    id: "cs-pseudocode",
-    name: "Pseudocode & Programming",
-    order: 9,
+    id: "cs-11-programming",
+    name: "Programming",
+    section: 11,
+    order: 11,
     summary: "Cambridge pseudocode conventions and control flow.",
     detail: [
       "**Conventions**: keywords in CAPITALS, `←` for assignment, **1-based** arrays, `DECLARE Name : TYPE`.",
@@ -690,9 +705,10 @@ ENDCASE` },
     ],
   },
   {
-    id: "cs-python",
+    id: "cs-20-python",
     name: "Python for Paper 4",
-    order: 9.5,
+    section: 20,
+    order: 20.5,
     summary: "Turning Cambridge pseudocode into working Python — the exam's chosen language.",
     detail: [
       "Paper 4 is **practical**: you write and test real code. Python is the most common choice, so you must be fluent at converting **pseudocode → Python**.",
@@ -876,9 +892,10 @@ for p in [Person("Ana"), Teacher("Ben", "Physics")]:
     ],
   },
   {
-    id: "cs-trace-tables",
-    name: "Trace Tables",
-    order: 10,
+    id: "cs-12-software-development",
+    name: "Software Development",
+    section: 12,
+    order: 12,
     summary: "Hand-tracing an algorithm to find its output.",
     detail: [
       "A **trace table** records the value of each variable after every step — proving what an algorithm does.",
@@ -937,9 +954,10 @@ OUTPUT Q, A` },
     ],
   },
   {
-    id: "cs-oop",
-    name: "Object-Oriented Programming",
-    order: 11,
+    id: "cs-20-further-programming",
+    name: "Further Programming",
+    section: 20,
+    order: 20,
     summary: "Classes, objects, encapsulation, inheritance and polymorphism.",
     detail: [
       "A **class** is a blueprint bundling **attributes** (data) and **methods** (behaviour); an **object** is an instance of it.",
@@ -1019,9 +1037,12 @@ ENDCLASS` },
     ],
   },
   {
-    id: "cs-computational-thinking",
-    name: "Computational Thinking",
-    order: 12,
+    // 9.1 Computational thinking skills — the AS half of the topic. The A Level
+    // material (recursion, advanced algorithms) is section 19, below.
+    id: "cs-09-computational-thinking-skills",
+    name: "Computational Thinking Skills",
+    section: 9,
+    order: 9.1,
     summary: "Decomposition, abstraction and pattern recognition.",
     detail: [
       "**Decomposition**: break a big problem into smaller, solvable sub-problems.",
@@ -1081,8 +1102,584 @@ ENDFUNCTION` },
       },
     ],
   },
+  // ================= Sections added to complete the syllabus =================
+  {
+    id: "cs-03-hardware",
+    name: "Hardware",
+    section: 3,
+    order: 3,
+    summary: "Components, storage, and logic gates and circuits.",
+    detail: [
+      "**Primary** storage is directly addressable by the CPU: **RAM** (volatile, holds running programs) and **ROM** (non-volatile, holds the bootstrap).",
+      "**Secondary** storage is non-volatile and not directly addressable — magnetic (HDD), solid-state (SSD) and optical (CD/DVD).",
+      "**Input** devices convert real-world data into a form the computer can process; **output** devices do the reverse.",
+      "A **logic gate** performs a Boolean operation on its inputs. The six examined are `AND`, `OR`, `NOT`, `NAND`, `NOR` and `XOR`.",
+      "A **logic circuit** combines gates; describe it with a **truth table** covering every input combination ($2^n$ rows for $n$ inputs).",
+    ],
+    keyTerms: [
+      { term: "RAM vs ROM", def: "**RAM** is **volatile** read/write memory holding the programs and data currently in use; **ROM** is **non-volatile** and normally read-only, holding the start-up (bootstrap) instructions.", keywords: ["volatile", "non-volatile", "currently in use", "bootstrap"] },
+      { term: "Primary vs secondary storage", def: "**Primary** storage is **directly accessed by the CPU**; **secondary** storage is **non-volatile, larger and slower**, used for long-term retention and not directly addressable.", keywords: ["directly accessed by the processor", "non-volatile", "long-term"] },
+      { term: "Solid-state (SSD)", def: "Secondary storage using **NAND flash** with **no moving parts** — faster access, lower power and more shock-resistant than a hard disk, but with a finite number of write cycles.", keywords: ["no moving parts", "flash memory", "faster access", "limited write cycles"] },
+      { term: "Truth table", def: "A table listing **every possible combination of inputs** and the resulting output of a logic gate or circuit — $2^n$ rows for $n$ inputs.", keywords: ["every combination of inputs", "resulting output", "2 to the power n rows"] },
+      { term: "NAND / NOR as universal gates", def: "Any logic circuit can be built **entirely from NAND gates** (or entirely from NOR gates), which is why they are called **universal** — useful because one component type is cheaper to manufacture.", keywords: ["any circuit can be built from them", "universal gate"] },
+      { term: "XOR", def: "Output is 1 when the inputs are **different** (exactly one input is 1) — distinct from OR, which is also 1 when both are 1.", keywords: ["inputs are different", "exactly one input is 1"] },
+    ],
+    examples: [
+      {
+        title: "Truth table for a two-gate circuit",
+        blocks: [
+          { kind: "text", text: "The circuit computes $X = (A \\text{ AND } B) \\text{ OR } (\\text{NOT } C)$. Work the intermediate columns out first, then combine them:" },
+          { kind: "table", headers: ["A", "B", "C", "A AND B", "NOT C", "X"], rows: [
+            ["0", "0", "0", "0", "1", "1"],
+            ["0", "0", "1", "0", "0", "0"],
+            ["0", "1", "1", "0", "0", "0"],
+            ["1", "0", "1", "0", "0", "0"],
+            ["1", "1", "0", "1", "1", "1"],
+            ["1", "1", "1", "1", "0", "1"],
+          ] },
+          { kind: "text", text: "With three inputs there are $2^3 = 8$ rows in full — always write **every** combination, in binary counting order, or you lose marks for an incomplete table." },
+        ],
+        alternative: {
+          label: "Alternative: build it from NAND only",
+          note: "Why NAND is called a universal gate.",
+          blocks: [
+            { kind: "text", text: "Each basic gate can be made from NANDs alone, so a whole circuit needs only one component type:" },
+            { kind: "table", headers: ["Gate", "Built from NAND"], rows: [
+              ["NOT A", "A NAND A"],
+              ["A AND B", "(A NAND B) NAND (A NAND B)"],
+              ["A OR B", "(A NAND A) NAND (B NAND B)"],
+            ] },
+          ],
+        },
+      },
+      {
+        title: "Choosing storage for a task",
+        blocks: [
+          { kind: "table", headers: ["Requirement", "Choice", "Why"], rows: [
+            ["Running programs now", "RAM", "Directly addressable and fast, but volatile"],
+            ["Boot instructions", "ROM", "Must survive power-off and never change"],
+            ["Laptop main drive", "SSD", "Fast, silent, shock-resistant; no moving parts"],
+            ["Cheap bulk archive", "HDD", "Lowest cost per gigabyte"],
+          ] },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-07-ethics-ownership",
+    name: "Ethics & Ownership",
+    section: 7,
+    order: 7,
+    summary: "Professional conduct, copyright, licensing and the ethics of AI.",
+    detail: [
+      "Computing professionals are expected to follow a **code of conduct** — competence, honesty about limitations, respect for privacy, and no conflict of interest.",
+      "**Copyright** protects the *expression* of an idea (the source code, the artwork), not the idea itself, and arises automatically.",
+      "Software **licences** set what you may legally do: proprietary, **free and open source**, **freeware**, **shareware**.",
+      "**Artificial intelligence** raises questions of bias, accountability and transparency that the law is still catching up with.",
+    ],
+    keyTerms: [
+      { term: "Copyright", def: "The **legal right of the creator** to control the copying, distribution and adaptation of their work. It applies **automatically** on creation and protects the **expression**, not the underlying idea.", keywords: ["legal right of the creator", "copying and distribution", "automatic", "expression not the idea"] },
+      { term: "Free and open source software (FOSS)", def: "Software distributed **with its source code**, which users may **run, study, modify and redistribute**. 'Free' refers to **freedom**, not price.", keywords: ["source code provided", "may modify and redistribute", "freedom not price"] },
+      { term: "Freeware vs shareware", def: "**Freeware** is free to use indefinitely but the **source code is not supplied**. **Shareware** is free only for a **trial period or with limited features**, after which payment is required.", keywords: ["free to use", "no source code", "trial period", "limited features"] },
+      { term: "Code of conduct", def: "A **set of professional standards** a computing professional agrees to follow — acting competently, respecting confidentiality and privacy, avoiding conflicts of interest, and being honest about their limitations.", keywords: ["professional standards", "competence", "confidentiality", "conflict of interest"] },
+      { term: "Algorithmic bias", def: "Where an AI system produces **systematically unfair outcomes for a group** because that unfairness was present in its **training data** or in the choice of features.", keywords: ["systematically unfair", "training data", "reflects existing bias"] },
+      { term: "Ethical issue vs legal issue", def: "A **legal** issue concerns what the **law permits or forbids**; an **ethical** issue concerns what is **morally right**. Something can be perfectly legal and still be unethical — a distinction examiners test directly.", keywords: ["what the law says", "what is morally right", "legal but unethical"] },
+    ],
+    examples: [
+      {
+        title: "Which licence fits the situation?",
+        blocks: [
+          { kind: "table", headers: ["Scenario", "Licence", "Reason"], rows: [
+            ["A school wants to adapt a tool for its own use", "FOSS", "Source code supplied and modification permitted"],
+            ["A firm wants to protect its commercial code", "Proprietary", "Source withheld, use restricted by the EULA"],
+            ["A developer wants users to try before buying", "Shareware", "Time-limited or feature-limited trial"],
+            ["A utility given away with no source", "Freeware", "Free to use, but cannot be studied or modified"],
+          ] },
+        ],
+        alternative: {
+          label: "Alternative: framing it as an ethics answer",
+          note: "How to earn the evaluation marks rather than just listing.",
+          blocks: [
+            { kind: "text", text: "A strong answer names the **stakeholders** and the **conflict** between them. For a school copying licensed software: the school gains (cost saved), the developer loses (revenue and the incentive to keep developing), and pupils learn that infringement is normal. The conclusion should identify the **legal breach** *and* the **separate ethical harm** — that a professional should model lawful behaviour." },
+          ],
+        },
+      },
+      {
+        title: "Accountability when an AI gets it wrong",
+        blocks: [
+          { kind: "text", text: "A recruitment model trained on a decade of a firm's own hiring data down-ranks applicants from certain universities. Work through it as an exam answer:" },
+          { kind: "table", headers: ["Question", "Response"], rows: [
+            ["What went wrong?", "The model learned historic bias present in the training data"],
+            ["Was it illegal?", "Possibly — discrimination law may apply to the outcome, not the intent"],
+            ["Was it unethical?", "Yes — foreseeable harm, and deploying without testing for bias breaches professional duty"],
+            ["Who is accountable?", "The deploying organisation; 'the algorithm decided' is not a defence"],
+            ["What would prevent it?", "Bias testing before release, explainability, human review of rejections"],
+          ] },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-13-data-representation",
+    name: "Data Representation",
+    section: 13,
+    order: 13,
+    summary: "User-defined types, file organisation and floating-point numbers.",
+    detail: [
+      "A **user-defined data type** is one the programmer builds from existing types — **non-composite** (enumerated, pointer) or **composite** (record, set, class).",
+      "**File organisation** determines how records are stored: **serial**, **sequential**, **random (direct)**.",
+      "**Access method** is separate from organisation: sequential access reads records in order; direct access jumps straight to one via a **hashing algorithm**.",
+      "**Floating-point** representation splits a number into a **mantissa** and an **exponent**, both usually in two's complement.",
+      "**Normalisation** maximises precision: a positive mantissa begins `0.1`, a negative one begins `1.0`.",
+    ],
+    keyTerms: [
+      { term: "User-defined data type", def: "A data type **defined by the programmer** from existing types, so that variables can model the problem directly. **Non-composite** types (enumerated, pointer) are built from one existing type; **composite** types (record, set, class) combine several.", keywords: ["defined by the programmer", "from existing types", "non-composite", "composite"] },
+      { term: "Enumerated type", def: "A **non-composite** user-defined type listing **all the values a variable may take**, in order, as named constants — e.g. `TYPE TDay = (Mon, Tue, Wed)`.", keywords: ["list of all possible values", "named constants", "ordered"] },
+      { term: "Serial vs sequential file", def: "In a **serial** file records are stored in the order they arrived, with **no ordering key**. In a **sequential** file they are stored **in order of a key field**, which allows a much faster search.", keywords: ["order of arrival", "no key order", "ordered on a key field"] },
+      { term: "Random (direct) file organisation", def: "Records are placed at an address calculated from the key by a **hashing algorithm**, so any record can be retrieved **directly in roughly one read** without searching.", keywords: ["hashing algorithm", "address calculated from the key", "direct access"] },
+      { term: "Hashing collision", def: "Where two different keys **hash to the same address**. It is resolved by **open addressing** (store in the next free slot) or by **chaining** (an overflow list at that address).", keywords: ["two keys give the same address", "open addressing", "overflow area"] },
+      { term: "Mantissa and exponent", def: "In floating-point form a value is $\\text{mantissa} \\times 2^{\\text{exponent}}$: the **mantissa** carries the significant digits (**precision**) and the **exponent** fixes the position of the binary point (**range**).", keywords: ["mantissa gives precision", "exponent gives range"] },
+      { term: "Normalisation (floating point)", def: "Adjusting the mantissa and exponent so a **positive** number starts `0.1` and a **negative** number starts `1.0`. This gives the **greatest precision** for the bits available and one unique representation per value.", keywords: ["positive starts 0.1", "negative starts 1.0", "maximum precision", "unique representation"] },
+      { term: "Precision vs range trade-off", def: "For a fixed total number of bits, **more mantissa bits give greater precision** but **fewer exponent bits reduce the range** of representable values — and vice versa.", keywords: ["more mantissa means more precision", "more exponent means greater range", "fixed number of bits"] },
+    ],
+    examples: [
+      {
+        title: "Normalising a floating-point number",
+        blocks: [
+          { kind: "text", text: "Shift the mantissa left until it begins `0.1`, decrementing the exponent by 1 for each shift:" },
+          { kind: "code", lang: "working", code: `mantissa 0001 1000   exponent 0110  (+6)
+shift <<1  0011 0000            0101  (+5)
+shift <<1  0110 0000            0100  (+4)
+shift <<1  1100 0000  -- stop, this is now negative!
+
+Back up one: 0110 0000, exponent 0100
+Normalised (starts 0.1) = 0.75 x 2^4 = 12` },
+          { kind: "text", text: "Stop as soon as the mantissa reads `0.1…`. Shifting once more flips the sign bit and changes the number entirely." },
+        ],
+        alternative: {
+          label: "Alternative: a negative mantissa",
+          note: "The mirror rule — normalised negatives start 1.0.",
+          blocks: [
+            { kind: "code", lang: "working", code: `mantissa 1110 0000   exponent 0011  (+3)
+shift <<1  1100 0000            0010  (+2)
+Normalised (starts 1.0) = -0.5 x 2^2 = -2` },
+          ],
+        },
+      },
+      {
+        title: "Picking a file organisation",
+        blocks: [
+          { kind: "table", headers: ["Requirement", "Organisation", "Access", "Why"], rows: [
+            ["Log every transaction as it happens", "Serial", "Sequential", "Appending is fastest; order doesn't matter"],
+            ["Monthly payroll over all staff", "Sequential", "Sequential", "Every record is processed, in key order"],
+            ["Look up one customer instantly", "Random", "Direct", "Hash the key and read that address"],
+          ] },
+          { kind: "text", text: "Note the two columns are independent: a **sequential** file can also be accessed **directly** if an index exists." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-14-communication-internet",
+    name: "Communication & Internet Technologies",
+    section: 14,
+    order: 14,
+    summary: "Protocols, protocol stacks, and circuit versus packet switching.",
+    detail: [
+      "A **protocol** is a set of agreed rules; the internet uses a **stack** of them, each layer handling one concern and using the layer below.",
+      "**TCP** guarantees reliable, in-order delivery; **IP** addresses and routes packets. They are usually paired as **TCP/IP**.",
+      "**Circuit switching** reserves a dedicated path for the whole conversation; **packet switching** routes each packet independently.",
+      "Application-layer protocols: **HTTP/HTTPS** (web), **FTP** (files), **SMTP/POP3/IMAP** (mail), **BitTorrent** (peer-to-peer).",
+    ],
+    keyTerms: [
+      { term: "Protocol stack", def: "A set of protocols **arranged in layers**, each providing a service to the layer above and using the layer below, so that each layer can be **designed and changed independently**.", keywords: ["arranged in layers", "service to the layer above", "independent of other layers"] },
+      { term: "TCP", def: "**Transmission Control Protocol** — splits data into packets, numbers them, checks for errors and **requests retransmission of anything lost**, guaranteeing **reliable, in-order** delivery.", keywords: ["splits into packets", "error checking", "retransmission", "reliable and in order"] },
+      { term: "IP", def: "**Internet Protocol** — **addresses** each packet and **routes** it across networks towards its destination. It is 'best effort': it does not itself guarantee delivery.", keywords: ["addressing", "routing", "best effort", "no delivery guarantee"] },
+      { term: "Circuit switching", def: "A **dedicated physical path is reserved** for the entire duration of a communication. Delivery is in order with constant delay, but the line is **wasted during silences** and a broken link ends the call.", keywords: ["dedicated path reserved", "for the whole duration", "wasteful", "fails if link breaks"] },
+      { term: "Packet switching", def: "Data is **split into packets** that are **routed independently** by whichever route is best at the time, then **reassembled in sequence** at the destination. Efficient and resilient, but packets can arrive out of order or late.", keywords: ["split into packets", "routed independently", "reassembled using sequence numbers", "resilient"] },
+      { term: "Peer-to-peer (BitTorrent)", def: "A distributed model where every machine is **both client and server**: a file is split into pieces held by many **peers** (a swarm), and a **tracker** tells a new peer where the pieces are. There is **no central server** to overload.", keywords: ["both client and server", "swarm", "tracker", "no central server"] },
+    ],
+    examples: [
+      {
+        title: "Circuit vs packet switching, side by side",
+        blocks: [
+          { kind: "table", headers: ["", "Circuit switching", "Packet switching"], rows: [
+            ["Path", "One dedicated path, reserved up front", "Chosen per packet, can differ"],
+            ["Set-up", "Connection established before sending", "None — just send"],
+            ["Efficiency", "Poor — line idle during pauses", "Good — bandwidth shared"],
+            ["Order", "Always in order", "May arrive out of order; resequenced"],
+            ["Link failure", "Call drops", "Routed around it"],
+            ["Best for", "Constant-rate voice calls", "Bursty data traffic"],
+          ] },
+        ],
+        alternative: {
+          label: "Alternative: what a packet actually carries",
+          note: "The header fields examiners expect you to name.",
+          blocks: [
+            { kind: "table", headers: ["Field", "Purpose"], rows: [
+              ["Source address", "Where the packet came from"],
+              ["Destination address", "Where it is going"],
+              ["Sequence number", "Position for reassembly"],
+              ["Payload", "The chunk of data itself"],
+              ["Time to live / hop count", "Discards the packet if it circulates too long"],
+            ] },
+          ],
+        },
+      },
+      {
+        title: "Which protocol does what",
+        blocks: [
+          { kind: "table", headers: ["Protocol", "Layer", "Job"], rows: [
+            ["HTTP / HTTPS", "Application", "Request and transfer web pages (HTTPS adds TLS encryption)"],
+            ["FTP", "Application", "Transfer files between hosts"],
+            ["SMTP", "Application", "Send outgoing mail"],
+            ["POP3 / IMAP", "Application", "Retrieve mail (POP3 downloads; IMAP keeps it on the server)"],
+            ["TCP", "Transport", "Reliable, ordered delivery"],
+            ["IP", "Network", "Addressing and routing"],
+          ] },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-15-hardware-virtual-machines",
+    name: "Hardware & Virtual Machines",
+    section: 15,
+    order: 15,
+    summary: "Parallel processing, virtual machines and Boolean algebra.",
+    detail: [
+      "**Flynn's taxonomy** classifies processors by instruction and data streams: **SISD**, **SIMD**, **MISD**, **MIMD**.",
+      "A **virtual machine** is software emulating a complete computer, letting a guest OS run as a process on a host.",
+      "**Boolean algebra** simplifies logic circuits; the key tools are the distributive law, **absorption**, and **De Morgan's laws**.",
+      "A **Karnaugh map** is a visual alternative to algebraic simplification, grouping adjacent 1s in powers of two.",
+    ],
+    keyTerms: [
+      { term: "Parallel processing", def: "Using **several processors or cores simultaneously** on parts of the same task, so it completes faster than a single processor could manage.", keywords: ["several processors simultaneously", "parts of the same task"] },
+      { term: "SIMD", def: "**Single Instruction, Multiple Data** — one instruction is applied to **many data items at the same time** by an array of processors. Typical of GPUs and vector processing.", keywords: ["one instruction", "many data items simultaneously", "array processor"] },
+      { term: "MIMD", def: "**Multiple Instruction, Multiple Data** — each processor runs **its own instruction stream on its own data**. Typical of multi-core CPUs and clusters.", keywords: ["different instructions", "different data", "multi-core"] },
+      { term: "Virtual machine", def: "**Software that emulates a complete computer system**, providing a guest operating system with what appears to be its own dedicated hardware while actually running as a process on a host.", keywords: ["software emulating a computer", "guest operating system", "appears to be dedicated hardware"] },
+      { term: "De Morgan's laws", def: "$\\overline{A.B} = \\overline{A} + \\overline{B}$ and $\\overline{A+B} = \\overline{A}.\\overline{B}$ — **break the bar and change the sign**. Used to eliminate a bar over a bracket.", keywords: ["break the line change the sign", "NOT (A AND B) = NOT A OR NOT B"] },
+      { term: "Absorption law", def: "$A + A.B = A$ and $A.(A+B) = A$ — a term is **absorbed** when it already implies the other, letting you delete it outright.", keywords: ["A OR (A AND B) = A", "term is absorbed"] },
+      { term: "Karnaugh map", def: "A grid in which adjacent cells differ by **one variable only** (Gray code order). Grouping adjacent 1s in blocks of $2^n$ yields a **minimal** Boolean expression without algebra.", keywords: ["adjacent cells differ by one variable", "Gray code", "group in powers of two", "minimal expression"] },
+    ],
+    examples: [
+      {
+        title: "Simplify with De Morgan's laws",
+        blocks: [
+          { kind: "code", lang: "working", code: `X = NOT(A . B) . NOT(A + C)
+
+De Morgan on each bracket:
+  NOT(A . B)  =  NOT A + NOT B
+  NOT(A + C)  =  NOT A . NOT C
+
+X = (NOT A + NOT B) . NOT A . NOT C
+
+Absorption: (NOT A + NOT B) . NOT A  =  NOT A
+
+X = NOT A . NOT C          (two gates instead of five)` },
+          { kind: "text", text: "State the law you are using at each step — Cambridge awards a mark for the method as well as the answer." },
+        ],
+        alternative: {
+          label: "Alternative: a Karnaugh map",
+          note: "Same answer, no algebra.",
+          blocks: [
+            { kind: "text", text: "Plot the outputs, then group adjacent 1s in blocks of 1, 2, 4 or 8. Columns are in **Gray code** order (00, 01, 11, 10) so neighbouring cells differ by one variable:" },
+            { kind: "table", headers: ["A\\BC", "00", "01", "11", "10"], rows: [
+              ["0", "1", "0", "0", "1"],
+              ["1", "0", "0", "0", "0"],
+            ] },
+            { kind: "text", text: "The two 1s sit in row $A=0$ where $C=0$, so the group reads $\\overline{A}.\\overline{C}$ — identical to the algebra above." },
+          ],
+        },
+      },
+      {
+        title: "Flynn's taxonomy in practice",
+        blocks: [
+          { kind: "table", headers: ["Class", "Instructions", "Data", "Real example"], rows: [
+            ["SISD", "One", "One", "A classic single-core Von Neumann processor"],
+            ["SIMD", "One", "Many", "A GPU shading thousands of pixels at once"],
+            ["MISD", "Many", "One", "Rare — redundant flight-control systems cross-checking"],
+            ["MIMD", "Many", "Many", "A multi-core CPU or a server cluster"],
+          ] },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-16-system-software",
+    name: "System Software",
+    section: 16,
+    order: 16,
+    summary: "What an operating system really does, and how translators work.",
+    detail: [
+      "An OS provides **memory management**, **process (CPU) scheduling**, **file management**, **device management** and **security**.",
+      "**Paging** divides memory into fixed-size pages; **segmentation** uses variable-size logical segments.",
+      "**Virtual memory** lets a program larger than RAM run by paging sections to disk — over-doing it causes **disk thrashing**.",
+      "An **interrupt** is a signal that suspends the current process so a higher-priority one can be serviced.",
+      "Translators: an **assembler** for assembly language, a **compiler** for whole-program translation, an **interpreter** for line-by-line execution.",
+    ],
+    keyTerms: [
+      { term: "Memory management", def: "The OS function that **allocates memory to processes, keeps a record of what is in use**, and **protects each process's memory** so one program cannot overwrite another's.", keywords: ["allocates memory", "keeps track of what is in use", "protects processes from each other"] },
+      { term: "Paging", def: "Dividing physical memory into **fixed-size pages** and program memory into pages of the same size, so any page can be loaded into any frame — removing the need for contiguous free space.", keywords: ["fixed-size blocks", "any page into any frame", "no need for contiguous memory"] },
+      { term: "Segmentation", def: "Dividing a program into **variable-length logical segments** that reflect its structure (a procedure, an array), rather than into equal-sized blocks.", keywords: ["variable length", "logical divisions of the program"] },
+      { term: "Virtual memory", def: "Using **secondary storage as an extension of RAM**: pages not currently needed are **swapped out to disk**, allowing programs larger than physical memory to run.", keywords: ["secondary storage as extra RAM", "pages swapped to disk", "programs larger than memory"] },
+      { term: "Disk thrashing", def: "Where the system spends **more time swapping pages in and out than executing**, because too many processes are competing for too little real memory — throughput collapses.", keywords: ["more time swapping than processing", "excessive paging"] },
+      { term: "Interrupt", def: "A **signal to the processor from hardware or software** requesting attention. At the end of the current fetch–decode–execute cycle the processor **saves its state**, runs the **interrupt service routine**, then restores the state and resumes.", keywords: ["signal requesting attention", "end of the current cycle", "saves state", "interrupt service routine"] },
+      { term: "Scheduling", def: "Deciding **which process gets the processor and for how long**, to maximise throughput and keep the system responsive. Methods include round robin, first come first served, shortest job first and priority scheduling.", keywords: ["which process gets the CPU", "for how long", "round robin", "priority"] },
+      { term: "Assembler vs compiler vs interpreter", def: "An **assembler** translates **assembly language** to machine code (roughly one-to-one). A **compiler** translates the **whole** high-level program before execution. An **interpreter** translates and executes **one statement at a time**.", keywords: ["one to one", "whole program before execution", "statement at a time"] },
+    ],
+    examples: [
+      {
+        title: "How an interrupt is handled",
+        blocks: [
+          { kind: "code", lang: "sequence", code: `1  Device raises an interrupt signal on the control bus
+2  Processor finishes the CURRENT fetch-decode-execute cycle
+3  Contents of registers (PC, ACC, ...) pushed onto the stack
+4  Interrupt's priority checked against the running process
+5  If higher: address of the ISR loaded into the PC
+6  Interrupt Service Routine executes
+7  Registers popped back off the stack
+8  Interrupted process resumes exactly where it left off` },
+          { kind: "text", text: "Step 2 matters: the current **cycle** is completed first, not the current program. Saying 'the processor stops immediately' loses the mark." },
+        ],
+        alternative: {
+          label: "Alternative: why a stack is used",
+          note: "It handles nested interrupts for free.",
+          blocks: [
+            { kind: "text", text: "If a higher-priority interrupt arrives while an ISR is running, its state is pushed on top. Because a stack is **last in, first out**, each routine resumes in exactly the reverse order — no bookkeeping needed." },
+          ],
+        },
+      },
+      {
+        title: "Round robin scheduling traced",
+        blocks: [
+          { kind: "text", text: "Three processes, each needing 6 ms of CPU, with a **time slice** of 2 ms:" },
+          { kind: "code", lang: "working", code: `time  0-2   2-4   4-6   6-8   8-10  10-12 12-14 14-16 16-18
+proc   P1    P2    P3    P1    P2    P3    P1    P2    P3
+                                                        all done at 18ms` },
+          { kind: "text", text: "Every process gets the CPU regularly, so none starves and the system stays responsive. The cost is **context switching** — saving and restoring state at each swap is pure overhead." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-17-security",
+    name: "Security",
+    section: 17,
+    order: 17,
+    summary: "Symmetric and asymmetric encryption, digital signatures and certificates.",
+    detail: [
+      "**Symmetric** encryption uses **one shared key** for both encryption and decryption — fast, but the key must be exchanged securely.",
+      "**Asymmetric** encryption uses a **public/private key pair**; what one key encrypts, only the other can decrypt.",
+      "A **digital signature** is a **hash of the message encrypted with the sender's private key** — it proves authorship and detects tampering.",
+      "A **digital certificate** binds a public key to an identity and is signed by a **Certificate Authority**.",
+      "**SSL/TLS** uses asymmetric encryption to agree a symmetric **session key**, then switches to symmetric for speed.",
+    ],
+    keyTerms: [
+      { term: "Symmetric encryption", def: "Encryption using a **single shared secret key** for both encryption and decryption. It is **fast**, but the key itself must somehow be **distributed securely** — the key-exchange problem.", keywords: ["same key for both", "fast", "key distribution problem"] },
+      { term: "Asymmetric encryption", def: "Encryption using a **matched key pair**: a **public key** anyone may hold and a **private key** kept secret. Data encrypted with one can **only** be decrypted with the other, so no secret needs to be exchanged.", keywords: ["public and private key pair", "only the other key can decrypt", "no shared secret needed"] },
+      { term: "Digital signature", def: "A **hash (digest) of the message, encrypted with the sender's private key**. The recipient decrypts it with the sender's public key and compares with their own hash — proving **authenticity** and that the message is **unaltered**.", keywords: ["hash of the message", "encrypted with the private key", "authenticity", "not been altered"] },
+      { term: "Digital certificate", def: "An electronic document containing the owner's **public key and identifying details**, **signed by a Certificate Authority**, which allows a recipient to trust that the public key genuinely belongs to that owner.", keywords: ["contains the public key", "identity details", "signed by a Certificate Authority"] },
+      { term: "Certificate Authority (CA)", def: "A **trusted third party** that verifies an applicant's identity and **signs their certificate with its own private key**. Browsers ship with the CAs' public keys pre-installed, which is where the chain of trust begins.", keywords: ["trusted third party", "verifies identity", "signs with its own private key"] },
+      { term: "Hashing vs encryption", def: "**Encryption is reversible** with the correct key; **hashing is one-way** — the digest cannot be turned back into the original. Hashing checks integrity and stores passwords; encryption keeps data confidential.", keywords: ["encryption is two-way", "hashing is one-way", "cannot be reversed"] },
+      { term: "SSL/TLS handshake", def: "The client and server use **asymmetric** encryption to authenticate and agree a shared **session key**, then switch to **symmetric** encryption for the rest of the session — combining asymmetric's safe key exchange with symmetric's speed.", keywords: ["asymmetric to agree a session key", "then symmetric", "best of both"] },
+    ],
+    examples: [
+      {
+        title: "Sending a signed, confidential message",
+        blocks: [
+          { kind: "text", text: "Alice wants Bob to know the message is **from her** and that **nobody else can read it**. Two key pairs, used in opposite directions:" },
+          { kind: "code", lang: "sequence", code: `SIGNING (proves it is from Alice)
+  Alice hashes the message              -> digest
+  Alice encrypts the digest with HER PRIVATE key -> signature
+
+CONFIDENTIALITY (only Bob can read it)
+  Alice encrypts the message with BOB'S PUBLIC key
+
+AT BOB'S END
+  Decrypt message with HIS PRIVATE key
+  Decrypt signature with ALICE'S PUBLIC key -> digest A
+  Hash the received message                 -> digest B
+  digest A = digest B  ->  authentic AND unaltered` },
+          { kind: "text", text: "The rule to memorise: **encrypt with the recipient's public key for secrecy; encrypt with your own private key for proof of identity.**" },
+        ],
+        alternative: {
+          label: "Alternative: why not use asymmetric for everything?",
+          note: "The reason TLS bothers with a session key.",
+          blocks: [
+            { kind: "text", text: "Asymmetric encryption is **far slower** — the maths is much heavier — so encrypting a whole video stream with it would be impractical. TLS therefore uses asymmetric encryption **only** to agree a symmetric session key safely, then uses fast symmetric encryption for the bulk of the data." },
+          ],
+        },
+      },
+      {
+        title: "What a certificate actually contains",
+        blocks: [
+          { kind: "table", headers: ["Field", "Purpose"], rows: [
+            ["Subject", "Who the certificate belongs to (the domain name)"],
+            ["Public key", "The subject's public key"],
+            ["Issuer", "Which Certificate Authority signed it"],
+            ["Valid from / to", "The period it may be trusted"],
+            ["Serial number", "Unique identifier, used for revocation"],
+            ["CA's digital signature", "The CA's guarantee, verifiable with the CA's public key"],
+          ] },
+          { kind: "text", text: "The browser verifies the signature with the CA's public key it already holds. That is what stops an attacker substituting their own public key for the server's." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-18-artificial-intelligence",
+    name: "Artificial Intelligence",
+    section: 18,
+    order: 18,
+    summary: "Machine learning, deep learning, neural networks and graph search.",
+    detail: [
+      "**Artificial intelligence** is the simulation of human intelligence by machines — reasoning, learning and self-correction.",
+      "**Machine learning** improves at a task from data rather than from explicit programming; **deep learning** is ML using multi-layer neural networks.",
+      "Learning types: **supervised** (labelled data), **unsupervised** (finds structure itself), **reinforcement** (learns from reward and penalty).",
+      "An **artificial neural network** has an input layer, one or more **hidden layers** and an output layer, with **weighted** connections adjusted during training.",
+      "Graph-search algorithms **A\\*** and **Dijkstra's** underpin pathfinding; A\\* adds a **heuristic** estimate of the remaining distance.",
+    ],
+    keyTerms: [
+      { term: "Machine learning", def: "A branch of AI in which a system **improves its performance at a task by learning from data**, rather than being explicitly programmed with the rules.", keywords: ["improves from data", "not explicitly programmed"] },
+      { term: "Deep learning", def: "Machine learning using **artificial neural networks with many hidden layers**, which learn the useful **features from raw data themselves** instead of having them hand-engineered.", keywords: ["many hidden layers", "learns features from raw data"] },
+      { term: "Supervised learning", def: "Training on a **labelled dataset** — each input is paired with its correct output — so the model learns the mapping and can then predict labels for unseen data.", keywords: ["labelled data", "input paired with correct output", "predicts unseen data"] },
+      { term: "Unsupervised learning", def: "Training on **unlabelled data**, where the system finds **structure or patterns for itself** — most commonly by **clustering** similar items.", keywords: ["unlabelled data", "finds patterns itself", "clustering"] },
+      { term: "Reinforcement learning", def: "Learning by **interacting with an environment** and receiving a **reward or penalty** for each action, so behaviour that maximises cumulative reward is reinforced.", keywords: ["reward and penalty", "trial and error", "maximise reward"] },
+      { term: "Hidden layer", def: "A layer of nodes **between the input and output layers** of a neural network. Each node applies **weights** and an activation function; adjusting those weights during training is how the network learns.", keywords: ["between input and output", "weights", "adjusted during training"] },
+      { term: "Back propagation", def: "The training method where the **error at the output is propagated backwards** through the network so each **weight is adjusted** in the direction that reduces the error.", keywords: ["error propagated backwards", "weights adjusted", "reduce the error"] },
+      { term: "Heuristic (A\\*)", def: "An **estimate of the remaining cost** from a node to the goal. A\\* selects the node with the lowest $f = g + h$, where $g$ is the cost so far and $h$ the heuristic — so it explores towards the goal instead of in all directions.", keywords: ["estimate of the remaining cost", "f = g + h", "cost so far plus estimate"] },
+    ],
+    examples: [
+      {
+        title: "A* versus Dijkstra",
+        blocks: [
+          { kind: "table", headers: ["", "Dijkstra's", "A*"], rows: [
+            ["Chooses next node by", "Lowest cost so far, g", "Lowest g + h"],
+            ["Uses a heuristic?", "No", "Yes — estimated distance to goal"],
+            ["Search shape", "Expands in all directions", "Biased towards the goal"],
+            ["Nodes examined", "More", "Fewer, if h is good"],
+            ["Guarantees shortest path?", "Yes", "Yes, provided h never overestimates"],
+          ] },
+          { kind: "text", text: "The condition on the last row matters: a heuristic that never overestimates is **admissible**. Straight-line distance works for maps because it can never exceed the real road distance." },
+        ],
+        alternative: {
+          label: "Alternative: the three learning types compared",
+          note: "Match the type to the data you actually have.",
+          blocks: [
+            { kind: "table", headers: ["Type", "Data given", "Typical use"], rows: [
+              ["Supervised", "Inputs with correct labels", "Spam detection, image classification"],
+              ["Unsupervised", "Inputs only, no labels", "Customer segmentation, anomaly detection"],
+              ["Reinforcement", "No data — an environment and rewards", "Game playing, robot control"],
+            ] },
+          ],
+        },
+      },
+      {
+        title: "How a neural network learns",
+        blocks: [
+          { kind: "code", lang: "sequence", code: `1  Inputs presented at the input layer
+2  Each connection multiplies its value by a WEIGHT
+3  Hidden-layer nodes sum their inputs, apply an
+   activation function, pass the result on
+4  Output layer produces a prediction
+5  Prediction compared with the known correct label -> ERROR
+6  BACK PROPAGATION: error sent backwards, each weight
+   nudged in the direction that reduces it
+7  Repeat over many passes (epochs) until error is small
+8  Test on data the network has NEVER seen` },
+          { kind: "text", text: "Step 8 is the one candidates forget. Testing on the training data proves nothing — it only shows the network has memorised, not generalised." },
+        ],
+      },
+    ],
+  },
+  {
+    id: "cs-19-computational-thinking",
+    name: "Computational Thinking & Problem Solving",
+    section: 19,
+    order: 19,
+    summary: "Recursion, and the algorithms examined at A Level.",
+    detail: [
+      "A **recursive** routine calls itself. It needs a **base case** that stops the recursion and a **general case** that moves towards it.",
+      "Each unfinished call puts a **stack frame** — return address, parameters, local variables — on the **call stack**; too many causes a **stack overflow**.",
+      "Any recursive solution can be rewritten **iteratively**, usually with an explicit stack, and iteration is generally faster and lighter on memory.",
+      "A **binary tree** is naturally recursive: traverse it **in-order** to get sorted output, **pre-order** to copy it, **post-order** to delete it.",
+      "Sorting at A Level: **insertion** and **bubble** are $O(n^2)$; **quicksort** and **merge sort** are $O(n \\log n)$.",
+    ],
+    keyTerms: [
+      { term: "Recursion", def: "A routine **defined in terms of itself**, which calls itself with a **smaller version of the problem** until a **base case** is reached.", keywords: ["defined in terms of itself", "calls itself", "smaller problem", "base case"] },
+      { term: "Base case", def: "The condition under which a recursive routine **returns without calling itself again**. Without one the recursion never stops and the stack overflows.", keywords: ["stops the recursion", "returns without recursing", "prevents infinite recursion"] },
+      { term: "Stack frame", def: "The block pushed onto the **call stack** for each active call, holding the **return address, parameters and local variables** so the call can resume correctly when the one below it returns.", keywords: ["return address", "parameters", "local variables", "call stack"] },
+      { term: "Stack overflow", def: "The error raised when recursion goes **too deep for the memory allocated to the call stack** — usually caused by a missing or unreachable base case.", keywords: ["too deep", "call stack runs out of memory", "missing base case"] },
+      { term: "In-order traversal", def: "Visit the **left subtree, then the node, then the right subtree**. On a binary search tree this outputs the data in **ascending order**.", keywords: ["left, node, right", "produces sorted order"] },
+      { term: "Time complexity (Big O)", def: "How the number of operations **grows with the size of the input, n**, ignoring constants: $O(1)$ constant, $O(\\log n)$ logarithmic, $O(n)$ linear, $O(n \\log n)$, $O(n^2)$ quadratic.", keywords: ["how running time grows with n", "ignores constants", "worst case"] },
+    ],
+    examples: [
+      {
+        title: "Recursive vs iterative factorial",
+        blocks: [
+          { kind: "text", text: "The recursive version reads almost like the mathematical definition:" },
+          { kind: "code", lang: "pseudocode", code: `FUNCTION Fact(n : INTEGER) RETURNS INTEGER
+    IF n <= 1 THEN          // base case
+        RETURN 1
+    ELSE                     // general case
+        RETURN n * Fact(n - 1)
+    ENDIF
+ENDFUNCTION` },
+          { kind: "text", text: "Trace `Fact(4)` and you can see the stack build up, then unwind:" },
+          { kind: "code", lang: "trace", code: `Fact(4) -> 4 * Fact(3)          <- 4 frames on the stack
+           4 * (3 * Fact(2))
+           4 * (3 * (2 * Fact(1)))
+           4 * (3 * (2 * 1))        <- base case reached
+           = 24                      <- unwinds back up` },
+        ],
+        alternative: {
+          label: "Alternative: the iterative version",
+          note: "Same answer, one stack frame instead of n.",
+          blocks: [
+            { kind: "code", lang: "pseudocode", code: `FUNCTION Fact(n : INTEGER) RETURNS INTEGER
+    DECLARE Result : INTEGER
+    Result <- 1
+    FOR i <- 2 TO n
+        Result <- Result * i
+    NEXT i
+    RETURN Result
+ENDFUNCTION` },
+            { kind: "text", text: "Iteration uses **constant** memory and avoids the call overhead, so it is faster and cannot overflow the stack. Recursion wins on readability where the problem is itself recursive — tree traversal, for instance, is far uglier iteratively." },
+          ],
+        },
+      },
+      {
+        title: "Traversing a binary tree",
+        blocks: [
+          { kind: "text", text: "For this binary search tree:" },
+          { kind: "code", lang: "tree", code: `          20
+         /    \\
+       10      30
+      /  \\       \\
+     5    15      40` },
+          { kind: "table", headers: ["Traversal", "Order of visits", "Result", "Used for"], rows: [
+            ["In-order", "left, node, right", "5 10 15 20 30 40", "Reading a BST in sorted order"],
+            ["Pre-order", "node, left, right", "20 10 5 15 30 40", "Copying or serialising the tree"],
+            ["Post-order", "left, right, node", "5 15 10 40 30 20", "Deleting the tree safely"],
+          ] },
+          { kind: "code", lang: "pseudocode", code: `PROCEDURE InOrder(Node)
+    IF Node <> NULL THEN
+        CALL InOrder(Node.Left)
+        OUTPUT Node.Data
+        CALL InOrder(Node.Right)
+    ENDIF
+ENDPROCEDURE` },
+          { kind: "text", text: "The base case here is `Node = NULL` — an empty subtree needs no work, which is what stops the recursion at the leaves." },
+        ],
+      },
+    ],
+  },
 ];
 
 export function csTopicById(id: string): CSTopic | undefined {
   return CS_TOPICS.find((t) => t.id === id);
 }
+
+/** Topics in syllabus order, 1 → 20. */
+export const CS_TOPICS_ORDERED = [...CS_TOPICS].sort((a, b) => a.order - b.order);
