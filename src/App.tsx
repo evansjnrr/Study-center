@@ -18,17 +18,24 @@ const SessionPlanner = React.lazy(() => import("@/features/practice/SessionPlann
 export default function App() {
   const { ready, boot } = useApp();
   const route = useApp((s) => s.route);
+  // Boot is usually a single frame, so showing the greeting immediately just
+  // makes it flash. Hold it back and let a fast start render nothing at all.
+  const [slowBoot, setSlowBoot] = React.useState(false);
 
   React.useEffect(() => {
     boot();
+    const t = setTimeout(() => setSlowBoot(true), 300);
+    return () => clearTimeout(t);
   }, [boot]);
 
   if (!ready) {
     return (
       <div className="min-h-full grid place-items-center">
-        <div className="text-ink-faint animate-fade-in text-sm">
-          a quiet room, good light…
-        </div>
+        {slowBoot && (
+          <div className="text-ink-faint animate-fade-in text-sm">
+            a quiet room, good light…
+          </div>
+        )}
       </div>
     );
   }

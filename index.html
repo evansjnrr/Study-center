@@ -10,6 +10,34 @@
     <title>Personal Study Center — A-Level</title>
     <!-- Fonts + KaTeX styles are self-hosted (imported in main.tsx) so the app
          works fully offline; no external CDN requests. -->
+    <script>
+      // Paint the right theme before the first frame. Settings live in
+      // IndexedDB, which can only be read asynchronously — long enough for the
+      // browser to paint the light palette first and flash white. store.ts
+      // mirrors the three visual prefs into localStorage (synchronous) purely
+      // so this can run ahead of any paint. IndexedDB stays the source of truth.
+      (function () {
+        var root = document.documentElement;
+        try {
+          var p = JSON.parse(localStorage.getItem("ui-prefs") || "{}");
+          var theme = p.theme || "dark"; // matches DEFAULT_SETTINGS
+          var dark =
+            theme === "dark" ||
+            (theme === "system" &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches);
+          root.classList.toggle("dark", dark);
+          if (p.reduceMotion) root.classList.add("reduce-motion");
+          if (p.bigTapTargets) root.classList.add("big-tap");
+          root.style.backgroundColor = dark ? "#070709" : "#f7f8fa";
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", dark ? "#070709" : "#f7f8fa");
+        } catch (e) {
+          // Corrupt or unavailable storage — fall back to the default theme.
+          root.classList.add("dark");
+          root.style.backgroundColor = "#070709";
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

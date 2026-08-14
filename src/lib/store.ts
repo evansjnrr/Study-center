@@ -64,6 +64,11 @@ export const useApp = create<AppState>((set, get) => ({
     await putQuestions(QUESTION_BANK);
     set({ settings, ready: true });
     get().applyTheme();
+    // Only animate theme changes made from Settings — never the first paint.
+    // A timer rather than requestAnimationFrame: rAF doesn't fire in a
+    // background or non-compositing tab, which would leave the transition
+    // switched off for the whole session.
+    setTimeout(() => document.documentElement.classList.add("theme-ready"), 100);
   },
 
   navigate: (r) =>
@@ -86,15 +91,31 @@ export const useApp = create<AppState>((set, get) => ({
   },
 
   applyTheme: () => {
-    const { theme } = get().settings;
+    const s = get().settings;
     const prefersDark =
       window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
-    const dark = theme === "dark" || (theme === "system" && prefersDark);
-    document.documentElement.classList.toggle("dark", dark);
-    document.documentElement.classList.toggle("reduce-motion", !!get().settings.reduceMotion);
-    document.documentElement.classList.toggle("big-tap", !!get().settings.bigTapTargets);
+    const dark = s.theme === "dark" || (s.theme === "system" && prefersDark);
+    const root = document.documentElement;
+    root.classList.toggle("dark", dark);
+    root.classList.toggle("reduce-motion", !!s.reduceMotion);
+    root.classList.toggle("big-tap", !!s.bigTapTargets);
+    root.style.backgroundColor = dark ? "#070709" : "#f7f8fa";
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", dark ? "#070709" : "#f7f8fa");
+    // Mirror the visual prefs somewhere synchronous so the inline script in
+    // index.html can paint the right theme before the first frame.
+    try {
+      localStorage.setItem(
+        "ui-prefs",
+        JSON.stringify({
+          theme: s.theme,
+          reduceMotion: !!s.reduceMotion,
+          bigTapTargets: !!s.bigTapTargets,
+        }),
+      );
+    } catch {
+      // Private mode / storage full — the app still works, just flashes on load.
+    }
   },
 }));
 

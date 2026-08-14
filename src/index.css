@@ -71,6 +71,11 @@ body,
 
 body {
   @apply bg-paper text-ink font-sans antialiased;
+}
+
+/* Animate only theme changes made in-app. Without the guard this transition
+   turns any first-paint mismatch into a visible 250ms fade. */
+html.theme-ready body {
   transition: background-color 250ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
